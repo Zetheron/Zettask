@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="zettask_widget_bg">#FFFFFF</color>
+    <color name="zettask_widget_border">#E7E5E4</color>
+    <color name="zettask_widget_text_primary">#18181B</color>
+    <color name="zettask_widget_text_secondary">#57534E</color>
+    <color name="zettask_widget_accent">#3730A3</color>
+    <color name="zettask_widget_accent_on">#FFFFFF</color>
+    <color name="zettask_widget_badge_bg">#E0E7FF</color>
+    <color name="zettask_widget_badge_text">#1E1B4B</color>
+    <color name="zettask_widget_divider">#E7E5E4</color>
+</resources>

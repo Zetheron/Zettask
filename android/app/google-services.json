@@ -1,0 +1,55 @@
+{
+  "project_info": {
+    "project_number": "463702759187",
+    "project_id": "zettask-46b1e",
+    "storage_bucket": "zettask-46b1e.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:463702759187:android:a6015ce1b0defb7526ace6",
+        "android_client_info": {
+          "package_name": "com.zetheron.zettask"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "463702759187-aqihm4bbihrs90hniafq0v577c6oun92.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zetheron.zettask",
+            "certificate_hash": "d6f12efc24e57e7915907ba91830806addc5c0fc"
+          }
+        },
+        {
+          "client_id": "463702759187-jkeo4s5hj0eho2aevhda1en7ot3g15k3.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.zetheron.zettask",
+            "certificate_hash": "ab933d350a8be0a3a5d376196afc0a8f1e3a1626"
+          }
+        },
+        {
+          "client_id": "463702759187-06otbnnhl5p2dtbtv6cbm5huueinb8l8.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyC-gJsPvtcgufBcGiVM6ZwCFE9sB_wfNSE"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "463702759187-06otbnnhl5p2dtbtv6cbm5huueinb8l8.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

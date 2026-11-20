@@ -1,0 +1,705 @@
+{
+  "@@locale": "en",
+  "appName": "Zettask",
+  "navTimeline": "Timeline",
+  "navBoard": "Board",
+  "navUnplanned": "Unplanned",
+  "navMore": "More",
+  "save": "Save",
+  "cancel": "Cancel",
+  "close": "Close",
+  "delete": "Delete",
+  "edit": "Edit",
+  "undo": "Undo",
+  "back": "Back",
+  "retry": "Try Again",
+  "clear": "Clear",
+  "all": "All",
+  "or": "or",
+  "continueAction": "Continue",
+  "understand": "Got it",
+  "useAction": "Use",
+  "today": "Today",
+  "tomorrow": "Tomorrow",
+  "yesterday": "Yesterday",
+  "toDo": "To Do",
+  "overdue": "Overdue",
+  "unplanned": "Unplanned",
+  "allDay": "All Day",
+  "scheduled": "Scheduled",
+  "addTaskToday": "Add task for today",
+  "addTask": "Add task",
+  "noTasksForDate": "No tasks for this date.",
+  "savedToUnplanned": "Saved to Unplanned",
+  "savedToUnplannedNoDate": "Saved to Unplanned (no date)",
+  "scheduledForDate": "Scheduled for {date}",
+  "@scheduledForDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "taskScheduledForDate": "Task scheduled for {date}",
+  "@taskScheduledForDate": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "taskDeleted": "Task deleted",
+  "searchTasksTooltip": "Search tasks",
+  "timelineOptionsTooltip": "Timeline options",
+  "addTaskTooltip": "Add Task",
+  "completedLabel": "Done",
+  "uncompleteLabel": "Mark active",
+  "subtasksCount": "{done}/{total} subtasks",
+  "@subtasksCount": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "repeatingTaskLabel": "Repeating task",
+  "quickAddHint": "Add a new task...",
+  "expandTooltip": "Expand",
+  "saveTaskTooltip": "Save task",
+  "newTask": "New Task",
+  "editTask": "Edit Task",
+  "taskTitleLabel": "Task title",
+  "taskTitleHint": "e.g. Review sprint notes",
+  "taskTitleRequired": "Task title is required",
+  "descriptionLabel": "Description",
+  "descriptionHint": "Add notes or context...",
+  "pickDate": "Pick Date",
+  "pickOnCalendar": "Pick on calendar...",
+  "noDateUnplanned": "No date (Unplanned)",
+  "noDate": "No date",
+  "taskTime": "Task Time",
+  "changeTime": "Change time",
+  "clearTimeAllDay": "Clear time (All Day)",
+  "timeLabel": "Time",
+  "reminderLabel": "Reminder",
+  "noReminder": "No reminder",
+  "atTime": "On time",
+  "minutesBefore10": "10 min before",
+  "minutesBefore30": "30 min before",
+  "hourBefore1": "1 hour before",
+  "reminderShort10m": "10m",
+  "reminderShort30m": "30m",
+  "reminderShort1h": "1h",
+  "projectLabel": "Project",
+  "noProject": "No project",
+  "tagLabel": "Tag",
+  "noTag": "No tag",
+  "priorityLabel": "Priority",
+  "priorityLow": "Low",
+  "priorityMedium": "Medium",
+  "priorityHigh": "High",
+  "saveTask": "Save Task",
+  "saveChanges": "Save Changes",
+  "checklistLabel": "Checklist",
+  "addChecklistHint": "Add checklist item...",
+  "repeatLabel": "Repeat",
+  "noRepeat": "Does not repeat",
+  "repeatDaily": "Every day",
+  "repeatWeekly": "Every week",
+  "repeatMonthly": "Every month",
+  "colorLabel": "Color",
+  "timelineOptionsTitle": "Timeline Options",
+  "viewModeLabel": "View Mode",
+  "modeTimeline": "Timeline Mode",
+  "modeDaily": "Daily Mode",
+  "firstDayOfWeek": "Start of Week",
+  "monday": "Monday",
+  "sunday": "Sunday",
+  "firstDayMondayOrder": "Mon · Tue · Wed · Thu · Fri · Sat · Sun",
+  "firstDaySundayOrder": "Sun · Mon · Tue · Wed · Thu · Fri · Sat",
+  "showCompletedTasks": "Show completed tasks",
+  "showCompletedTasksSubtitle": "Hide checked tasks to stay focused on active ones.",
+  "showCompletedWorkspaceSubtitle": "Show or hide completed tasks.",
+  "overdueTasksTitle": "Overdue Tasks",
+  "noOverdueTasks": "No overdue tasks",
+  "moveToToday": "Move to Today",
+  "moveAllToToday": "Move all to Today",
+  "searchTasksHint": "Search tasks...",
+  "searchTasksEmpty": "Type to search tasks, descriptions, or checklists.",
+  "searchNoResults": "No tasks match \"{query}\".",
+  "@searchNoResults": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "calendarEventReadOnly": "Calendar event · read-only",
+  "prevWeekTooltip": "Previous week",
+  "nextWeekTooltip": "Next week",
+  "boardTitle": "Board",
+  "allProjects": "All Projects",
+  "searchProjectHint": "Search project name...",
+  "searchProjectTooltip": "Search projects",
+  "closeSearchTooltip": "Close search",
+  "createProject": "Create Project",
+  "editProject": "Edit project",
+  "deleteProject": "Delete project",
+  "projectOptionsTooltip": "Project options",
+  "projectDeleted": "Project \"{name}\" deleted",
+  "@projectDeleted": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "projectsCompletedRatio": "{done}/{total} done",
+  "@projectsCompletedRatio": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "projectTasksCompletedRatio": "{done}/{total} tasks done",
+  "@projectTasksCompletedRatio": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "projectNotFound": "Project not found",
+  "noProjectsYet": "No projects yet",
+  "projectSearchEmpty": "No project matches \"{query}\".",
+  "@projectSearchEmpty": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "noProjectsSubtitle": "Tap the folder button below to create your first project.",
+  "newProject": "New Project",
+  "projectNameLabel": "Project name",
+  "projectNameHint": "e.g. Zettask Launch",
+  "projectNameRequired": "Project name is required",
+  "projectColorLabel": "Project Color",
+  "unplannedTitle": "Unplanned",
+  "activeCountLabel": "{count} active",
+  "@activeCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noUnplannedTitle": "No unplanned tasks yet",
+  "noUnplannedSubtitle": "Tap + to capture tasks without a date.",
+  "addUnplannedTooltip": "Add Unplanned Task",
+  "workspaceTitle": "Workspace",
+  "organizeSection": "Organize",
+  "automationSection": "Automation",
+  "insightsSection": "Insights & Personalization",
+  "settingsInfoSection": "Settings & Info",
+  "tagsTitle": "Tags",
+  "tagsSubtitleEmpty": "Color labels for tasks and notes",
+  "tagsCountSubtitle": "{count} tags saved",
+  "@tagsCountSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "newTag": "New Tag",
+  "editTag": "Edit Tag",
+  "tagNameLabel": "Tag name",
+  "tagNameRequired": "Tag name is required",
+  "tagDeleted": "Tag deleted",
+  "noTagsYet": "No tags yet",
+  "tagTasksCount": "{count} tasks",
+  "@tagTasksCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "templatesTitle": "Templates",
+  "templatesSubtitleEmpty": "Save reusable task and checklist structures",
+  "templatesCountSubtitle": "{count} templates ready",
+  "@templatesCountSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "newTemplate": "New Template",
+  "editTemplate": "Edit Template",
+  "templateNameLabel": "Template name",
+  "templateNameRequired": "Template name is required",
+  "templateDeleted": "Template deleted",
+  "noTemplatesYet": "No templates yet",
+  "taskFromTemplateSaved": "Task from template saved",
+  "notesTitle": "Notes",
+  "notesSubtitleEmpty": "Quick undated notes",
+  "notesCountSubtitle": "{count} notes saved",
+  "@notesCountSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "newNote": "New Note",
+  "editNote": "Edit Note",
+  "noteTitleLabel": "Note title",
+  "noteTitleHint": "e.g. Meeting summary",
+  "noteTitleRequired": "Note title is required",
+  "noteContentLabel": "Note content",
+  "noteContentHint": "Write your note here...",
+  "noteDeleted": "Note deleted",
+  "searchNotesHint": "Search notes...",
+  "noteNotFound": "Note not found",
+  "noNotesYet": "No notes yet",
+  "noteSearchEmpty": "No note matches \"{query}\".",
+  "@noteSearchEmpty": {
+    "placeholders": {
+      "query": {
+        "type": "String"
+      }
+    }
+  },
+  "noNotesSubtitle": "Tap + to jot down an undated note.",
+  "saveNote": "Save Note",
+  "repeatingTasksTitle": "Repeating Tasks",
+  "repeatingTasksSubtitleEmpty": "Manage daily, weekly, and monthly routines",
+  "repeatingActiveCount": "{count} active routines",
+  "@repeatingActiveCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noRepeatingTasks": "No repeating tasks yet",
+  "repeatingActionTitle": "This is a repeating task",
+  "repeatingThisOnly": "Only this task",
+  "repeatingThisAndFollowing": "This and all following tasks",
+  "last7DaysUpper": "LAST 7 DAYS",
+  "weeklySummary": "{tasks} tasks, plus {checklists} checklist items",
+  "@weeklySummary": {
+    "placeholders": {
+      "tasks": {
+        "type": "int"
+      },
+      "checklists": {
+        "type": "int"
+      }
+    }
+  },
+  "statsTitle": "Statistics",
+  "range7Days": "7 Days",
+  "range30Days": "30 Days",
+  "completedToday": "Done Today",
+  "last7DaysLabel": "Last 7 Days",
+  "last30DaysLabel": "Last 30 Days",
+  "allTimeLabel": "All Time",
+  "completionRateLabel": "Completion Rate",
+  "activity7Days": "Last 7 Days Activity",
+  "activity30Days": "Last 30 Days Activity",
+  "dayDetailSummary": "{tasks} tasks · {checklists} checklists",
+  "@dayDetailSummary": {
+    "placeholders": {
+      "tasks": {
+        "type": "int"
+      },
+      "checklists": {
+        "type": "int"
+      }
+    }
+  },
+  "totalRangeSummary": "Total {days} days: {tasks} tasks, plus {checklists} checklist items",
+  "@totalRangeSummary": {
+    "placeholders": {
+      "days": {
+        "type": "int"
+      },
+      "tasks": {
+        "type": "int"
+      },
+      "checklists": {
+        "type": "int"
+      }
+    }
+  },
+  "completedByPriority": "Completed by Priority",
+  "progressByProject": "Progress by Project",
+  "breakdownByTag": "Breakdown by Tag",
+  "habits30Days": "Habits · 30 Days",
+  "noProjectsCreated": "No projects created yet.",
+  "noTagsCreated": "No tags created yet.",
+  "noActiveHabits": "No active routines yet.",
+  "completedCountLabel": "{count} done",
+  "@completedCountLabel": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "tagBreakdownTrailing": "{done}/{total} done",
+  "@tagBreakdownTrailing": {
+    "placeholders": {
+      "done": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "habitCompletedRatio": "{summary} · {done}/{scheduled} done",
+  "@habitCompletedRatio": {
+    "placeholders": {
+      "summary": {
+        "type": "String"
+      },
+      "done": {
+        "type": "int"
+      },
+      "scheduled": {
+        "type": "int"
+      }
+    }
+  },
+  "statsSubtitle": "{completed} completed · {percent}% completion rate",
+  "@statsSubtitle": {
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "int"
+      }
+    }
+  },
+  "themeTitle": "Theme",
+  "themeAndColorsTitle": "Theme & Colors",
+  "livePreviewSection": "Live Preview",
+  "appearanceModeSection": "Appearance Mode",
+  "colorPaletteSection": "Color Palette",
+  "themeLight": "Light",
+  "themeDark": "Dark",
+  "themeSystem": "System",
+  "themeSystemLight": "System (Light)",
+  "themeSystemDark": "System (Dark)",
+  "presetDefault": "Default",
+  "presetDefaultDesc": "Indigo & slate",
+  "presetOcean": "Ocean",
+  "presetOceanDesc": "Calm blue",
+  "presetForest": "Forest",
+  "presetForestDesc": "Sage & emerald",
+  "presetTerracotta": "Terracotta",
+  "presetTerracottaDesc": "Warm clay orange",
+  "presetPlum": "Plum",
+  "presetPlumDesc": "Muted purple",
+  "presetMonochrome": "Monochrome",
+  "presetMonochromeDesc": "Charcoal & black",
+  "previewActiveTask": "Review interface design",
+  "previewCompletedTask": "Sync weekly schedule",
+  "languageTitle": "Language",
+  "deviceLanguageOption": "Device language (if supported)",
+  "appLockTitle": "App Lock",
+  "appLockSubtitle": "Fingerprint, face, or device PIN",
+  "appLockLockedTitle": "Zettask Locked",
+  "appLockLockedSubtitle": "Use fingerprint, face, or device PIN to access your tasks.",
+  "unlockButton": "Unlock",
+  "verifyingButton": "Verifying...",
+  "appLockUnsupportedError": "Device has no biometrics or screen lock PIN enabled.",
+  "appLockCancelledError": "Verification cancelled or failed.",
+  "appLockUnlockFailedError": "Authentication cancelled or failed. Tap Unlock to try again.",
+  "calendarSyncTitle": "Calendar Sync",
+  "calendarSyncActiveSubtitle": "Active · {count} calendars",
+  "@calendarSyncActiveSubtitle": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "calendarSyncInactiveSubtitle": "Off · display device events read-only",
+  "grantCalendarPermission": "Grant Calendar Permission",
+  "exportCsvTitle": "Export CSV",
+  "exportCsvSubtitle": "Share tasks or notes as CSV files",
+  "exportDataCsvTitle": "Export CSV Data",
+  "exportTasksTitle": "Export Tasks",
+  "exportTasksSubtitle": "All scheduled, unplanned, and project tasks",
+  "exportNotesTitle": "Export Notes",
+  "exportNotesSubtitle": "All quick notes in Notes",
+  "exportBothTitle": "Export Both",
+  "exportBothSubtitle": "Tasks and notes CSV files together",
+  "aboutPrivacyTitle": "About & Privacy Policy",
+  "aboutPrivacySubtitle": "Version {version} · Offline-first & optional cloud",
+  "@aboutPrivacySubtitle": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "aboutTitle": "About Zettask",
+  "versionLabel": "Version {version}",
+  "@versionLabel": {
+    "placeholders": {
+      "version": {
+        "type": "String"
+      }
+    }
+  },
+  "privacySyncTitle": "Privacy & Sync",
+  "privacySyncDescription": "By default your data stays locally on this device. Firebase cloud sync is optional when signed in, and you can permanently delete your account and cloud data at any time.",
+  "privacyPolicyLabel": "Privacy Policy",
+  "privacyLinkCopied": "Privacy Policy link copied",
+  "accountAndSyncTitle": "Account & Sync",
+  "signInToZettask": "Sign in to Zettask Account",
+  "accountBannerSubtitle": "Optional · back up & sync data to cloud",
+  "authWelcomeTitle": "Keep your progress and tasks",
+  "authWelcomeSubtitle": "Back up schedules, projects, and notes automatically to the cloud. You can still use Zettask locally without an account.",
+  "createNewAccount": "Create new account",
+  "signIn": "Sign In",
+  "continueWithGoogle": "Continue with Google",
+  "authTermsNotice": "By continuing, you agree to Zettask Terms & Privacy Policy.",
+  "signInToAccountTitle": "Sign in to Zettask",
+  "signInToAccountSubtitle": "Local data will be merged with your cloud backup.",
+  "emailLabel": "Email",
+  "emailHint": "name@email.com",
+  "emailRequired": "Email is required.",
+  "emailInvalid": "Invalid email format.",
+  "passwordLabel": "Password",
+  "passwordHint": "Enter password",
+  "passwordNewHint": "At least 6 characters",
+  "passwordRequired": "Password is required.",
+  "passwordTooShort": "Password must be at least 6 characters.",
+  "forgotPassword": "Forgot?",
+  "enterValidEmailFirst": "Please enter a valid email address first.",
+  "passwordResetSent": "Password reset link sent to {email}.",
+  "@passwordResetSent": {
+    "placeholders": {
+      "email": {
+        "type": "String"
+      }
+    }
+  },
+  "showPasswordTooltip": "Show password",
+  "hidePasswordTooltip": "Hide password",
+  "noAccountPrompt": "Don't have an account?",
+  "createAccountLink": "Create account",
+  "createAccountTitle": "Create Account",
+  "createAccountSubtitle": "Back up all tasks, routines, and notes to the cloud.",
+  "haveAccountPrompt": "Already have an account?",
+  "signedInVia": "Signed in via {provider}",
+  "@signedInVia": {
+    "placeholders": {
+      "provider": {
+        "type": "String"
+      }
+    }
+  },
+  "syncNowButton": "Sync now",
+  "syncingLabel": "Syncing...",
+  "syncDoneMessage": "Sync completed.",
+  "syncFailedMessage": "Failed to sync data. Check your internet connection.",
+  "syncStatusIdle": "Not synced yet",
+  "syncStatusSyncing": "Syncing...",
+  "syncStatusSynced": "Synced",
+  "syncStatusError": "Sync failed",
+  "lastSyncedPrefix": "Last synced: {time}",
+  "@lastSyncedPrefix": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "neverSynced": "Never synced",
+  "signOutButton": "Sign Out",
+  "signedOutMessage": "Signed out. Local data remains on your device.",
+  "deleteAccountButton": "Delete Account",
+  "deleteAccountStep1Title": "Delete Account?",
+  "deleteAccountStep1Body": "All cloud backups (tasks, routines, projects, tags, notes, and templates) and your account will be permanently deleted. Local data on this device remains intact.",
+  "deleteAccountStep2Title": "Confirm Permanent Deletion",
+  "deleteAccountStep2Body": "This action cannot be undone. Are you sure you want to permanently delete your account and all cloud data now?",
+  "deleteAccountConfirmButton": "Yes, Delete Permanently",
+  "accountDeletedMessage": "Account and all cloud data permanently deleted.",
+  "reloginRequiredTitle": "Re-login Required",
+  "authErrUserNotFound": "No account found for this email.",
+  "authErrWrongPassword": "Incorrect password.",
+  "authErrInvalidCredential": "Invalid email or password.",
+  "authErrInvalidEmail": "Invalid email format.",
+  "authErrEmailInUse": "This email is already registered to another account.",
+  "authErrWeakPassword": "Password is too weak. Use at least 6 characters.",
+  "authErrNetwork": "Network issue. Please check your internet connection.",
+  "authErrRequiresRecentLogin": "For security, sign out and sign back in before deleting your account.",
+  "authErrTooManyRequests": "Too many attempts. Please try again shortly.",
+  "authErrUserDisabled": "This account has been disabled.",
+  "authErrAccountExistsDifferent": "This email is already linked to another sign-in method.",
+  "authErrOperationNotAllowed": "This sign-in method is not enabled.",
+  "authErrFirebaseUnavailable": "Account service is unavailable. Check your connection.",
+  "authErrUnknown": "Authentication error. Please try again.",
+  "widgetTitle": "Zettask · Today",
+  "widgetEmptyText": "All tasks for today are done.",
+  "repeatingTasksAndFollowingDeleted": "Repeating task and following occurrences deleted",
+  "noProjectTasksTitle": "No tasks in this project yet",
+  "noProjectTasksSubtitle": "Tap + to add a task to {project}.",
+  "@noProjectTasksSubtitle": {
+    "placeholders": {
+      "project": {
+        "type": "String"
+      }
+    }
+  },
+  "addTaskToProjectTooltip": "Add Task to Project",
+  "noTagsSubtitle": "Tap + to create color tags for tasks and notes.",
+  "tagOptionsTooltip": "Tag options",
+  "deleteTag": "Delete tag",
+  "addTagTooltip": "Add Tag",
+  "noTasksWithTag": "No tasks with this tag yet.",
+  "addTaskWithTagTooltip": "Add Task with Tag",
+  "tagNameHint": "e.g. Work, Personal, Urgent",
+  "tagColorLabel": "Tag Color",
+  "createTag": "Create Tag",
+  "tagDeletedNamed": "Tag \"{name}\" deleted",
+  "@tagDeletedNamed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "noTemplatesSubtitle": "Save frequently used task and checklist structures to create them faster.",
+  "templateOptionsTooltip": "Template options",
+  "deleteTemplate": "Delete template",
+  "createTemplateTooltip": "Create Template",
+  "templateDeletedNamed": "Template \"{name}\" deleted",
+  "@templateDeletedNamed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "templateNameHint": "e.g. Weekly Release",
+  "defaultTaskTitleLabel": "Default task title",
+  "defaultTaskTitleHint": "e.g. Prepare production release",
+  "timeOptionalLabel": "Time (optional)",
+  "clearTimeTooltip": "Clear time",
+  "projectOptionalLabel": "Project (optional)",
+  "tagOptionalLabel": "Tag (optional)",
+  "defaultSubtasksLabel": "Default subtasks",
+  "addTemplateSubtaskHint": "Add template subtask...",
+  "saveTemplate": "Save Template",
+  "subtasksTotalCount": "{count} subtasks",
+  "@subtasksTotalCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "useTemplateButton": "Use Template",
+  "pickTemplateTitle": "Choose Template",
+  "repeatingTaskDeleted": "Repeating task deleted",
+  "noRepeatingTasksSubtitle": "Tap + to create daily, weekly, or monthly routines.",
+  "addRepeatingTaskTooltip": "Add Repeating Task",
+  "editRepeatingTask": "Edit Repeating Task",
+  "newRepeatingTask": "New Repeating Task",
+  "deleteTaskTooltip": "Delete task",
+  "scheduleLabel": "Schedule",
+  "startAndTimeLabel": "Start & Time",
+  "dateRequiredForTime": "Needs date",
+  "clearDateTooltip": "Clear date",
+  "pickTimeFirstReminder": "Pick a time first to enable reminders.",
+  "notificationPermissionDenied": "Notification permission is off. Enable it in device settings so reminders appear.",
+  "pickDateFirstRepeat": "Pick a date first to configure repetition.",
+  "subtasksLabel": "Subtasks",
+  "subtasksWithCount": "Subtasks ({count})",
+  "@subtasksWithCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "removeSubtaskTooltip": "Remove subtask",
+  "addSubtaskTooltip": "Add subtask",
+  "moveAllOverdueMoved": "All overdue tasks moved to today",
+  "moveAllShort": "Move all",
+  "noOverdueTasksSubtitle": "All tasks from previous days are completed.",
+  "repeatingDeletePrompt": "What would you like to delete?",
+  "repeatingEditPrompt": "What would you like to change?",
+  "repeatingDeleteSingleSub": "Delete only this occurrence",
+  "repeatingEditSingleSub": "Edit only this occurrence",
+  "repeatingDeleteFollowingSub": "Delete this and all upcoming occurrences",
+  "repeatingEditFollowingSub": "Apply to this and all upcoming occurrences",
+  "deviceCalendarTitle": "Device Calendar",
+  "selectCalendarsLabel": "Select Calendars",
+  "calendarsActiveCount": "{selected}/{total} active",
+  "@calendarsActiveCount": {
+    "placeholders": {
+      "selected": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "showCalendarEventsTitle": "Show Calendar Events",
+  "showCalendarEventsSubtitle": "Device events appear chronologically as read-only.",
+  "calendarPermDeniedPermanentTitle": "Calendar Permission Permanently Denied",
+  "calendarPermRequiredTitle": "Calendar Read Permission Needed",
+  "calendarPermDeniedPermanentDesc": "Enable calendar read permission in device Settings, then tap Check Again.",
+  "calendarPermRequiredDesc": "Zettask only asks for read-only calendar permission to show your events on the timeline.",
+  "openSettingsButton": "Open Settings",
+  "checkAgainButton": "Check Again",
+  "noCalendarsFound": "No calendars found on this device.",
+  "eventDetailTitle": "Event Details",
+  "eventNotesLabel": "Notes",
+  "calendarEventReadOnlyBanner": "Event from device calendar (read-only).",
+  "markUncompletedSemantics": "Mark incomplete",
+  "markCompletedSemantics": "Mark completed",
+  "deleteNoteTooltip": "Delete note",
+  "repeatMonthlyDay": "Every month · day {day}",
+  "@repeatMonthlyDay": {
+    "placeholders": {
+      "day": {
+        "type": "int"
+      }
+    }
+  },
+  "last30DaysSubtitle": "Last 30 days",
+  "allTimeSubtitle": "All time",
+  "taskCancelled": "Task marked as cancelled",
+  "taskRestored": "Task marked as active",
+  "cancelledStatusLabel": "Cancelled",
+  "restoreTaskLabel": "Restore",
+  "markCancelledSemantics": "Mark cancelled",
+  "calendarPermFallbackHint": "If the permission prompt did not appear, open App Settings to enable Calendar access manually.",
+  "calendarBadgeLabel": "Calendar",
+  "calendarSourceLabel": "Calendar",
+  "calendarLocationLabel": "Location",
+  "calendarReadOnlyInfo": "Synced from device calendar. This item is read-only and cannot be edited in Zettask."
+}

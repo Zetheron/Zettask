@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="id" data-active-lang="id">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Zettask — Zetheron</title>
+  <meta name="description" content="Zettask by Zetheron: Minimalist daily timeline to-do list for Android. Privacy Policy and Account Deletion guide." />
+  <link rel="stylesheet" href="./styles.css" />
+</head>
+<body>
+  <header class="site-header">
+    <div class="header-inner">
+      <a class="brand" href="./index.html">
+        <span class="brand-mark" aria-hidden="true">Z</span>
+        <span>Zettask</span>
+      </a>
+      <div class="header-actions">
+        <div class="lang-toggle" role="group" aria-label="Language">
+          <button type="button" class="lang-btn" data-set-lang="id" aria-pressed="true">ID</button>
+          <button type="button" class="lang-btn" data-set-lang="en" aria-pressed="false">EN</button>
+        </div>
+      </div>
+    </div>
+  </header>
+
+  <main class="container">
+    <section data-lang="id">
+      <h1>Zettask</h1>
+      <p class="lead">
+        Aplikasi daftar tugas timeline harian yang ringkas untuk Android. Kelola jadwal, sub-tugas, rutinitas berulang, proyek, dan catatan secara offline-first, dengan cadangan cloud opsional.
+      </p>
+
+      <a class="card-link" href="./privacy-policy.html">
+        <div>
+          <div class="card-link-title">Kebijakan Privasi</div>
+          <div class="card-link-desc">Penjelasan data lokal, akun opsional Firebase, izin perangkat, dan keamanan data.</div>
+        </div>
+        <span class="chevron" aria-hidden="true">&rsaquo;</span>
+      </a>
+
+      <a class="card-link" href="./delete-account.html">
+        <div>
+          <div class="card-link-title">Panduan Hapus Akun &amp; Data</div>
+          <div class="card-link-desc">Cara menghapus akun Zettask beserta seluruh data cloud secara permanen.</div>
+        </div>
+        <span class="chevron" aria-hidden="true">&rsaquo;</span>
+      </a>
+
+      <div class="card">
+        <h2 style="margin-top: 0;">Kontak Pengembang</h2>
+        <p style="margin-bottom: 4px;">
+          Pengembang: <strong>Zetheron</strong><br />
+          Package ID: <code>com.zetheron.zettask</code><br />
+          Email dukungan: <a href="mailto:zetheron.id@gmail.com">zetheron.id@gmail.com</a>
+        </p>
+      </div>
+    </section>
+
+    <section data-lang="en">
+      <h1>Zettask</h1>
+      <p class="lead">
+        A minimalist daily timeline to-do list for Android. Organize tasks, checklists, repeating routines, projects, and quick notes offline-first, with optional cloud backup.
+      </p>
+
+      <a class="card-link" href="./privacy-policy.html">
+        <div>
+          <div class="card-link-title">Privacy Policy</div>
+          <div class="card-link-desc">Details on local-first storage, optional Firebase sync, device permissions, and data safety.</div>
+        </div>
+        <span class="chevron" aria-hidden="true">&rsaquo;</span>
+      </a>
+
+      <a class="card-link" href="./delete-account.html">
+        <div>
+          <div class="card-link-title">Account &amp; Data Deletion Guide</div>
+          <div class="card-link-desc">How to permanently delete your Zettask account and all cloud data.</div>
+        </div>
+        <span class="chevron" aria-hidden="true">&rsaquo;</span>
+      </a>
+
+      <div class="card">
+        <h2 style="margin-top: 0;">Developer Contact</h2>
+        <p style="margin-bottom: 4px;">
+          Developer: <strong>Zetheron</strong><br />
+          Package ID: <code>com.zetheron.zettask</code><br />
+          Support email: <a href="mailto:zetheron.id@gmail.com">zetheron.id@gmail.com</a>
+        </p>
+      </div>
+    </section>
+
+    <footer class="site-footer">
+      <span>&copy; 2026 Zetheron</span>
+      <div class="footer-links">
+        <a href="./privacy-policy.html"><span data-lang="id">Privasi</span><span data-lang="en">Privacy</span></a>
+        <a href="./delete-account.html"><span data-lang="id">Hapus Akun</span><span data-lang="en">Delete Account</span></a>
+        <a href="mailto:zetheron.id@gmail.com">zetheron.id@gmail.com</a>
+      </div>
+    </footer>
+  </main>
+
+  <script>
+    (function () {
+      var params = new URLSearchParams(window.location.search);
+      var fromQuery = params.get('lang');
+      var saved = null;
+      try { saved = localStorage.getItem('zettask_docs_lang'); } catch (_) {}
+      var browserIsEn = (navigator.language || '').toLowerCase().startsWith('en');
+      var initial = (fromQuery === 'en' || fromQuery === 'id')
+        ? fromQuery
+        : (saved === 'en' || saved === 'id' ? saved : (browserIsEn ? 'en' : 'id'));
+
+      function applyLang(lang) {
+        document.documentElement.setAttribute('data-active-lang', lang);
+        document.documentElement.setAttribute('lang', lang);
+        document.querySelectorAll('[data-set-lang]').forEach(function (btn) {
+          btn.setAttribute('aria-pressed', btn.getAttribute('data-set-lang') === lang ? 'true' : 'false');
+        });
+        try { localStorage.setItem('zettask_docs_lang', lang); } catch (_) {}
+      }
+
+      document.querySelectorAll('[data-set-lang]').forEach(function (btn) {
+        btn.addEventListener('click', function () {
+          applyLang(btn.getAttribute('data-set-lang'));
+        });
+      });
+
+      applyLang(initial);
+    })();
+  </script>
+</body>
+</html>
