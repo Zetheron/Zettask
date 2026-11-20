@@ -1392,4 +1392,142 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get calendarReadOnlyInfo =>
       'Disinkronkan dari kalender perangkat. Item ini hanya dapat dibaca dan tidak dapat diedit di Zettask.';
+
+  @override
+  String get proBrandTitle => 'Zettask Pro';
+
+  @override
+  String get proBadge => 'PRO';
+
+  @override
+  String get proPaywallSubtitle =>
+      'Sinkronisasi cloud, kalender perangkat, kunci aplikasi, dan tema OLED dalam satu paket.';
+
+  @override
+  String proActiveBannerTitle(String plan) {
+    return 'Aktif — $plan';
+  }
+
+  @override
+  String get proActiveBannerSubtitle => 'Terima kasih telah mendukung Zettask.';
+
+  @override
+  String get proUpgradeBannerSubtitle =>
+      'Tema AMOLED, warna aksen kustom, gaya widget & lainnya';
+
+  @override
+  String get proBenefitCloudSync => 'Sinkronisasi Cloud & Multi-Perangkat';
+
+  @override
+  String get proBenefitCalendar => 'Integrasi Kalender & Hari Libur Nasional';
+
+  @override
+  String get proBenefitAppLock =>
+      'Kunci Aplikasi Biometrik & Privasi Recent Apps';
+
+  @override
+  String get proBenefitProjectsCsv => 'Proyek Tanpa Batas & Ekspor CSV';
+
+  @override
+  String get proBenefitCustomization =>
+      'Tema AMOLED Pure Black, Warna Aksen Kustom & Gaya Widget';
+
+  @override
+  String get proPlanMonthlyTitle => 'Bulanan';
+
+  @override
+  String get proPlanMonthlyPrice => 'Rp19.000 / bulan';
+
+  @override
+  String get proPlanYearlyTitle => 'Tahunan';
+
+  @override
+  String get proPlanYearlyPrice => 'Rp129.000 / tahun';
+
+  @override
+  String get proPlanYearlyBadge => 'Paling Hemat';
+
+  @override
+  String get proPlanYearlySavings => 'Hemat ~43%';
+
+  @override
+  String get proPlanLifetimeTitle => 'Seumur Hidup';
+
+  @override
+  String get proPlanLifetimePrice => 'Rp299.000';
+
+  @override
+  String get proPlanLifetimeBadge => 'Sekali Bayar';
+
+  @override
+  String get proContinueButton => 'Lanjutkan';
+
+  @override
+  String get proAlreadyActiveButton => 'Zettask Pro Aktif';
+
+  @override
+  String get proRestorePurchasesButton => 'Pulihkan Pembelian';
+
+  @override
+  String get proLegalFootnote =>
+      'Langganan diperpanjang otomatis kecuali dibatalkan. Batalkan kapan saja melalui Google Play.';
+
+  @override
+  String get proStoreUnavailableMessage =>
+      'Pembelian Google Play belum tersedia di perangkat ini. Coba lagi setelah terhubung ke Google Play.';
+
+  @override
+  String get proPurchaseSuccessMessage => 'Zettask Pro kini aktif.';
+
+  @override
+  String get proRestoreSuccessMessage =>
+      'Pembelian Zettask Pro berhasil dipulihkan.';
+
+  @override
+  String get proRestoreEmptyMessage =>
+      'Tidak ditemukan pembelian Zettask Pro aktif pada akun ini.';
+
+  @override
+  String get proPurchaseFailedMessage =>
+      'Pembelian tidak dapat diselesaikan saat ini. Silakan coba lagi.';
+
+  @override
+  String get debugProSimulationLabel => 'Mode Pengembang: Simulasi Pro';
+
+  @override
+  String get amoledPureBlackTitle => 'AMOLED Pure Black';
+
+  @override
+  String get amoledPureBlackSubtitle =>
+      'Latar gelap #000000 murni untuk hemat baterai OLED';
+
+  @override
+  String get customAccentSection => 'Warna Aksen Kustom';
+
+  @override
+  String get accentMonochrome => 'Monochrome';
+
+  @override
+  String get accentSage => 'Sage';
+
+  @override
+  String get accentIndigo => 'Indigo';
+
+  @override
+  String get accentTerracotta => 'Terracotta';
+
+  @override
+  String get accentAmber => 'Amber';
+
+  @override
+  String get widgetStyleSection => 'Gaya Home Screen Widget';
+
+  @override
+  String get widgetStyleStandard => 'Standar';
+
+  @override
+  String get widgetStyleAmoled => 'AMOLED';
+
+  @override
+  String get widgetStyleTranslucent => 'Transparan';
 }

@@ -25,7 +25,12 @@ abstract class HomeWidgetSyncService {
   Stream<Uri?> get widgetClicked;
 }
 
-class AndroidHomeWidgetService implements HomeWidgetSyncService {
+abstract class HomeWidgetStyleService {
+  Future<void> updateWidgetStyle(String styleKey);
+}
+
+class AndroidHomeWidgetService
+    implements HomeWidgetSyncService, HomeWidgetStyleService {
   AndroidHomeWidgetService._internal();
 
   static final AndroidHomeWidgetService instance =
@@ -35,6 +40,7 @@ class AndroidHomeWidgetService implements HomeWidgetSyncService {
   static const String keyTasksJson = 'today_tasks_json';
   static const String keyWidgetTitle = 'widget_title';
   static const String keyWidgetEmptyText = 'widget_empty_text';
+  static const String keyWidgetStyle = 'widget_style';
   static const String androidWidgetName = 'ZettaskWidgetProvider';
   static const int maxDisplayTasks = 5;
 
@@ -127,6 +133,23 @@ class AndroidHomeWidgetService implements HomeWidgetSyncService {
       debugPrint('AndroidHomeWidgetService.updateWidgetLabels gagal: ${e.code}');
     } catch (e) {
       debugPrint('AndroidHomeWidgetService.updateWidgetLabels gagal: $e');
+    }
+  }
+
+  @override
+  Future<void> updateWidgetStyle(String styleKey) async {
+    if (!_isAndroidRuntime) {
+      return;
+    }
+    try {
+      await HomeWidget.saveWidgetData<String>(keyWidgetStyle, styleKey);
+      await HomeWidget.updateWidget(androidName: androidWidgetName);
+    } on MissingPluginException {
+      // Ignore in widget tests or unsupported platforms.
+    } on PlatformException catch (e) {
+      debugPrint('AndroidHomeWidgetService.updateWidgetStyle gagal: ${e.code}');
+    } catch (e) {
+      debugPrint('AndroidHomeWidgetService.updateWidgetStyle gagal: $e');
     }
   }
 

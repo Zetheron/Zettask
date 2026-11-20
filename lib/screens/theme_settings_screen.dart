@@ -3,8 +3,11 @@ import 'package:provider/provider.dart';
 
 import '../core/theme/app_theme.dart';
 import '../l10n/app_localizations.dart';
+import '../models/subscription_model.dart';
 import '../models/task_model.dart';
+import '../providers/subscription_provider.dart';
 import '../providers/theme_provider.dart';
+import 'pro_paywall_screen.dart';
 
 class ThemeSettingsScreen extends StatelessWidget {
   const ThemeSettingsScreen({super.key});
@@ -24,15 +27,88 @@ class ThemeSettingsScreen extends StatelessWidget {
 
   (String, String) _presetCopy(AppThemePreset preset, AppLocalizations l10n) {
     return switch (preset) {
-      AppThemePreset.defaultIndigo => (l10n.presetDefault, l10n.presetDefaultDesc),
+      AppThemePreset.defaultIndigo => (
+          l10n.presetDefault,
+          l10n.presetDefaultDesc,
+        ),
       AppThemePreset.ocean => (l10n.presetOcean, l10n.presetOceanDesc),
       AppThemePreset.forest => (l10n.presetForest, l10n.presetForestDesc),
-      AppThemePreset.terracotta =>
-        (l10n.presetTerracotta, l10n.presetTerracottaDesc),
+      AppThemePreset.terracotta => (
+          l10n.presetTerracotta,
+          l10n.presetTerracottaDesc,
+        ),
       AppThemePreset.plum => (l10n.presetPlum, l10n.presetPlumDesc),
-      AppThemePreset.monochrome =>
-        (l10n.presetMonochrome, l10n.presetMonochromeDesc),
+      AppThemePreset.monochrome => (
+          l10n.presetMonochrome,
+          l10n.presetMonochromeDesc,
+        ),
     };
+  }
+
+  String _accentLabel(ProAccentColor accent, AppLocalizations l10n) {
+    return switch (accent) {
+      ProAccentColor.monochrome => l10n.accentMonochrome,
+      ProAccentColor.sage => l10n.accentSage,
+      ProAccentColor.indigo => l10n.accentIndigo,
+      ProAccentColor.terracotta => l10n.accentTerracotta,
+      ProAccentColor.amber => l10n.accentAmber,
+    };
+  }
+
+  String _widgetStyleLabel(WidgetStyle style, AppLocalizations l10n) {
+    return switch (style) {
+      WidgetStyle.standard => l10n.widgetStyleStandard,
+      WidgetStyle.amoled => l10n.widgetStyleAmoled,
+      WidgetStyle.translucent => l10n.widgetStyleTranslucent,
+    };
+  }
+
+  Future<void> _handleToggleAmoled(
+    BuildContext context,
+    ThemeProvider themeProvider,
+    bool isPro,
+    bool value,
+  ) async {
+    if (value && !isPro) {
+      await showProPaywall(
+        context,
+        highlightedFeature: ProFeature.customThemes,
+      );
+      return;
+    }
+    await themeProvider.setAmoledBlack(value);
+  }
+
+  Future<void> _handleSelectAccent(
+    BuildContext context,
+    ThemeProvider themeProvider,
+    bool isPro,
+    ProAccentColor accent,
+  ) async {
+    if (accent.isPro && !isPro) {
+      await showProPaywall(
+        context,
+        highlightedFeature: ProFeature.customThemes,
+      );
+      return;
+    }
+    await themeProvider.setAccentColor(accent);
+  }
+
+  Future<void> _handleSelectWidgetStyle(
+    BuildContext context,
+    ThemeProvider themeProvider,
+    bool isPro,
+    WidgetStyle style,
+  ) async {
+    if (style.isPro && !isPro) {
+      await showProPaywall(
+        context,
+        highlightedFeature: ProFeature.widgetStyles,
+      );
+      return;
+    }
+    await themeProvider.setWidgetStyle(style);
   }
 
   @override
@@ -41,8 +117,13 @@ class ThemeSettingsScreen extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final l10n = AppLocalizations.of(context);
     final themeProvider = context.watch<ThemeProvider>();
+    final subscriptionProvider = context.watch<SubscriptionProvider?>();
+    final isPro = subscriptionProvider?.isPro ?? false;
     final previewTheme = _resolvePreviewTheme(context, themeProvider);
-    final activePresetName = _presetCopy(themeProvider.preset, l10n).$1;
+    final activeBadgeName =
+        themeProvider.accentColor == ProAccentColor.monochrome
+            ? _presetCopy(themeProvider.preset, l10n).$1
+            : _accentLabel(themeProvider.accentColor, l10n);
 
     return Scaffold(
       appBar: AppBar(
@@ -58,7 +139,7 @@ class ThemeSettingsScreen extends StatelessWidget {
               data: previewTheme,
               child: _TimelineLivePreviewCard(
                 key: const ValueKey('theme_live_preview'),
-                presetLabel: activePresetName,
+                presetLabel: activeBadgeName,
                 l10n: l10n,
               ),
             ),
@@ -120,7 +201,355 @@ class ThemeSettingsScreen extends StatelessWidget {
                 );
               },
             ),
+            const SizedBox(height: 22),
+            Material(
+              color: colorScheme.surface,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+                side: BorderSide(color: colorScheme.outline, width: 1),
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: SwitchListTile(
+                key: const ValueKey('amoled_black_switch'),
+                value: themeProvider.isAmoledBlack,
+                onChanged: (value) => _handleToggleAmoled(
+                  context,
+                  themeProvider,
+                  isPro,
+                  value,
+                ),
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 4,
+                ),
+                secondary: Icon(
+                  Icons.contrast_rounded,
+                  size: 20,
+                  color: themeProvider.isAmoledBlack
+                      ? colorScheme.primary
+                      : colorScheme.onSurfaceVariant,
+                ),
+                title: Row(
+                  children: [
+                    Flexible(
+                      child: Text(
+                        l10n.amoledPureBlackTitle,
+                        style: theme.textTheme.titleMedium?.copyWith(
+                          fontSize: 14.5,
+                        ),
+                      ),
+                    ),
+                    if (!isPro) ...[
+                      const SizedBox(width: 8),
+                      _ProTagBadge(label: l10n.proBadge),
+                    ],
+                  ],
+                ),
+                subtitle: Text(
+                  l10n.amoledPureBlackSubtitle,
+                  style: theme.textTheme.bodySmall,
+                ),
+              ),
+            ),
+            const SizedBox(height: 22),
+            _SectionHeader(title: l10n.customAccentSection),
+            const SizedBox(height: 8),
+            Wrap(
+              spacing: 8,
+              runSpacing: 8,
+              children: [
+                for (final accent in ProAccentColor.values)
+                  _AccentColorChip(
+                    key: ValueKey('accent_chip_${accent.key}'),
+                    accent: accent,
+                    label: _accentLabel(accent, l10n),
+                    proBadgeLabel: l10n.proBadge,
+                    isSelected: themeProvider.accentColor == accent,
+                    showProBadge: accent.isPro && !isPro,
+                    onTap: () => _handleSelectAccent(
+                      context,
+                      themeProvider,
+                      isPro,
+                      accent,
+                    ),
+                  ),
+              ],
+            ),
+            const SizedBox(height: 22),
+            _SectionHeader(title: l10n.widgetStyleSection),
+            const SizedBox(height: 8),
+            Row(
+              children: [
+                for (var i = 0; i < WidgetStyle.values.length; i++) ...[
+                  Expanded(
+                    child: _WidgetStyleCard(
+                      key: ValueKey(
+                        'widget_style_${WidgetStyle.values[i].key}',
+                      ),
+                      style: WidgetStyle.values[i],
+                      label: _widgetStyleLabel(WidgetStyle.values[i], l10n),
+                      proBadgeLabel: l10n.proBadge,
+                      isSelected:
+                          themeProvider.widgetStyle == WidgetStyle.values[i],
+                      showProBadge: WidgetStyle.values[i].isPro && !isPro,
+                      onTap: () => _handleSelectWidgetStyle(
+                        context,
+                        themeProvider,
+                        isPro,
+                        WidgetStyle.values[i],
+                      ),
+                    ),
+                  ),
+                  if (i < WidgetStyle.values.length - 1)
+                    const SizedBox(width: 8),
+                ],
+              ],
+            ),
           ],
+        ),
+      ),
+    );
+  }
+}
+
+class _ProTagBadge extends StatelessWidget {
+  const _ProTagBadge({required this.label});
+
+  final String label;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
+      decoration: BoxDecoration(
+        color: colorScheme.primaryContainer,
+        borderRadius: BorderRadius.circular(5),
+      ),
+      child: Text(
+        label,
+        style: theme.textTheme.labelSmall?.copyWith(
+          color: colorScheme.onPrimaryContainer,
+          fontSize: 9.5,
+          fontWeight: FontWeight.w700,
+          letterSpacing: 0.5,
+        ),
+      ),
+    );
+  }
+}
+
+class _AccentColorChip extends StatelessWidget {
+  const _AccentColorChip({
+    super.key,
+    required this.accent,
+    required this.label,
+    required this.proBadgeLabel,
+    required this.isSelected,
+    required this.showProBadge,
+    required this.onTap,
+  });
+
+  final ProAccentColor accent;
+  final String label;
+  final String proBadgeLabel;
+  final bool isSelected;
+  final bool showProBadge;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final swatch = accent.previewColor(theme.brightness);
+    final onSwatch = theme.brightness == Brightness.dark
+        ? accent.tokens.onPrimaryDark
+        : accent.tokens.onPrimaryLight;
+
+    return Material(
+      color: colorScheme.surface,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(
+          color: isSelected ? swatch : colorScheme.outline,
+          width: isSelected ? 1.5 : 1,
+        ),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: 48),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            child: Row(
+              mainAxisSize: MainAxisSize.min,
+              children: [
+                Container(
+                  width: 20,
+                  height: 20,
+                  decoration: BoxDecoration(
+                    color: swatch,
+                    shape: BoxShape.circle,
+                    border: Border.all(
+                      color: colorScheme.outline,
+                      width: 1,
+                    ),
+                  ),
+                  child: isSelected
+                      ? Icon(Icons.check_rounded, size: 13, color: onSwatch)
+                      : null,
+                ),
+                const SizedBox(width: 8),
+                Text(
+                  label,
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    fontSize: 13,
+                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
+                  ),
+                ),
+                if (showProBadge) ...[
+                  const SizedBox(width: 6),
+                  _ProTagBadge(label: proBadgeLabel),
+                ],
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _WidgetStyleCard extends StatelessWidget {
+  const _WidgetStyleCard({
+    super.key,
+    required this.style,
+    required this.label,
+    required this.proBadgeLabel,
+    required this.isSelected,
+    required this.showProBadge,
+    required this.onTap,
+  });
+
+  final WidgetStyle style;
+  final String label;
+  final String proBadgeLabel;
+  final bool isSelected;
+  final bool showProBadge;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    final Color previewBg;
+    final Color previewBorder;
+    final Color previewLine;
+    switch (style) {
+      case WidgetStyle.standard:
+        previewBg = colorScheme.surfaceContainerHighest;
+        previewBorder = colorScheme.outline;
+        previewLine = colorScheme.onSurfaceVariant;
+      case WidgetStyle.amoled:
+        previewBg = const Color(0xFF000000);
+        previewBorder = const Color(0xFF1E1E1E);
+        previewLine = const Color(0xFFFAFAFA);
+      case WidgetStyle.translucent:
+        previewBg = const Color(0xB3121212);
+        previewBorder = const Color(0x4DFFFFFF);
+        previewLine = const Color(0xFFFAFAFA);
+    }
+
+    return Material(
+      color: colorScheme.surface,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14),
+        side: BorderSide(
+          color: isSelected ? colorScheme.primary : colorScheme.outline,
+          width: isSelected ? 1.5 : 1,
+        ),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: Padding(
+          padding: const EdgeInsets.all(10),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              Container(
+                height: 46,
+                padding: const EdgeInsets.all(8),
+                decoration: BoxDecoration(
+                  color: previewBg,
+                  borderRadius: BorderRadius.circular(10),
+                  border: Border.all(color: previewBorder, width: 1),
+                ),
+                child: Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  children: [
+                    Container(
+                      width: 34,
+                      height: 5,
+                      decoration: BoxDecoration(
+                        color: previewLine.withValues(alpha: 0.85),
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                    ),
+                    Container(
+                      width: double.infinity,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: previewLine.withValues(alpha: 0.35),
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                    ),
+                    Container(
+                      width: 44,
+                      height: 4,
+                      decoration: BoxDecoration(
+                        color: previewLine.withValues(alpha: 0.35),
+                        borderRadius: BorderRadius.circular(999),
+                      ),
+                    ),
+                  ],
+                ),
+              ),
+              const SizedBox(height: 8),
+              Row(
+                mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                children: [
+                  Flexible(
+                    child: Text(
+                      label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.labelMedium?.copyWith(
+                        fontSize: 12,
+                        fontWeight:
+                            isSelected ? FontWeight.w700 : FontWeight.w600,
+                      ),
+                    ),
+                  ),
+                  if (showProBadge)
+                    _ProTagBadge(label: proBadgeLabel)
+                  else if (isSelected)
+                    Icon(
+                      Icons.check_circle_rounded,
+                      size: 15,
+                      color: colorScheme.primary,
+                    ),
+                ],
+              ),
+            ],
+          ),
         ),
       ),
     );

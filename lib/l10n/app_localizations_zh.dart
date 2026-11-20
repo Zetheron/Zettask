@@ -1342,4 +1342,133 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get calendarReadOnlyInfo => '已从设备日历同步。此项目为只读，无法在 Zettask 中编辑。';
+
+  @override
+  String get proBrandTitle => 'Zettask Pro';
+
+  @override
+  String get proBadge => 'PRO';
+
+  @override
+  String get proPaywallSubtitle => '云端同步、设备日历、应用锁与 OLED 纯黑主题一站式体验。';
+
+  @override
+  String proActiveBannerTitle(String plan) {
+    return '已开通 — $plan';
+  }
+
+  @override
+  String get proActiveBannerSubtitle => '感谢你支持 Zettask。';
+
+  @override
+  String get proUpgradeBannerSubtitle => 'AMOLED 主题、自定义强调色、小组件样式等';
+
+  @override
+  String get proBenefitCloudSync => '云端同步与多设备支持';
+
+  @override
+  String get proBenefitCalendar => '日历集成与法定节假日';
+
+  @override
+  String get proBenefitAppLock => '生物识别应用锁与最近任务隐私保护';
+
+  @override
+  String get proBenefitProjectsCsv => '无限项目与 CSV 导出';
+
+  @override
+  String get proBenefitCustomization => 'AMOLED 纯黑主题、自定义强调色与小组件样式';
+
+  @override
+  String get proPlanMonthlyTitle => '按月订阅';
+
+  @override
+  String get proPlanMonthlyPrice => '\$1.99 / 月';
+
+  @override
+  String get proPlanYearlyTitle => '按年订阅';
+
+  @override
+  String get proPlanYearlyPrice => '\$12.99 / 年';
+
+  @override
+  String get proPlanYearlyBadge => '最划算';
+
+  @override
+  String get proPlanYearlySavings => '立省约 43%';
+
+  @override
+  String get proPlanLifetimeTitle => '终身版';
+
+  @override
+  String get proPlanLifetimePrice => '\$29.99';
+
+  @override
+  String get proPlanLifetimeBadge => '一次付费';
+
+  @override
+  String get proContinueButton => '继续';
+
+  @override
+  String get proAlreadyActiveButton => 'Zettask Pro 已激活';
+
+  @override
+  String get proRestorePurchasesButton => '恢复购买';
+
+  @override
+  String get proLegalFootnote => '订阅到期将自动续费，除非提前取消。可随时在 Google Play 中取消。';
+
+  @override
+  String get proStoreUnavailableMessage =>
+      '当前设备暂不支持 Google Play 结算，请连接 Google Play 后重试。';
+
+  @override
+  String get proPurchaseSuccessMessage => 'Zettask Pro 已激活。';
+
+  @override
+  String get proRestoreSuccessMessage => '已恢复你的 Zettask Pro 购买记录。';
+
+  @override
+  String get proRestoreEmptyMessage => '未在此账号找到有效的 Zettask Pro 购买记录。';
+
+  @override
+  String get proPurchaseFailedMessage => '暂时无法完成购买，请重试。';
+
+  @override
+  String get debugProSimulationLabel => '开发者模式：模拟 Pro';
+
+  @override
+  String get amoledPureBlackTitle => 'AMOLED 纯黑';
+
+  @override
+  String get amoledPureBlackSubtitle => '纯黑 #000000 深色背景，更适合 OLED 屏幕省电';
+
+  @override
+  String get customAccentSection => '自定义强调色';
+
+  @override
+  String get accentMonochrome => '单色';
+
+  @override
+  String get accentSage => '鼠尾草绿';
+
+  @override
+  String get accentIndigo => '靛蓝';
+
+  @override
+  String get accentTerracotta => '陶土橙';
+
+  @override
+  String get accentAmber => '琥珀金';
+
+  @override
+  String get widgetStyleSection => '主屏幕小组件样式';
+
+  @override
+  String get widgetStyleStandard => '标准';
+
+  @override
+  String get widgetStyleAmoled => 'AMOLED';
+
+  @override
+  String get widgetStyleTranslucent => '半透明';
 }

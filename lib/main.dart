@@ -11,6 +11,7 @@ import 'providers/app_lock_provider.dart';
 import 'providers/auth_provider.dart';
 import 'providers/calendar_provider.dart';
 import 'providers/locale_provider.dart';
+import 'providers/subscription_provider.dart';
 import 'providers/task_provider.dart';
 import 'providers/theme_provider.dart';
 import 'providers/workspace_provider.dart';
@@ -23,6 +24,7 @@ import 'services/database_service.dart';
 import 'services/export_service.dart';
 import 'services/home_widget_service.dart';
 import 'services/notification_service.dart';
+import 'services/subscription_service.dart';
 import 'widgets/app_lock_gate.dart';
 
 export 'providers/locale_provider.dart' show prefLocaleKey;
@@ -30,6 +32,9 @@ export 'providers/theme_provider.dart'
     show
         prefThemeModeKey,
         prefThemePresetKey,
+        prefThemeAmoledKey,
+        prefThemeAccentKey,
+        prefWidgetStyleKey,
         parseThemeMode,
         serializeThemeMode;
 
@@ -85,6 +90,7 @@ class ZettaskApp extends StatefulWidget {
     this.appLockService,
     this.privacyService,
     this.homeWidgetService,
+    this.subscriptionService,
     this.initialDate,
     this.initialThemeMode,
     this.initialThemePreset,
@@ -102,6 +108,7 @@ class ZettaskApp extends StatefulWidget {
   final AppLockService? appLockService;
   final ScreenPrivacyService? privacyService;
   final HomeWidgetSyncService? homeWidgetService;
+  final SubscriptionService? subscriptionService;
   final DateTime? initialDate;
   final ThemeMode? initialThemeMode;
   final AppThemePreset? initialThemePreset;
@@ -115,6 +122,7 @@ class ZettaskApp extends StatefulWidget {
 class _ZettaskAppState extends State<ZettaskApp> {
   late final ThemeProvider _themeProvider;
   late final LocaleProvider _localeProvider;
+  late final SubscriptionProvider _subscriptionProvider;
 
   HomeWidgetSyncService get _homeWidgetService =>
       widget.homeWidgetService ?? AndroidHomeWidgetService.instance;
@@ -122,16 +130,27 @@ class _ZettaskAppState extends State<ZettaskApp> {
   @override
   void initState() {
     super.initState();
+    final styleService = _homeWidgetService is HomeWidgetStyleService
+        ? _homeWidgetService as HomeWidgetStyleService
+        : null;
+
     _themeProvider = ThemeProvider(
       initialThemeMode: widget.initialThemeMode ?? ThemeMode.system,
       initialPreset: widget.initialThemePreset ?? AppThemePreset.defaultIndigo,
+      homeWidgetStyleService: styleService,
     );
-    if (widget.initialThemeMode == null || widget.initialThemePreset == null) {
-      _themeProvider.loadSavedPreferences(
-        restoreMode: widget.initialThemeMode == null,
-        restorePreset: widget.initialThemePreset == null,
-      );
-    }
+
+    _subscriptionProvider = SubscriptionProvider(
+      subscriptionService: widget.subscriptionService,
+      nowProvider: widget.nowProvider,
+      onProStatusChanged: (isPro) {
+        if (!isPro) {
+          _themeProvider.enforceProEntitlement(false);
+        }
+      },
+    );
+
+    _initializeThemeAndSubscription();
 
     _localeProvider = LocaleProvider(
       initialLocale: widget.initialLocale,
@@ -157,6 +176,17 @@ class _ZettaskAppState extends State<ZettaskApp> {
     }
   }
 
+  Future<void> _initializeThemeAndSubscription() async {
+    await _subscriptionProvider.initialize();
+    if (!mounted) return;
+    await _themeProvider.loadSavedPreferences(
+      restoreMode: widget.initialThemeMode == null,
+      restorePreset: widget.initialThemePreset == null,
+      restoreProOptions: true,
+      isPro: _subscriptionProvider.isPro,
+    );
+  }
+
   Future<void> _syncWidgetLabelsForLocale(Locale effectiveLocale) async {
     final l10n = lookupAppLocalizations(effectiveLocale);
     await _homeWidgetService.updateWidgetLabels(
@@ -169,6 +199,7 @@ class _ZettaskAppState extends State<ZettaskApp> {
   void dispose() {
     _themeProvider.dispose();
     _localeProvider.dispose();
+    _subscriptionProvider.dispose();
     super.dispose();
   }
 
@@ -178,6 +209,9 @@ class _ZettaskAppState extends State<ZettaskApp> {
       providers: [
         ChangeNotifierProvider<ThemeProvider>.value(value: _themeProvider),
         ChangeNotifierProvider<LocaleProvider>.value(value: _localeProvider),
+        ChangeNotifierProvider<SubscriptionProvider>.value(
+          value: _subscriptionProvider,
+        ),
         ChangeNotifierProvider<AppLockProvider>(
           create: (_) => AppLockProvider(
             appLockService: widget.appLockService,

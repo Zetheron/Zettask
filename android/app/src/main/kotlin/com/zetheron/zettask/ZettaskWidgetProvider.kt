@@ -29,6 +29,7 @@ class ZettaskWidgetProvider : HomeWidgetProvider() {
             KEY_WIDGET_EMPTY_TEXT,
             DEFAULT_EMPTY_TEXT,
         ).takeIf { it.isNotBlank() } ?: DEFAULT_EMPTY_TEXT
+        val widgetStyle = resolveWidgetStyle(context, widgetData)
 
         val parsedTasks = mutableListOf<Pair<String, String>>()
         try {
@@ -82,6 +83,12 @@ class ZettaskWidgetProvider : HomeWidgetProvider() {
         for (widgetId in appWidgetIds) {
             try {
                 val views = RemoteViews(context.packageName, R.layout.zettask_widget_layout)
+                applyWidgetStyleSafely(
+                    views = views,
+                    widgetStyle = widgetStyle,
+                    timeIds = timeIds,
+                    titleIds = titleIds,
+                )
 
                 views.setTextViewText(R.id.widget_header_title, widgetTitle)
                 views.setTextViewText(R.id.widget_empty_text, widgetEmptyText)
@@ -177,6 +184,92 @@ class ZettaskWidgetProvider : HomeWidgetProvider() {
         }
     }
 
+    private fun applyWidgetStyleSafely(
+        views: RemoteViews,
+        widgetStyle: String,
+        timeIds: IntArray,
+        titleIds: IntArray,
+    ) {
+        try {
+            when (widgetStyle) {
+                STYLE_AMOLED -> {
+                    views.setInt(
+                        R.id.widget_root,
+                        "setBackgroundResource",
+                        R.drawable.zettask_widget_background_amoled,
+                    )
+                    applyDarkWidgetTextColors(views, timeIds, titleIds)
+                }
+
+                STYLE_TRANSLUCENT -> {
+                    views.setInt(
+                        R.id.widget_root,
+                        "setBackgroundResource",
+                        R.drawable.zettask_widget_background_translucent,
+                    )
+                    applyDarkWidgetTextColors(views, timeIds, titleIds)
+                }
+
+                else -> {
+                    views.setInt(
+                        R.id.widget_root,
+                        "setBackgroundResource",
+                        R.drawable.zettask_widget_background,
+                    )
+                }
+            }
+        } catch (_: Exception) {
+            // Fall back to standard drawable so launcher never fails to render the widget.
+            try {
+                views.setInt(
+                    R.id.widget_root,
+                    "setBackgroundResource",
+                    R.drawable.zettask_widget_background,
+                )
+            } catch (_: Exception) {
+            }
+        }
+    }
+
+    private fun applyDarkWidgetTextColors(
+        views: RemoteViews,
+        timeIds: IntArray,
+        titleIds: IntArray,
+    ) {
+        val primaryColor = 0xFFFAFAFA.toInt()
+        val secondaryColor = 0xFFB3B3B3.toInt()
+        views.setTextColor(R.id.widget_header_title, primaryColor)
+        views.setTextColor(R.id.widget_empty_text, secondaryColor)
+        for (id in titleIds) {
+            views.setTextColor(id, primaryColor)
+        }
+        for (id in timeIds) {
+            views.setTextColor(id, secondaryColor)
+        }
+    }
+
+    private fun resolveWidgetStyle(
+        context: Context,
+        widgetData: SharedPreferences,
+    ): String {
+        val fromHomeWidget = readSafeString(widgetData, KEY_WIDGET_STYLE, "").trim()
+        if (fromHomeWidget.isNotEmpty()) {
+            return fromHomeWidget
+        }
+        return try {
+            val flutterPrefs = context.getSharedPreferences(
+                FLUTTER_PREFS_NAME,
+                Context.MODE_PRIVATE,
+            )
+            flutterPrefs.getString(FLUTTER_KEY_WIDGET_STYLE, STYLE_STANDARD)
+                ?.trim()
+                ?.takeIf { it.isNotEmpty() }
+                ?: STYLE_STANDARD
+        } catch (_: Exception) {
+            STYLE_STANDARD
+        }
+    }
+
     companion object {
         private const val HOME_WIDGET_LAUNCH_ACTION =
             "es.antonborri.home_widget.action.LAUNCH"
@@ -188,5 +281,11 @@ class ZettaskWidgetProvider : HomeWidgetProvider() {
         private const val KEY_TASKS_JSON = "today_tasks_json"
         private const val KEY_WIDGET_TITLE = "widget_title"
         private const val KEY_WIDGET_EMPTY_TEXT = "widget_empty_text"
+        private const val KEY_WIDGET_STYLE = "widget_style"
+        private const val FLUTTER_PREFS_NAME = "FlutterSharedPreferences"
+        private const val FLUTTER_KEY_WIDGET_STYLE = "flutter.zettask_widget_style"
+        private const val STYLE_STANDARD = "standard"
+        private const val STYLE_AMOLED = "amoled"
+        private const val STYLE_TRANSLUCENT = "translucent"
     }
 }

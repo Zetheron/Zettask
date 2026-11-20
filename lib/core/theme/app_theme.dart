@@ -232,6 +232,163 @@ enum AppThemePreset {
   }
 }
 
+enum ProAccentColor {
+  monochrome(
+    key: 'monochrome',
+    isPro: false,
+    tokens: ThemePaletteTokens(
+      primaryLight: Color(0xFF18181B),
+      onPrimaryLight: Color(0xFFFAFAFA),
+      primaryContainerLight: Color(0xFFE4E4E7),
+      onPrimaryContainerLight: Color(0xFF18181B),
+      secondaryLight: Color(0xFF52525B),
+      onSecondaryLight: Color(0xFFFAFAFA),
+      secondaryContainerLight: Color(0xFFF4F4F5),
+      onSecondaryContainerLight: Color(0xFF27272A),
+      primaryDark: Color(0xFFFAFAFA),
+      onPrimaryDark: Color(0xFF0A0A0A),
+      primaryContainerDark: Color(0xFF27272A),
+      onPrimaryContainerDark: Color(0xFFFAFAFA),
+      secondaryDark: Color(0xFFA1A1AA),
+      onSecondaryDark: Color(0xFF09090B),
+      secondaryContainerDark: Color(0xFF1F1F23),
+      onSecondaryContainerDark: Color(0xFFE4E4E7),
+    ),
+  ),
+  sage(
+    key: 'sage',
+    isPro: true,
+    tokens: ThemePaletteTokens(
+      primaryLight: Color(0xFF2F6B4F),
+      onPrimaryLight: Color(0xFFFFFFFF),
+      primaryContainerLight: Color(0xFFE2F2E9),
+      onPrimaryContainerLight: Color(0xFF143526),
+      secondaryLight: Color(0xFF427A60),
+      onSecondaryLight: Color(0xFFFFFFFF),
+      secondaryContainerLight: Color(0xFFEDF7F1),
+      onSecondaryContainerLight: Color(0xFF1C4532),
+      primaryDark: Color(0xFF76C89F),
+      onPrimaryDark: Color(0xFF072417),
+      primaryContainerDark: Color(0xFF163829),
+      onPrimaryContainerDark: Color(0xFFD9F3E6),
+      secondaryDark: Color(0xFF9AD9B9),
+      onSecondaryDark: Color(0xFF0A291B),
+      secondaryContainerDark: Color(0xFF1C3F2F),
+      onSecondaryContainerDark: Color(0xFFE2F5EB),
+    ),
+  ),
+  indigo(
+    key: 'indigo',
+    isPro: true,
+    tokens: ThemePaletteTokens(
+      primaryLight: Color(0xFF3B5BDB),
+      onPrimaryLight: Color(0xFFFFFFFF),
+      primaryContainerLight: Color(0xFFE0E7FF),
+      onPrimaryContainerLight: Color(0xFF1B2A6B),
+      secondaryLight: Color(0xFF4C6EF5),
+      onSecondaryLight: Color(0xFFFFFFFF),
+      secondaryContainerLight: Color(0xFFEEF2FF),
+      onSecondaryContainerLight: Color(0xFF22337A),
+      primaryDark: Color(0xFF93B4FF),
+      onPrimaryDark: Color(0xFF0D1B4C),
+      primaryContainerDark: Color(0xFF1D2C5E),
+      onPrimaryContainerDark: Color(0xFFE0EAFF),
+      secondaryDark: Color(0xFFB3CAFF),
+      onSecondaryDark: Color(0xFF102059),
+      secondaryContainerDark: Color(0xFF22336B),
+      onSecondaryContainerDark: Color(0xFFEBF1FF),
+    ),
+  ),
+  terracotta(
+    key: 'terracotta',
+    isPro: true,
+    tokens: ThemePaletteTokens(
+      primaryLight: Color(0xFFB5471D),
+      onPrimaryLight: Color(0xFFFFFFFF),
+      primaryContainerLight: Color(0xFFFDECE4),
+      onPrimaryContainerLight: Color(0xFF5A1E0A),
+      secondaryLight: Color(0xFFC45B32),
+      onSecondaryLight: Color(0xFFFFFFFF),
+      secondaryContainerLight: Color(0xFFFEF3EE),
+      onSecondaryContainerLight: Color(0xFF69250E),
+      primaryDark: Color(0xFFF4976C),
+      onPrimaryDark: Color(0xFF361004),
+      primaryContainerDark: Color(0xFF52210E),
+      onPrimaryContainerDark: Color(0xFFFDECE4),
+      secondaryDark: Color(0xFFF7B191),
+      onSecondaryDark: Color(0xFF3D1306),
+      secondaryContainerDark: Color(0xFF5E2712),
+      onSecondaryContainerDark: Color(0xFFFEF2EC),
+    ),
+  ),
+  amber(
+    key: 'amber',
+    isPro: true,
+    tokens: ThemePaletteTokens(
+      primaryLight: Color(0xFF9A5B00),
+      onPrimaryLight: Color(0xFFFFFFFF),
+      primaryContainerLight: Color(0xFFFEF3C7),
+      onPrimaryContainerLight: Color(0xFF4D2B00),
+      secondaryLight: Color(0xFFB46B00),
+      onSecondaryLight: Color(0xFFFFFFFF),
+      secondaryContainerLight: Color(0xFFFFF8DB),
+      onSecondaryContainerLight: Color(0xFF573100),
+      primaryDark: Color(0xFFFBBF24),
+      onPrimaryDark: Color(0xFF2E1900),
+      primaryContainerDark: Color(0xFF4A2D05),
+      onPrimaryContainerDark: Color(0xFFFEF3C7),
+      secondaryDark: Color(0xFFFCD34D),
+      onSecondaryDark: Color(0xFF331C00),
+      secondaryContainerDark: Color(0xFF573607),
+      onSecondaryContainerDark: Color(0xFFFFF7D6),
+    ),
+  );
+
+  const ProAccentColor({
+    required this.key,
+    required this.isPro,
+    required this.tokens,
+  });
+
+  final String key;
+  final bool isPro;
+  final ThemePaletteTokens tokens;
+
+  Color previewColor(Brightness brightness) {
+    return brightness == Brightness.dark
+        ? tokens.primaryDark
+        : tokens.primaryLight;
+  }
+
+  static ProAccentColor fromStorage(String? rawKey) {
+    for (final accent in ProAccentColor.values) {
+      if (accent.key == rawKey) return accent;
+    }
+    return ProAccentColor.monochrome;
+  }
+}
+
+enum WidgetStyle {
+  standard(key: 'standard', isPro: false),
+  amoled(key: 'amoled', isPro: true),
+  translucent(key: 'translucent', isPro: true);
+
+  const WidgetStyle({
+    required this.key,
+    required this.isPro,
+  });
+
+  final String key;
+  final bool isPro;
+
+  static WidgetStyle fromStorage(String? rawKey) {
+    for (final style in WidgetStyle.values) {
+      if (style.key == rawKey) return style;
+    }
+    return WidgetStyle.standard;
+  }
+}
+
 class AppTheme {
   AppTheme._();
 
@@ -253,6 +410,11 @@ class AppTheme {
   static const Color darkBorder = Color(0xFF262626);
   static const Color darkTextPrimary = Color(0xFFFAFAFA);
   static const Color darkTextSecondary = Color(0xFFA3A3A3);
+
+  static const Color amoledBackground = Color(0xFF000000);
+  static const Color amoledSurface = Color(0xFF0A0A0A);
+  static const Color amoledSurfaceVariant = Color(0xFF141414);
+  static const Color amoledBorder = Color(0xFF1E1E1E);
 
   static const Color errorLight = Color(0xFFDC2626);
   static const Color errorDark = Color(0xFFF87171);
@@ -338,8 +500,13 @@ class AppTheme {
 
   static ThemeData get darkTheme => darkThemeFor(AppThemePreset.defaultIndigo);
 
-  static ThemeData lightThemeFor(AppThemePreset preset) {
-    final t = preset.tokens;
+  static ThemeData lightThemeFor(
+    AppThemePreset preset, {
+    ProAccentColor accentColor = ProAccentColor.monochrome,
+  }) {
+    final t = accentColor == ProAccentColor.monochrome
+        ? preset.tokens
+        : accentColor.tokens;
     final colorScheme = ColorScheme.light(
       primary: t.primaryLight,
       onPrimary: t.onPrimaryLight,
@@ -481,8 +648,20 @@ class AppTheme {
     );
   }
 
-  static ThemeData darkThemeFor(AppThemePreset preset) {
-    final t = preset.tokens;
+  static ThemeData darkThemeFor(
+    AppThemePreset preset, {
+    bool amoled = false,
+    ProAccentColor accentColor = ProAccentColor.monochrome,
+  }) {
+    final t = accentColor == ProAccentColor.monochrome
+        ? preset.tokens
+        : accentColor.tokens;
+    final resolvedBackground = amoled ? amoledBackground : darkBackground;
+    final resolvedSurface = amoled ? amoledSurface : darkSurface;
+    final resolvedSurfaceVariant =
+        amoled ? amoledSurfaceVariant : darkSurfaceVariant;
+    final resolvedBorder = amoled ? amoledBorder : darkBorder;
+
     final colorScheme = ColorScheme.dark(
       primary: t.primaryDark,
       onPrimary: t.onPrimaryDark,
@@ -492,12 +671,12 @@ class AppTheme {
       onSecondary: t.onSecondaryDark,
       secondaryContainer: t.secondaryContainerDark,
       onSecondaryContainer: t.onSecondaryContainerDark,
-      surface: darkSurface,
+      surface: resolvedSurface,
       onSurface: darkTextPrimary,
       onSurfaceVariant: darkTextSecondary,
-      surfaceContainerHighest: darkSurfaceVariant,
-      outline: darkBorder,
-      outlineVariant: darkBorder,
+      surfaceContainerHighest: resolvedSurfaceVariant,
+      outline: resolvedBorder,
+      outlineVariant: resolvedBorder,
       error: errorDark,
       onError: const Color(0xFF450A0A),
     );
@@ -513,10 +692,10 @@ class AppTheme {
       useMaterial3: true,
       brightness: Brightness.dark,
       colorScheme: colorScheme,
-      scaffoldBackgroundColor: darkBackground,
+      scaffoldBackgroundColor: resolvedBackground,
       textTheme: _buildTextTheme(baseTextTheme, darkTextSecondary),
       appBarTheme: AppBarTheme(
-        backgroundColor: darkBackground,
+        backgroundColor: resolvedBackground,
         foregroundColor: darkTextPrimary,
         elevation: 0,
         scrolledUnderElevation: 0,
@@ -529,12 +708,12 @@ class AppTheme {
         ),
       ),
       cardTheme: CardThemeData(
-        color: darkSurface,
+        color: resolvedSurface,
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(14),
-          side: const BorderSide(color: darkBorder, width: 1),
+          side: BorderSide(color: resolvedBorder, width: 1),
         ),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
@@ -549,9 +728,9 @@ class AppTheme {
         ),
       ),
       chipTheme: ChipThemeData(
-        backgroundColor: darkSurface,
+        backgroundColor: resolvedSurface,
         selectedColor: colorScheme.primaryContainer,
-        side: const BorderSide(color: darkBorder, width: 1),
+        side: BorderSide(color: resolvedBorder, width: 1),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
@@ -569,18 +748,18 @@ class AppTheme {
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: darkSurfaceVariant,
+        fillColor: resolvedSurfaceVariant,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 14,
           vertical: 14,
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: darkBorder, width: 1),
+          borderSide: BorderSide(color: resolvedBorder, width: 1),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: darkBorder, width: 1),
+          borderSide: BorderSide(color: resolvedBorder, width: 1),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
@@ -595,17 +774,17 @@ class AppTheme {
           borderSide: const BorderSide(color: errorDark, width: 1.5),
         ),
       ),
-      bottomSheetTheme: const BottomSheetThemeData(
-        backgroundColor: darkSurface,
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: resolvedSurface,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         ),
       ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
-        backgroundColor: darkSurfaceVariant,
+        backgroundColor: resolvedSurfaceVariant,
         contentTextStyle: GoogleFonts.plusJakartaSans(
           color: darkTextPrimary,
           fontSize: 14,
@@ -614,11 +793,11 @@ class AppTheme {
         actionTextColor: t.primaryDark,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
-          side: const BorderSide(color: darkBorder, width: 1),
+          side: BorderSide(color: resolvedBorder, width: 1),
         ),
       ),
-      dividerTheme: const DividerThemeData(
-        color: darkBorder,
+      dividerTheme: DividerThemeData(
+        color: resolvedBorder,
         thickness: 1,
         space: 1,
       ),

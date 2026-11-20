@@ -1349,4 +1349,135 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get calendarReadOnlyInfo =>
       '기기 캘린더에서 동기화되었습니다. 이 항목은 읽기 전용이며 Zettask에서 편집할 수 없습니다.';
+
+  @override
+  String get proBrandTitle => 'Zettask Pro';
+
+  @override
+  String get proBadge => 'PRO';
+
+  @override
+  String get proPaywallSubtitle =>
+      '클라우드 동기화, 캘린더 연동, 앱 잠금, OLED 테마를 한 번에 이용하세요.';
+
+  @override
+  String proActiveBannerTitle(String plan) {
+    return '활성 — $plan';
+  }
+
+  @override
+  String get proActiveBannerSubtitle => 'Zettask를 후원해 주셔서 감사합니다.';
+
+  @override
+  String get proUpgradeBannerSubtitle => 'AMOLED 테마, 맞춤 강조 색상, 위젯 스타일 등';
+
+  @override
+  String get proBenefitCloudSync => '클라우드 동기화 및 멀티 디바이스';
+
+  @override
+  String get proBenefitCalendar => '캘린더 연동 및 공휴일 표시';
+
+  @override
+  String get proBenefitAppLock => '생체 인식 앱 잠금 및 최근 앱 보호';
+
+  @override
+  String get proBenefitProjectsCsv => '무제한 프로젝트 및 CSV 내보내기';
+
+  @override
+  String get proBenefitCustomization => 'AMOLED 퓨어 블랙, 맞춤 강조 색상 및 위젯 스타일';
+
+  @override
+  String get proPlanMonthlyTitle => '월간';
+
+  @override
+  String get proPlanMonthlyPrice => '₩2,500 / 월';
+
+  @override
+  String get proPlanYearlyTitle => '연간';
+
+  @override
+  String get proPlanYearlyPrice => '₩17,000 / 년';
+
+  @override
+  String get proPlanYearlyBadge => '최고 가성비';
+
+  @override
+  String get proPlanYearlySavings => '약 43% 할인';
+
+  @override
+  String get proPlanLifetimeTitle => '평생 이용';
+
+  @override
+  String get proPlanLifetimePrice => '₩39,000';
+
+  @override
+  String get proPlanLifetimeBadge => '일회성 결제';
+
+  @override
+  String get proContinueButton => '계속하기';
+
+  @override
+  String get proAlreadyActiveButton => 'Zettask Pro 활성';
+
+  @override
+  String get proRestorePurchasesButton => '구매 복원';
+
+  @override
+  String get proLegalFootnote =>
+      '구독은 취소하지 않으면 자동 갱신됩니다. Google Play에서 언제든 취소할 수 있습니다.';
+
+  @override
+  String get proStoreUnavailableMessage =>
+      '이 기기에서는 아직 Google Play 결제를 사용할 수 없습니다. 연결 후 다시 시도해 주세요.';
+
+  @override
+  String get proPurchaseSuccessMessage => 'Zettask Pro가 활성화되었습니다.';
+
+  @override
+  String get proRestoreSuccessMessage => 'Zettask Pro 구매 내역이 복원되었습니다.';
+
+  @override
+  String get proRestoreEmptyMessage => '이 계정에서 활성화된 Zettask Pro 구매를 찾을 수 없습니다.';
+
+  @override
+  String get proPurchaseFailedMessage => '지금은 구매를 완료할 수 없습니다. 다시 시도해 주세요.';
+
+  @override
+  String get debugProSimulationLabel => '개발자 모드: Pro 시뮬레이션';
+
+  @override
+  String get amoledPureBlackTitle => 'AMOLED 퓨어 블랙';
+
+  @override
+  String get amoledPureBlackSubtitle => 'OLED 화면 배터리를 절약하는 순수 #000000 배경';
+
+  @override
+  String get customAccentSection => '맞춤 강조 색상';
+
+  @override
+  String get accentMonochrome => '모노크롬';
+
+  @override
+  String get accentSage => '세이지';
+
+  @override
+  String get accentIndigo => '인디고';
+
+  @override
+  String get accentTerracotta => '테라코타';
+
+  @override
+  String get accentAmber => '앰버';
+
+  @override
+  String get widgetStyleSection => '홈 화면 위젯 스타일';
+
+  @override
+  String get widgetStyleStandard => '기본';
+
+  @override
+  String get widgetStyleAmoled => 'AMOLED';
+
+  @override
+  String get widgetStyleTranslucent => '반투명';
 }

@@ -2650,6 +2650,258 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Synced from device calendar. This item is read-only and cannot be edited in Zettask.'**
   String get calendarReadOnlyInfo;
+
+  /// No description provided for @proBrandTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Zettask Pro'**
+  String get proBrandTitle;
+
+  /// No description provided for @proBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'PRO'**
+  String get proBadge;
+
+  /// No description provided for @proPaywallSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud sync, device calendars, app lock, and OLED themes in one plan.'**
+  String get proPaywallSubtitle;
+
+  /// No description provided for @proActiveBannerTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Active — {plan}'**
+  String proActiveBannerTitle(String plan);
+
+  /// No description provided for @proActiveBannerSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Thank you for supporting Zettask.'**
+  String get proActiveBannerSubtitle;
+
+  /// No description provided for @proUpgradeBannerSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AMOLED theme, custom accents, widget styles & more'**
+  String get proUpgradeBannerSubtitle;
+
+  /// No description provided for @proBenefitCloudSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud Sync & Multi-Device'**
+  String get proBenefitCloudSync;
+
+  /// No description provided for @proBenefitCalendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar Integration & National Holidays'**
+  String get proBenefitCalendar;
+
+  /// No description provided for @proBenefitAppLock.
+  ///
+  /// In en, this message translates to:
+  /// **'Biometric App Lock & Recent Apps Privacy'**
+  String get proBenefitAppLock;
+
+  /// No description provided for @proBenefitProjectsCsv.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlimited Projects & CSV Export'**
+  String get proBenefitProjectsCsv;
+
+  /// No description provided for @proBenefitCustomization.
+  ///
+  /// In en, this message translates to:
+  /// **'AMOLED Pure Black, Custom Accents & Widget Styles'**
+  String get proBenefitCustomization;
+
+  /// No description provided for @proPlanMonthlyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Monthly'**
+  String get proPlanMonthlyTitle;
+
+  /// No description provided for @proPlanMonthlyPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'\$1.99 / month'**
+  String get proPlanMonthlyPrice;
+
+  /// No description provided for @proPlanYearlyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Yearly'**
+  String get proPlanYearlyTitle;
+
+  /// No description provided for @proPlanYearlyPrice.
+  ///
+  /// In en, this message translates to:
+  /// **'\$12.99 / year'**
+  String get proPlanYearlyPrice;
+
+  /// No description provided for @proPlanYearlyBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Best Value'**
+  String get proPlanYearlyBadge;
+
+  /// No description provided for @proPlanYearlySavings.
+  ///
+  /// In en, this message translates to:
+  /// **'Save ~43%'**
+  String get proPlanYearlySavings;
+
+  /// No description provided for @proPlanLifetimeTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Lifetime'**
+  String get proPlanLifetimeTitle;
+
+  /// No description provided for @proPlanLifetimePrice.
+  ///
+  /// In en, this message translates to:
+  /// **'\$29.99'**
+  String get proPlanLifetimePrice;
+
+  /// No description provided for @proPlanLifetimeBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'One-Time'**
+  String get proPlanLifetimeBadge;
+
+  /// No description provided for @proContinueButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get proContinueButton;
+
+  /// No description provided for @proAlreadyActiveButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Zettask Pro Active'**
+  String get proAlreadyActiveButton;
+
+  /// No description provided for @proRestorePurchasesButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore Purchases'**
+  String get proRestorePurchasesButton;
+
+  /// No description provided for @proLegalFootnote.
+  ///
+  /// In en, this message translates to:
+  /// **'Subscriptions renew automatically unless cancelled. Cancel anytime in Google Play.'**
+  String get proLegalFootnote;
+
+  /// No description provided for @proStoreUnavailableMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Google Play Billing is not available on this device yet. Try again once connected to Google Play.'**
+  String get proStoreUnavailableMessage;
+
+  /// No description provided for @proPurchaseSuccessMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Zettask Pro is now active.'**
+  String get proPurchaseSuccessMessage;
+
+  /// No description provided for @proRestoreSuccessMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Zettask Pro purchase has been restored.'**
+  String get proRestoreSuccessMessage;
+
+  /// No description provided for @proRestoreEmptyMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'No active Zettask Pro purchase was found on this account.'**
+  String get proRestoreEmptyMessage;
+
+  /// No description provided for @proPurchaseFailedMessage.
+  ///
+  /// In en, this message translates to:
+  /// **'Could not complete the purchase right now. Please try again.'**
+  String get proPurchaseFailedMessage;
+
+  /// No description provided for @debugProSimulationLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Developer Mode: Pro Simulation'**
+  String get debugProSimulationLabel;
+
+  /// No description provided for @amoledPureBlackTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'AMOLED Pure Black'**
+  String get amoledPureBlackTitle;
+
+  /// No description provided for @amoledPureBlackSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Pure #000000 dark background for OLED displays'**
+  String get amoledPureBlackSubtitle;
+
+  /// No description provided for @customAccentSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Custom Accent Color'**
+  String get customAccentSection;
+
+  /// No description provided for @accentMonochrome.
+  ///
+  /// In en, this message translates to:
+  /// **'Monochrome'**
+  String get accentMonochrome;
+
+  /// No description provided for @accentSage.
+  ///
+  /// In en, this message translates to:
+  /// **'Sage'**
+  String get accentSage;
+
+  /// No description provided for @accentIndigo.
+  ///
+  /// In en, this message translates to:
+  /// **'Indigo'**
+  String get accentIndigo;
+
+  /// No description provided for @accentTerracotta.
+  ///
+  /// In en, this message translates to:
+  /// **'Terracotta'**
+  String get accentTerracotta;
+
+  /// No description provided for @accentAmber.
+  ///
+  /// In en, this message translates to:
+  /// **'Amber'**
+  String get accentAmber;
+
+  /// No description provided for @widgetStyleSection.
+  ///
+  /// In en, this message translates to:
+  /// **'Home Screen Widget Style'**
+  String get widgetStyleSection;
+
+  /// No description provided for @widgetStyleStandard.
+  ///
+  /// In en, this message translates to:
+  /// **'Standard'**
+  String get widgetStyleStandard;
+
+  /// No description provided for @widgetStyleAmoled.
+  ///
+  /// In en, this message translates to:
+  /// **'AMOLED'**
+  String get widgetStyleAmoled;
+
+  /// No description provided for @widgetStyleTranslucent.
+  ///
+  /// In en, this message translates to:
+  /// **'Translucent'**
+  String get widgetStyleTranslucent;
 }
 
 class _AppLocalizationsDelegate

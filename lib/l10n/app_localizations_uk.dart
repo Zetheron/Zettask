@@ -1384,4 +1384,141 @@ class AppLocalizationsUk extends AppLocalizations {
   @override
   String get calendarReadOnlyInfo =>
       'Синхронізовано з календаря пристрою. Цей запис доступний лише для читання та не редагується в Zettask.';
+
+  @override
+  String get proBrandTitle => 'Zettask Pro';
+
+  @override
+  String get proBadge => 'PRO';
+
+  @override
+  String get proPaywallSubtitle =>
+      'Хмарна синхронізація, календарі, блокування додатку та OLED-теми.';
+
+  @override
+  String proActiveBannerTitle(String plan) {
+    return 'Активна — $plan';
+  }
+
+  @override
+  String get proActiveBannerSubtitle => 'Дякуємо за підтримку Zettask.';
+
+  @override
+  String get proUpgradeBannerSubtitle =>
+      'Тема AMOLED, власні акценти, стилі віджета та інше';
+
+  @override
+  String get proBenefitCloudSync => 'Хмарна синхронізація та кілька пристроїв';
+
+  @override
+  String get proBenefitCalendar => 'Інтеграція календаря та державні свята';
+
+  @override
+  String get proBenefitAppLock =>
+      'Біометричне блокування та приватність у недавніх';
+
+  @override
+  String get proBenefitProjectsCsv => 'Необмежені проєкти та експорт CSV';
+
+  @override
+  String get proBenefitCustomization =>
+      'AMOLED чистий чорний, кольори акценту та стилі віджета';
+
+  @override
+  String get proPlanMonthlyTitle => 'Місячний';
+
+  @override
+  String get proPlanMonthlyPrice => '\$1.99 / міс';
+
+  @override
+  String get proPlanYearlyTitle => 'Річний';
+
+  @override
+  String get proPlanYearlyPrice => '\$12.99 / рік';
+
+  @override
+  String get proPlanYearlyBadge => 'Найвигідніше';
+
+  @override
+  String get proPlanYearlySavings => 'Економія ~43%';
+
+  @override
+  String get proPlanLifetimeTitle => 'Назавжди';
+
+  @override
+  String get proPlanLifetimePrice => '\$29.99';
+
+  @override
+  String get proPlanLifetimeBadge => 'Разовий платіж';
+
+  @override
+  String get proContinueButton => 'Продовжити';
+
+  @override
+  String get proAlreadyActiveButton => 'Zettask Pro активна';
+
+  @override
+  String get proRestorePurchasesButton => 'Відновити покупки';
+
+  @override
+  String get proLegalFootnote =>
+      'Підписка подовжується автоматично, якщо її не скасувати. Скасуйте будь-коли в Google Play.';
+
+  @override
+  String get proStoreUnavailableMessage =>
+      'Оплата Google Play наразі недоступна на цьому пристрої. Спробуйте пізніше.';
+
+  @override
+  String get proPurchaseSuccessMessage => 'Zettask Pro активовано.';
+
+  @override
+  String get proRestoreSuccessMessage => 'Покупку Zettask Pro відновлено.';
+
+  @override
+  String get proRestoreEmptyMessage =>
+      'Активних покупок Zettask Pro для цього облікового запису не знайдено.';
+
+  @override
+  String get proPurchaseFailedMessage =>
+      'Не вдалося завершити покупку зараз. Спробуйте ще раз.';
+
+  @override
+  String get debugProSimulationLabel => 'Режим розробника: симуляція Pro';
+
+  @override
+  String get amoledPureBlackTitle => 'AMOLED чистий чорний';
+
+  @override
+  String get amoledPureBlackSubtitle =>
+      'Чисто чорний фон #000000 для OLED-екранів';
+
+  @override
+  String get customAccentSection => 'Власний колір акценту';
+
+  @override
+  String get accentMonochrome => 'Монохром';
+
+  @override
+  String get accentSage => 'Шавлія';
+
+  @override
+  String get accentIndigo => 'Індиго';
+
+  @override
+  String get accentTerracotta => 'Теракота';
+
+  @override
+  String get accentAmber => 'Бурштин';
+
+  @override
+  String get widgetStyleSection => 'Стиль віджета головного екрана';
+
+  @override
+  String get widgetStyleStandard => 'Стандартний';
+
+  @override
+  String get widgetStyleAmoled => 'AMOLED';
+
+  @override
+  String get widgetStyleTranslucent => 'Напівпрозорий';
 }

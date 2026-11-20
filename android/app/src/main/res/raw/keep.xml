@@ -1,3 +1,3 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources xmlns:tools="http://schemas.android.com/tools"
-    tools:keep="@mipmap/ic_launcher,@drawable/*,@layout/zettask_widget*,@drawable/zettask_widget*,@xml/zettask_widget*,@color/zettask_widget*,@string/zettask_widget*" />
+    tools:keep="@mipmap/ic_launcher,@drawable/*,@layout/zettask_widget*,@drawable/zettask_widget*,@drawable/zettask_widget_background_amoled,@drawable/zettask_widget_background_translucent,@xml/zettask_widget*,@color/zettask_widget*,@string/zettask_widget*" />

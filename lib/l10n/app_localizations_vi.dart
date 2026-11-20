@@ -1381,4 +1381,142 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get calendarReadOnlyInfo =>
       'Đã đồng bộ từ lịch thiết bị. Mục này chỉ đọc và không thể chỉnh sửa trong Zettask.';
+
+  @override
+  String get proBrandTitle => 'Zettask Pro';
+
+  @override
+  String get proBadge => 'PRO';
+
+  @override
+  String get proPaywallSubtitle =>
+      'Đồng bộ đám mây, lịch thiết bị, khóa ứng dụng và giao diện OLED.';
+
+  @override
+  String proActiveBannerTitle(String plan) {
+    return 'Đang hoạt động — $plan';
+  }
+
+  @override
+  String get proActiveBannerSubtitle => 'Cảm ơn bạn đã ủng hộ Zettask.';
+
+  @override
+  String get proUpgradeBannerSubtitle =>
+      'Giao diện AMOLED, màu nhấn tùy chỉnh, kiểu widget & hơn thế';
+
+  @override
+  String get proBenefitCloudSync => 'Đồng bộ đám mây & đa thiết bị';
+
+  @override
+  String get proBenefitCalendar => 'Tích hợp lịch & ngày lễ quốc gia';
+
+  @override
+  String get proBenefitAppLock =>
+      'Khóa sinh trắc học & ẩn xem trước ứng dụng gần đây';
+
+  @override
+  String get proBenefitProjectsCsv => 'Dự án không giới hạn & xuất CSV';
+
+  @override
+  String get proBenefitCustomization =>
+      'AMOLED đen thuần, màu nhấn tùy chỉnh & kiểu widget';
+
+  @override
+  String get proPlanMonthlyTitle => 'Hàng tháng';
+
+  @override
+  String get proPlanMonthlyPrice => '49.000₫ / tháng';
+
+  @override
+  String get proPlanYearlyTitle => 'Hàng năm';
+
+  @override
+  String get proPlanYearlyPrice => '329.000₫ / năm';
+
+  @override
+  String get proPlanYearlyBadge => 'Tiết kiệm nhất';
+
+  @override
+  String get proPlanYearlySavings => 'Tiết kiệm ~43%';
+
+  @override
+  String get proPlanLifetimeTitle => 'Trọn đời';
+
+  @override
+  String get proPlanLifetimePrice => '749.000₫';
+
+  @override
+  String get proPlanLifetimeBadge => 'Trả một lần';
+
+  @override
+  String get proContinueButton => 'Tiếp tục';
+
+  @override
+  String get proAlreadyActiveButton => 'Zettask Pro đang bật';
+
+  @override
+  String get proRestorePurchasesButton => 'Khôi phục giao dịch';
+
+  @override
+  String get proLegalFootnote =>
+      'Gói đăng ký tự động gia hạn trừ khi bạn hủy. Hủy bất kỳ lúc nào trên Google Play.';
+
+  @override
+  String get proStoreUnavailableMessage =>
+      'Thanh toán Google Play chưa khả dụng trên thiết bị này. Vui lòng thử lại sau.';
+
+  @override
+  String get proPurchaseSuccessMessage => 'Zettask Pro đã được kích hoạt.';
+
+  @override
+  String get proRestoreSuccessMessage =>
+      'Đã khôi phục giao dịch Zettask Pro của bạn.';
+
+  @override
+  String get proRestoreEmptyMessage =>
+      'Không tìm thấy giao dịch Zettask Pro đang hoạt động trên tài khoản này.';
+
+  @override
+  String get proPurchaseFailedMessage =>
+      'Không thể hoàn tất giao dịch lúc này. Vui lòng thử lại.';
+
+  @override
+  String get debugProSimulationLabel => 'Chế độ nhà phát triển: Giả lập Pro';
+
+  @override
+  String get amoledPureBlackTitle => 'AMOLED Đen Thuần';
+
+  @override
+  String get amoledPureBlackSubtitle =>
+      'Nền tối #000000 thuần giúp tiết kiệm pin màn hình OLED';
+
+  @override
+  String get customAccentSection => 'Màu nhấn tùy chỉnh';
+
+  @override
+  String get accentMonochrome => 'Đơn sắc';
+
+  @override
+  String get accentSage => 'Xanh xô thơm';
+
+  @override
+  String get accentIndigo => 'Chàm';
+
+  @override
+  String get accentTerracotta => 'Đất nung';
+
+  @override
+  String get accentAmber => 'Hổ phách';
+
+  @override
+  String get widgetStyleSection => 'Kiểu Widget màn hình chính';
+
+  @override
+  String get widgetStyleStandard => 'Tiêu chuẩn';
+
+  @override
+  String get widgetStyleAmoled => 'AMOLED';
+
+  @override
+  String get widgetStyleTranslucent => 'Bán trong suốt';
 }

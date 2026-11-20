@@ -1391,4 +1391,142 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get calendarReadOnlyInfo =>
       'Synchronisé depuis le calendrier de l’appareil. Cet élément est en lecture seule et ne peut pas être modifié dans Zettask.';
+
+  @override
+  String get proBrandTitle => 'Zettask Pro';
+
+  @override
+  String get proBadge => 'PRO';
+
+  @override
+  String get proPaywallSubtitle =>
+      'Synchronisation cloud, calendriers, verrouillage biométrique et thèmes OLED.';
+
+  @override
+  String proActiveBannerTitle(String plan) {
+    return 'Actif — $plan';
+  }
+
+  @override
+  String get proActiveBannerSubtitle => 'Merci de soutenir Zettask.';
+
+  @override
+  String get proUpgradeBannerSubtitle =>
+      'Thème AMOLED, accents personnalisés, styles de widget et plus';
+
+  @override
+  String get proBenefitCloudSync => 'Synchronisation cloud et multi-appareils';
+
+  @override
+  String get proBenefitCalendar => 'Intégration calendrier et jours fériés';
+
+  @override
+  String get proBenefitAppLock =>
+      'Verrouillage biométrique et confidentialité récents';
+
+  @override
+  String get proBenefitProjectsCsv => 'Projets illimités et export CSV';
+
+  @override
+  String get proBenefitCustomization =>
+      'AMOLED noir pur, couleurs d\'accent et styles de widget';
+
+  @override
+  String get proPlanMonthlyTitle => 'Mensuel';
+
+  @override
+  String get proPlanMonthlyPrice => '1,99 € / mois';
+
+  @override
+  String get proPlanYearlyTitle => 'Annuel';
+
+  @override
+  String get proPlanYearlyPrice => '12,99 € / an';
+
+  @override
+  String get proPlanYearlyBadge => 'Meilleure offre';
+
+  @override
+  String get proPlanYearlySavings => 'Économisez ~43 %';
+
+  @override
+  String get proPlanLifetimeTitle => 'À vie';
+
+  @override
+  String get proPlanLifetimePrice => '29,99 €';
+
+  @override
+  String get proPlanLifetimeBadge => 'Paiement unique';
+
+  @override
+  String get proContinueButton => 'Continuer';
+
+  @override
+  String get proAlreadyActiveButton => 'Zettask Pro actif';
+
+  @override
+  String get proRestorePurchasesButton => 'Restaurer les achats';
+
+  @override
+  String get proLegalFootnote =>
+      'Les abonnements se renouvellent automatiquement sauf résiliation. Annulez à tout moment via Google Play.';
+
+  @override
+  String get proStoreUnavailableMessage =>
+      'La facturation Google Play n\'est pas encore disponible sur cet appareil. Réessayez plus tard.';
+
+  @override
+  String get proPurchaseSuccessMessage => 'Zettask Pro est maintenant actif.';
+
+  @override
+  String get proRestoreSuccessMessage =>
+      'Votre achat Zettask Pro a été restauré.';
+
+  @override
+  String get proRestoreEmptyMessage =>
+      'Aucun achat Zettask Pro actif trouvé sur ce compte.';
+
+  @override
+  String get proPurchaseFailedMessage =>
+      'Impossible de finaliser l\'achat pour le moment. Veuillez réessayer.';
+
+  @override
+  String get debugProSimulationLabel => 'Mode développeur : Simulation Pro';
+
+  @override
+  String get amoledPureBlackTitle => 'AMOLED Noir Pur';
+
+  @override
+  String get amoledPureBlackSubtitle =>
+      'Fond noir pur #000000 pour écrans OLED';
+
+  @override
+  String get customAccentSection => 'Couleur d\'accent personnalisée';
+
+  @override
+  String get accentMonochrome => 'Monochrome';
+
+  @override
+  String get accentSage => 'Sauge';
+
+  @override
+  String get accentIndigo => 'Indigo';
+
+  @override
+  String get accentTerracotta => 'Terre cuite';
+
+  @override
+  String get accentAmber => 'Ambre';
+
+  @override
+  String get widgetStyleSection => 'Style du widget d\'accueil';
+
+  @override
+  String get widgetStyleStandard => 'Standard';
+
+  @override
+  String get widgetStyleAmoled => 'AMOLED';
+
+  @override
+  String get widgetStyleTranslucent => 'Translucide';
 }

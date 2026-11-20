@@ -1,3 +1,4 @@
+import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
@@ -6,6 +7,7 @@ import '../providers/app_lock_provider.dart';
 import '../providers/auth_provider.dart';
 import '../providers/calendar_provider.dart';
 import '../providers/locale_provider.dart';
+import '../providers/subscription_provider.dart';
 import '../providers/task_provider.dart';
 import '../providers/theme_provider.dart';
 import '../providers/workspace_provider.dart';
@@ -17,6 +19,7 @@ import '../widgets/language_picker_sheet.dart';
 import '../widgets/weekly_stats_card.dart';
 import 'auth_welcome_screen.dart';
 import 'notes_screen.dart';
+import 'pro_paywall_screen.dart';
 import 'repeating_tasks_screen.dart';
 import 'stats_screen.dart';
 import 'tags_screen.dart';
@@ -348,6 +351,7 @@ class WorkspaceScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final localeProvider = context.watch<LocaleProvider>();
     final themeProvider = context.watch<ThemeProvider>();
+    final subscriptionProvider = context.watch<SubscriptionProvider?>();
 
     return Consumer4<CalendarProvider, TaskProvider, WorkspaceProvider,
         AuthProvider>(
@@ -414,12 +418,20 @@ class WorkspaceScreen extends StatelessWidget {
             child: ListView(
               padding: const EdgeInsets.fromLTRB(16, 10, 16, 32),
               children: [
+                if (subscriptionProvider != null) ...[
+                  _ProBannerCard(
+                    key: const ValueKey('workspace_pro_banner'),
+                    subscriptionProvider: subscriptionProvider,
+                    onTap: () => showProPaywall(context),
+                  ),
+                  const SizedBox(height: 10),
+                ],
                 _AccountSummaryCard(
                   authProvider: authProvider,
                   syncStatusLabel: _syncStatusLabel(authProvider.syncStatus, l10n),
                   onTap: () => _openAccountFlow(context, authProvider),
                 ),
-                const SizedBox(height: 12),
+                const SizedBox(height: 10),
                 WeeklyStatsCard(
                   stats: workspaceProvider.stats,
                   onTap: () => Navigator.of(context).push(
@@ -642,6 +654,12 @@ class WorkspaceScreen extends StatelessWidget {
                     ),
                   ],
                 ),
+                if (kDebugMode && subscriptionProvider != null) ...[
+                  const SizedBox(height: 16),
+                  _DebugProSimulationRow(
+                    subscriptionProvider: subscriptionProvider,
+                  ),
+                ],
               ],
             ),
           ),
@@ -921,6 +939,171 @@ class _AccountSummaryCard extends StatelessWidget {
                 ),
               ],
             ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _ProBannerCard extends StatelessWidget {
+  const _ProBannerCard({
+    super.key,
+    required this.subscriptionProvider,
+    required this.onTap,
+  });
+
+  final SubscriptionProvider subscriptionProvider;
+  final VoidCallback onTap;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context);
+    final isPro = subscriptionProvider.isPro;
+    final activePlan = subscriptionProvider.activePlan;
+
+    final subtitle = isPro && activePlan != null
+        ? l10n.proActiveBannerTitle(localizedProPlanName(activePlan, l10n))
+        : l10n.proUpgradeBannerSubtitle;
+
+    return Material(
+      color: colorScheme.surface,
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(14),
+        side: BorderSide(
+          color: isPro ? colorScheme.primary : colorScheme.outline,
+          width: isPro ? 1.25 : 1,
+        ),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: InkWell(
+        onTap: onTap,
+        child: ConstrainedBox(
+          constraints: const BoxConstraints(minHeight: 58),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            child: Row(
+              children: [
+                Container(
+                  width: 34,
+                  height: 34,
+                  decoration: BoxDecoration(
+                    color: colorScheme.primaryContainer,
+                    borderRadius: BorderRadius.circular(10),
+                  ),
+                  child: Icon(
+                    isPro
+                        ? Icons.verified_rounded
+                        : Icons.workspace_premium_outlined,
+                    size: 18,
+                    color: colorScheme.onPrimaryContainer,
+                  ),
+                ),
+                const SizedBox(width: 12),
+                Expanded(
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              l10n.proBrandTitle,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                fontSize: 14.5,
+                                fontWeight: FontWeight.w700,
+                              ),
+                            ),
+                          ),
+                          const SizedBox(width: 6),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 6,
+                              vertical: 1.5,
+                            ),
+                            decoration: BoxDecoration(
+                              color: colorScheme.primary,
+                              borderRadius: BorderRadius.circular(5),
+                            ),
+                            child: Text(
+                              l10n.proBadge,
+                              style: theme.textTheme.labelSmall?.copyWith(
+                                color: colorScheme.onPrimary,
+                                fontSize: 9.5,
+                                fontWeight: FontWeight.w700,
+                                letterSpacing: 0.5,
+                              ),
+                            ),
+                          ),
+                        ],
+                      ),
+                      const SizedBox(height: 1),
+                      Text(
+                        subtitle,
+                        maxLines: 1,
+                        overflow: TextOverflow.ellipsis,
+                        style: theme.textTheme.bodySmall?.copyWith(
+                          color: isPro
+                              ? colorScheme.primary
+                              : colorScheme.onSurfaceVariant,
+                          fontWeight:
+                              isPro ? FontWeight.w600 : FontWeight.w400,
+                        ),
+                      ),
+                    ],
+                  ),
+                ),
+                Icon(
+                  Icons.chevron_right_rounded,
+                  size: 20,
+                  color: colorScheme.onSurfaceVariant,
+                ),
+              ],
+            ),
+          ),
+        ),
+      ),
+    );
+  }
+}
+
+class _DebugProSimulationRow extends StatelessWidget {
+  const _DebugProSimulationRow({
+    required this.subscriptionProvider,
+  });
+
+  final SubscriptionProvider subscriptionProvider;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final l10n = AppLocalizations.of(context);
+
+    return Material(
+      color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+      elevation: 0,
+      shape: RoundedRectangleBorder(
+        borderRadius: BorderRadius.circular(12),
+        side: BorderSide(color: colorScheme.outline, width: 1),
+      ),
+      clipBehavior: Clip.antiAlias,
+      child: SwitchListTile(
+        key: const ValueKey('debug_pro_simulation_switch'),
+        dense: true,
+        value: subscriptionProvider.isPro,
+        onChanged: (value) => subscriptionProvider.debugSetProStatus(value),
+        contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 0),
+        title: Text(
+          l10n.debugProSimulationLabel,
+          style: theme.textTheme.bodySmall?.copyWith(
+            fontWeight: FontWeight.w600,
+            color: colorScheme.onSurfaceVariant,
           ),
         ),
       ),
