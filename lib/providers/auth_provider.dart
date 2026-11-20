@@ -54,6 +54,7 @@ class AuthProvider extends ChangeNotifier {
   String? _errorMessage;
   String? _syncErrorMessage;
   bool _requiresRecentLogin = false;
+  bool _isCloudSyncPaused = false;
 
   AuthUser? get user => _user;
   bool get isSignedIn => _user != null;
@@ -65,6 +66,18 @@ class AuthProvider extends ChangeNotifier {
   String? get errorMessage => _errorMessage;
   String? get syncErrorMessage => _syncErrorMessage;
   bool get requiresRecentLogin => _requiresRecentLogin;
+  bool get isCloudSyncPaused => _isCloudSyncPaused;
+
+  /// Pauses or resumes cloud synchronization without signing out the user or
+  /// touching local SQLite data, keeping Sign Out and Delete Account available.
+  void setCloudSyncPaused(bool paused) {
+    if (_isCloudSyncPaused == paused) return;
+    _isCloudSyncPaused = paused;
+    if (paused && _syncStatus == SyncStatus.syncing) {
+      _syncStatus = SyncStatus.idle;
+    }
+    notifyListeners();
+  }
 
   String? localizedError(AppLocalizations l10n) {
     if (_errorCode != null) {
@@ -265,7 +278,9 @@ class AuthProvider extends ChangeNotifier {
 
   Future<bool> syncNow() async {
     final current = _user;
-    if (current == null || _syncStatus == SyncStatus.syncing) {
+    if (current == null ||
+        _syncStatus == SyncStatus.syncing ||
+        _isCloudSyncPaused) {
       return false;
     }
 

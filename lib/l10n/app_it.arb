@@ -462,5 +462,16 @@
   "widgetStyleSection": "Stile widget schermata Home",
   "widgetStyleStandard": "Standard",
   "widgetStyleAmoled": "AMOLED",
-  "widgetStyleTranslucent": "Traslucido"
+  "widgetStyleTranslucent": "Traslucido",
+  "proContextUnlimitedProjects": "Il piano gratuito include fino a 3 progetti. Passa a Zettask Pro per progetti illimitati.",
+  "proContextCalendarSync": "Sincronizzazione calendario e festività sono incluse in Zettask Pro.",
+  "proContextAppLock": "Blocco biometrico e privacy app recenti sono inclusi in Zettask Pro.",
+  "proContextCsvExport": "L'esportazione CSV di attività e note è inclusa in Zettask Pro.",
+  "proContextCloudSync": "La sincronizzazione cloud tra dispositivi è inclusa in Zettask Pro.",
+  "proContextCustomThemes": "AMOLED nero puro e colori accento personalizzati sono inclusi in Zettask Pro.",
+  "proContextWidgetStyles": "Gli stili widget AMOLED e traslucido sono inclusi in Zettask Pro.",
+  "cloudSyncPausedShort": "Sync cloud in pausa · Dati locali al sicuro",
+  "cloudSyncPausedTitle": "Sincronizzazione cloud in pausa",
+  "cloudSyncPausedBody": "Il tuo piano Zettask Pro non è attivo. Attività e note locali restano al sicuro su questo dispositivo.",
+  "resumeSyncWithProButton": "Riprendi sync con Pro"
 }

@@ -462,5 +462,16 @@
   "widgetStyleSection": "Startbildschirm-Widget-Stil",
   "widgetStyleStandard": "Standard",
   "widgetStyleAmoled": "AMOLED",
-  "widgetStyleTranslucent": "Transparent"
+  "widgetStyleTranslucent": "Transparent",
+  "proContextUnlimitedProjects": "Der kostenlose Tarif umfasst bis zu 3 Projekte. Mit Zettask Pro erstellst du unbegrenzt viele Projekte.",
+  "proContextCalendarSync": "Gerätekalender-Sync und Feiertage sind in Zettask Pro enthalten.",
+  "proContextAppLock": "Biometrische App-Sperre und Privatsphäre im App-Umschalter sind in Zettask Pro enthalten.",
+  "proContextCsvExport": "Der CSV-Export von Aufgaben und Notizen ist in Zettask Pro enthalten.",
+  "proContextCloudSync": "Cloud-Synchronisierung zwischen Geräten ist in Zettask Pro enthalten.",
+  "proContextCustomThemes": "AMOLED Reinschwarz und eigene Akzentfarben sind in Zettask Pro enthalten.",
+  "proContextWidgetStyles": "AMOLED- und transparente Widget-Stile sind in Zettask Pro enthalten.",
+  "cloudSyncPausedShort": "Cloud-Sync pausiert · Lokale Daten sicher",
+  "cloudSyncPausedTitle": "Cloud-Sync pausiert",
+  "cloudSyncPausedBody": "Dein Zettask Pro-Abo ist inaktiv. Lokale Aufgaben und Notizen bleiben sicher auf diesem Gerät.",
+  "resumeSyncWithProButton": "Sync mit Pro fortsetzen"
 }

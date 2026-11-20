@@ -1471,4 +1471,38 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get widgetStyleTranslucent => '半透明';
+
+  @override
+  String get proContextUnlimitedProjects =>
+      '免费版最多可创建 3 个项目。升级至 Zettask Pro 可创建无限项目。';
+
+  @override
+  String get proContextCalendarSync => '设备日历同步与法定节假日包含在 Zettask Pro 中。';
+
+  @override
+  String get proContextAppLock => '生物识别应用锁与最近任务隐私保护包含在 Zettask Pro 中。';
+
+  @override
+  String get proContextCsvExport => '任务与笔记 CSV 导出包含在 Zettask Pro 中。';
+
+  @override
+  String get proContextCloudSync => '多设备云端同步包含在 Zettask Pro 中。';
+
+  @override
+  String get proContextCustomThemes => 'AMOLED 纯黑主题与自定义强调色包含在 Zettask Pro 中。';
+
+  @override
+  String get proContextWidgetStyles => 'AMOLED 与半透明主屏幕小组件样式包含在 Zettask Pro 中。';
+
+  @override
+  String get cloudSyncPausedShort => '云端同步已暂停 · 本地数据安全';
+
+  @override
+  String get cloudSyncPausedTitle => '云端同步已暂停';
+
+  @override
+  String get cloudSyncPausedBody => '你的 Zettask Pro 订阅未激活。本地任务和笔记仍安全保存在此设备上。';
+
+  @override
+  String get resumeSyncWithProButton => '使用 Pro 恢复同步';
 }

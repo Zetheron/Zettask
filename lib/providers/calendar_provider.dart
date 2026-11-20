@@ -116,7 +116,10 @@ class CalendarProvider extends ChangeNotifier {
     return _timelineEventsByDate[TaskModel.formatDateKey(date)] ?? const [];
   }
 
-  Future<void> initialize({DateTime? initialDate}) async {
+  Future<void> initialize({
+    DateTime? initialDate,
+    bool allowSync = true,
+  }) async {
     if (initialDate != null) {
       _currentDate = TaskProvider.normalizeDate(initialDate);
     }
@@ -138,11 +141,38 @@ class CalendarProvider extends ChangeNotifier {
     }
 
     await _refreshPermissionStatus();
+    if (!allowSync && _isSyncEnabled) {
+      _isSyncEnabled = false;
+      _enableAfterPermissionGranted = false;
+      _events = [];
+      _timelineEventsByDate = {};
+      await _savePreferences();
+    }
     _isInitialized = true;
     notifyListeners();
 
     if (_isSyncEnabled && _hasPermission) {
       await _loadCalendarsAndEvents();
+    }
+  }
+
+  /// Cleanly disables Calendar Sync and clears cached timeline events when Pro
+  /// entitlement ends so stale calendar items do not linger on the timeline.
+  Future<void> disableForDowngrade() async {
+    final hadState = _isSyncEnabled ||
+        _enableAfterPermissionGranted ||
+        _events.isNotEmpty ||
+        _timelineEventsByDate.isNotEmpty;
+
+    _isSyncEnabled = false;
+    _enableAfterPermissionGranted = false;
+    _events = [];
+    _timelineEventsByDate = {};
+    _errorMessage = null;
+
+    await _savePreferences();
+    if (hadState || _isInitialized) {
+      notifyListeners();
     }
   }
 

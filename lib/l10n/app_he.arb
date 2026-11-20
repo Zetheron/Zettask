@@ -462,5 +462,16 @@
   "widgetStyleSection": "סגנון ווידג'ט מסך הבית",
   "widgetStyleStandard": "רגיל",
   "widgetStyleAmoled": "AMOLED",
-  "widgetStyleTranslucent": "שקוף למחצה"
+  "widgetStyleTranslucent": "שקוף למחצה",
+  "proContextUnlimitedProjects": "התוכנית החינמית כוללת עד 3 פרויקטים. שדרג ל-Zettask Pro לפרויקטים ללא הגבלה.",
+  "proContextCalendarSync": "סנכרון לוח שנה וחגים לאומיים כלול ב-Zettask Pro.",
+  "proContextAppLock": "נעילה ביומטרית ופרטיות באפליקציות אחרונות כלולים ב-Zettask Pro.",
+  "proContextCsvExport": "ייצוא משימות והערות ל-CSV כלול ב-Zettask Pro.",
+  "proContextCloudSync": "סנכרון ענן בין מכשירים כלול ב-Zettask Pro.",
+  "proContextCustomThemes": "AMOLED שחור טהור וצבעי הדגשה מותאמים כלולים ב-Zettask Pro.",
+  "proContextWidgetStyles": "סגנונות ווידג'ט AMOLED ושקוף כלולים ב-Zettask Pro.",
+  "cloudSyncPausedShort": "סנכרון ענן מושהה · הנתונים המקומיים בטוחים",
+  "cloudSyncPausedTitle": "סנכרון ענן מושהה",
+  "cloudSyncPausedBody": "מנוי Zettask Pro שלך אינו פעיל. המשימות וההערות המקומיות נשארות שמורות במכשיר זה.",
+  "resumeSyncWithProButton": "חדש סנכרון עם Pro"
 }

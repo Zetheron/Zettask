@@ -1515,4 +1515,46 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get widgetStyleTranslucent => 'شفاف';
+
+  @override
+  String get proContextUnlimitedProjects =>
+      'تشمل الخطة المجانية حتى 3 مشاريع. قم بالترقية إلى Zettask Pro لمشاريع غير محدودة.';
+
+  @override
+  String get proContextCalendarSync =>
+      'تتوفر مزامنة تقويم الجهاز والعطلات الرسمية في Zettask Pro.';
+
+  @override
+  String get proContextAppLock =>
+      'يتوفر قفل التطبيق بالبصمة وخصوصية التطبيقات الأخيرة في Zettask Pro.';
+
+  @override
+  String get proContextCsvExport =>
+      'يتوفر تصدير المهام والملاحظات إلى CSV في Zettask Pro.';
+
+  @override
+  String get proContextCloudSync =>
+      'تتوفر المزامنة السحابية عبر الأجهزة في Zettask Pro.';
+
+  @override
+  String get proContextCustomThemes =>
+      'تتوفر سمة AMOLED السوداء النقية وألوان التمييز المخصصة في Zettask Pro.';
+
+  @override
+  String get proContextWidgetStyles =>
+      'تتوفر أنماط ويدجت AMOLED والشفافة في Zettask Pro.';
+
+  @override
+  String get cloudSyncPausedShort =>
+      'المزامنة السحابية متوقفة · البيانات المحلية آمنة';
+
+  @override
+  String get cloudSyncPausedTitle => 'المزامنة السحابية متوقفة مؤقتًا';
+
+  @override
+  String get cloudSyncPausedBody =>
+      'اشتراك Zettask Pro غير نشط. تبقى مهامك وملاحظاتك المحلية آمنة على هذا الجهاز.';
+
+  @override
+  String get resumeSyncWithProButton => 'استئناف المزامنة مع Pro';
 }

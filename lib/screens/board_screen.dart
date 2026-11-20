@@ -4,10 +4,14 @@ import 'package:provider/provider.dart';
 import '../core/theme/app_theme.dart';
 import '../l10n/app_localizations.dart';
 import '../models/project_model.dart';
+import '../models/subscription_model.dart';
+import '../providers/subscription_provider.dart';
 import '../providers/task_provider.dart';
 import '../providers/workspace_provider.dart';
+import '../widgets/pro_badge.dart';
 import '../widgets/task_editor_sheet.dart';
 import '../widgets/task_search_sheet.dart';
+import 'pro_paywall_screen.dart';
 import 'project_detail_screen.dart';
 
 class BoardScreen extends StatefulWidget {
@@ -31,6 +35,21 @@ class _BoardScreenState extends State<BoardScreen> {
 
   Future<void> _openProjectEditor({ProjectModel? project}) async {
     final workspaceProvider = context.read<WorkspaceProvider>();
+    if (project == null) {
+      final subscriptionProvider = context.read<SubscriptionProvider?>();
+      final canCreate = subscriptionProvider == null ||
+          subscriptionProvider.canCreateProject(
+            workspaceProvider.projects.length,
+          );
+      if (!canCreate) {
+        await showProPaywall(
+          context,
+          highlightedFeature: ProFeature.unlimitedProjects,
+        );
+        return;
+      }
+    }
+
     final result = await _ProjectEditorSheet.show(
       context,
       initialProject: project,
@@ -93,6 +112,9 @@ class _BoardScreenState extends State<BoardScreen> {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final l10n = AppLocalizations.of(context);
+    final subscriptionProvider = context.watch<SubscriptionProvider?>();
+    final hasUnlimitedProjects =
+        subscriptionProvider?.hasAccess(ProFeature.unlimitedProjects) ?? true;
 
     return Consumer<WorkspaceProvider>(
       builder: (context, workspaceProvider, _) {
@@ -134,12 +156,60 @@ class _BoardScreenState extends State<BoardScreen> {
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
                       Text(l10n.boardTitle),
-                      Text(
-                        selectedProject?.name ?? l10n.allProjects,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          fontSize: 12,
-                          color: colorScheme.onSurfaceVariant,
-                        ),
+                      Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              selectedProject?.name ?? l10n.allProjects,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.bodySmall?.copyWith(
+                                fontSize: 12,
+                                color: colorScheme.onSurfaceVariant,
+                              ),
+                            ),
+                          ),
+                          if (!hasUnlimitedProjects) ...[
+                            const SizedBox(width: 8),
+                            Container(
+                              key: const ValueKey(
+                                'board_project_limit_indicator',
+                              ),
+                              padding: const EdgeInsets.symmetric(
+                                horizontal: 6,
+                                vertical: 1,
+                              ),
+                              decoration: BoxDecoration(
+                                color: colorScheme.surfaceContainerHighest,
+                                borderRadius: BorderRadius.circular(5),
+                                border: Border.all(
+                                  color: colorScheme.outline,
+                                  width: 1,
+                                ),
+                              ),
+                              child: Text(
+                                '${allProjects.length}/${SubscriptionProvider.freeProjectLimit}',
+                                style: theme.textTheme.labelSmall?.copyWith(
+                                  fontSize: 10,
+                                  fontWeight: FontWeight.w600,
+                                  color: allProjects.length >=
+                                          SubscriptionProvider.freeProjectLimit
+                                      ? colorScheme.primary
+                                      : colorScheme.onSurfaceVariant,
+                                  fontFeatures: const [
+                                    FontFeature.tabularFigures(),
+                                  ],
+                                ),
+                              ),
+                            ),
+                            if (allProjects.length >=
+                                SubscriptionProvider.freeProjectLimit) ...[
+                              const SizedBox(width: 4),
+                              const ProBadge(),
+                            ],
+                          ],
+                        ],
                       ),
                     ],
                   ),

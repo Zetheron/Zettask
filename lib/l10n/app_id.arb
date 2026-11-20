@@ -462,5 +462,16 @@
   "widgetStyleSection": "Gaya Home Screen Widget",
   "widgetStyleStandard": "Standar",
   "widgetStyleAmoled": "AMOLED",
-  "widgetStyleTranslucent": "Transparan"
+  "widgetStyleTranslucent": "Transparan",
+  "proContextUnlimitedProjects": "Paket Gratis mendukung hingga 3 proyek. Upgrade ke Zettask Pro untuk proyek tanpa batas.",
+  "proContextCalendarSync": "Integrasi kalender perangkat dan Hari Libur Nasional tersedia di Zettask Pro.",
+  "proContextAppLock": "Kunci Aplikasi Biometrik dan privasi Recent Apps tersedia di Zettask Pro.",
+  "proContextCsvExport": "Ekspor tugas dan catatan ke berkas CSV tersedia di Zettask Pro.",
+  "proContextCloudSync": "Sinkronisasi Cloud antar perangkat tersedia di Zettask Pro.",
+  "proContextCustomThemes": "Tema AMOLED Pure Black dan warna aksen kustom tersedia di Zettask Pro.",
+  "proContextWidgetStyles": "Gaya Home Screen Widget AMOLED dan Transparan tersedia di Zettask Pro.",
+  "cloudSyncPausedShort": "Sinkronisasi dijeda · Data lokal aman",
+  "cloudSyncPausedTitle": "Sinkronisasi Cloud dijeda",
+  "cloudSyncPausedBody": "Langganan Zettask Pro tidak aktif. Tugas dan catatan lokal Anda tetap aman di perangkat ini.",
+  "resumeSyncWithProButton": "Lanjutkan Sinkronisasi dengan Pro"
 }

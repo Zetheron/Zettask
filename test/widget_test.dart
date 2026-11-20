@@ -34,6 +34,7 @@ import 'package:zettask/services/cloud_sync_service.dart';
 import 'package:zettask/services/database_service.dart';
 import 'package:zettask/services/export_service.dart';
 import 'package:zettask/services/notification_service.dart';
+import 'package:zettask/services/subscription_service.dart';
 import 'package:zettask/widgets/about_sheet.dart';
 import 'package:zettask/widgets/account_sheet.dart';
 import 'package:zettask/widgets/date_strip.dart';
@@ -1125,6 +1126,10 @@ void main() {
   testWidgets(
       'Workspace (tab More) mengelola Sinkronisasi Kalender, Tema persisten, dan Tentang',
       (WidgetTester tester) async {
+    SharedPreferences.setMockInitialValues({
+      prefProIsActiveKey: true,
+      prefProActivePlanKey: 'yearly',
+    });
     final today = TaskProvider.normalizeDate(DateTime.now());
     final fakeCalendar = FakeDeviceCalendarService(
       granted: false,
@@ -1847,6 +1852,10 @@ void main() {
   testWidgets(
       'WeeklyStatsCard, StatsScreen, dan Ekspor CSV di WorkspaceScreen bekerja end-to-end',
       (WidgetTester tester) async {
+    SharedPreferences.setMockInitialValues({
+      prefProIsActiveKey: true,
+      prefProActivePlanKey: 'yearly',
+    });
     final today = TaskProvider.normalizeDate(DateTime.now());
     final fakeExport = FakeExportService();
     final fakeDb = FakeDatabaseService(
@@ -2158,6 +2167,10 @@ void main() {
   });
 
   testWidgets('Alur AuthWelcomeScreen, validasi SignUp/Login, sync cloud, dan AccountSheet (Logout & Hapus Akun)', (WidgetTester tester) async {
+    SharedPreferences.setMockInitialValues({
+      prefProIsActiveKey: true,
+      prefProActivePlanKey: 'yearly',
+    });
     final today = DateTime(2026, 11, 19);
     final fakeDb = FakeDatabaseService([
       TaskModel(id: 1, title: 'Tugas Offline', date: today, startTime: '08:00'),

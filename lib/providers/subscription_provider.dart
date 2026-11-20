@@ -11,6 +11,8 @@ class SubscriptionProvider extends ChangeNotifier {
   })  : _service = subscriptionService ?? SubscriptionService(),
         _nowProvider = nowProvider ?? DateTime.now;
 
+  static const int freeProjectLimit = 3;
+
   final SubscriptionService _service;
   final DateTime Function() _nowProvider;
   final ValueChanged<bool>? onProStatusChanged;
@@ -28,19 +30,22 @@ class SubscriptionProvider extends ChangeNotifier {
   bool get isInitialized => _initialized;
   List<ProProductOffering> get offerings => List.unmodifiable(_offerings);
 
-  /// Phase 1 entitlement check:
-  /// New Pro customization features require Pro; legacy features stay unlocked
-  /// until Phase 2 feature gating.
   bool hasAccess(ProFeature feature) {
     return switch (feature) {
-      ProFeature.customThemes || ProFeature.widgetStyles => _state.isPro,
       ProFeature.cloudSync ||
       ProFeature.calendarSync ||
       ProFeature.appLock ||
       ProFeature.csvExport ||
-      ProFeature.unlimitedProjects =>
-        true,
+      ProFeature.unlimitedProjects ||
+      ProFeature.customThemes ||
+      ProFeature.widgetStyles =>
+        _state.isPro,
     };
+  }
+
+  bool canCreateProject(int currentProjectCount) {
+    if (hasAccess(ProFeature.unlimitedProjects)) return true;
+    return currentProjectCount < freeProjectLimit;
   }
 
   ProProductOffering offeringFor(ProPlanType plan) {

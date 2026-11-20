@@ -27,6 +27,7 @@ import 'package:zettask/services/calendar_service.dart';
 import 'package:zettask/services/database_service.dart';
 import 'package:zettask/services/home_widget_service.dart';
 import 'package:zettask/services/notification_service.dart';
+import 'package:zettask/services/subscription_service.dart';
 import 'package:zettask/widgets/app_lock_gate.dart';
 import 'package:zettask/widgets/quick_add_task_sheet.dart';
 
@@ -512,6 +513,10 @@ void main() {
 
   testWidgets('Toggle Kunci Aplikasi di WorkspaceScreen memicu verifikasi dan menyimpan preferensi',
       (WidgetTester tester) async {
+    SharedPreferences.setMockInitialValues({
+      prefProIsActiveKey: true,
+      prefProActivePlanKey: 'yearly',
+    });
     final today = DateTime(2026, 11, 20);
     final fakeLock = FakeAppLockService(supported: true, nextAuthResult: true);
     final fakeWidget = FakeHomeWidgetSyncService();

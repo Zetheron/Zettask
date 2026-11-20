@@ -462,5 +462,16 @@
   "widgetStyleSection": "نمط أداة الشاشة الرئيسية",
   "widgetStyleStandard": "قياسي",
   "widgetStyleAmoled": "AMOLED",
-  "widgetStyleTranslucent": "شفاف"
+  "widgetStyleTranslucent": "شفاف",
+  "proContextUnlimitedProjects": "تشمل الخطة المجانية حتى 3 مشاريع. قم بالترقية إلى Zettask Pro لمشاريع غير محدودة.",
+  "proContextCalendarSync": "تتوفر مزامنة تقويم الجهاز والعطلات الرسمية في Zettask Pro.",
+  "proContextAppLock": "يتوفر قفل التطبيق بالبصمة وخصوصية التطبيقات الأخيرة في Zettask Pro.",
+  "proContextCsvExport": "يتوفر تصدير المهام والملاحظات إلى CSV في Zettask Pro.",
+  "proContextCloudSync": "تتوفر المزامنة السحابية عبر الأجهزة في Zettask Pro.",
+  "proContextCustomThemes": "تتوفر سمة AMOLED السوداء النقية وألوان التمييز المخصصة في Zettask Pro.",
+  "proContextWidgetStyles": "تتوفر أنماط ويدجت AMOLED والشفافة في Zettask Pro.",
+  "cloudSyncPausedShort": "المزامنة السحابية متوقفة · البيانات المحلية آمنة",
+  "cloudSyncPausedTitle": "المزامنة السحابية متوقفة مؤقتًا",
+  "cloudSyncPausedBody": "اشتراك Zettask Pro غير نشط. تبقى مهامك وملاحظاتك المحلية آمنة على هذا الجهاز.",
+  "resumeSyncWithProButton": "استئناف المزامنة مع Pro"
 }

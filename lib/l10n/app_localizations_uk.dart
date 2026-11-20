@@ -1521,4 +1521,46 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get widgetStyleTranslucent => 'Напівпрозорий';
+
+  @override
+  String get proContextUnlimitedProjects =>
+      'У безкоштовному тарифі доступно до 3 проєктів. Перейдіть на Zettask Pro для необмежених проєктів.';
+
+  @override
+  String get proContextCalendarSync =>
+      'Синхронізація календаря та державні свята доступні в Zettask Pro.';
+
+  @override
+  String get proContextAppLock =>
+      'Біометричне блокування та приватність у недавніх доступні в Zettask Pro.';
+
+  @override
+  String get proContextCsvExport =>
+      'Експорт завдань і нотаток у CSV доступний у Zettask Pro.';
+
+  @override
+  String get proContextCloudSync =>
+      'Хмарна синхронізація між пристроями доступна в Zettask Pro.';
+
+  @override
+  String get proContextCustomThemes =>
+      'AMOLED чистий чорний і власні кольори акценту доступні в Zettask Pro.';
+
+  @override
+  String get proContextWidgetStyles =>
+      'Стилі віджета AMOLED і напівпрозорий доступні в Zettask Pro.';
+
+  @override
+  String get cloudSyncPausedShort =>
+      'Синхронізацію призупинено · Локальні дані в безпеці';
+
+  @override
+  String get cloudSyncPausedTitle => 'Хмарну синхронізацію призупинено';
+
+  @override
+  String get cloudSyncPausedBody =>
+      'Підписка Zettask Pro неактивна. Локальні завдання та нотатки залишаються в безпеці на цьому пристрої.';
+
+  @override
+  String get resumeSyncWithProButton => 'Відновити з Pro';
 }

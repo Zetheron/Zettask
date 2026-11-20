@@ -1527,4 +1527,46 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get widgetStyleTranslucent => 'Translúcido';
+
+  @override
+  String get proContextUnlimitedProjects =>
+      'El plan gratuito permite hasta 3 proyectos. Mejora a Zettask Pro para proyectos ilimitados.';
+
+  @override
+  String get proContextCalendarSync =>
+      'La sincronización del calendario y festivos está incluida en Zettask Pro.';
+
+  @override
+  String get proContextAppLock =>
+      'El bloqueo biométrico y la privacidad en apps recientes están incluidos en Zettask Pro.';
+
+  @override
+  String get proContextCsvExport =>
+      'La exportación de tareas y notas a CSV está incluida en Zettask Pro.';
+
+  @override
+  String get proContextCloudSync =>
+      'La sincronización en la nube entre dispositivos está incluida en Zettask Pro.';
+
+  @override
+  String get proContextCustomThemes =>
+      'AMOLED negro puro y colores de acento personalizados están incluidos en Zettask Pro.';
+
+  @override
+  String get proContextWidgetStyles =>
+      'Los estilos de widget AMOLED y translúcido están incluidos en Zettask Pro.';
+
+  @override
+  String get cloudSyncPausedShort =>
+      'Sincronización pausada · Datos locales seguros';
+
+  @override
+  String get cloudSyncPausedTitle => 'Sincronización en la nube pausada';
+
+  @override
+  String get cloudSyncPausedBody =>
+      'Tu suscripción Zettask Pro está inactiva. Tus tareas y notas locales siguen seguras en este dispositivo.';
+
+  @override
+  String get resumeSyncWithProButton => 'Reanudar sincronización con Pro';
 }

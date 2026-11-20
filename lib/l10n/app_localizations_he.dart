@@ -1504,4 +1504,46 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get widgetStyleTranslucent => 'שקוף למחצה';
+
+  @override
+  String get proContextUnlimitedProjects =>
+      'התוכנית החינמית כוללת עד 3 פרויקטים. שדרג ל-Zettask Pro לפרויקטים ללא הגבלה.';
+
+  @override
+  String get proContextCalendarSync =>
+      'סנכרון לוח שנה וחגים לאומיים כלול ב-Zettask Pro.';
+
+  @override
+  String get proContextAppLock =>
+      'נעילה ביומטרית ופרטיות באפליקציות אחרונות כלולים ב-Zettask Pro.';
+
+  @override
+  String get proContextCsvExport =>
+      'ייצוא משימות והערות ל-CSV כלול ב-Zettask Pro.';
+
+  @override
+  String get proContextCloudSync =>
+      'סנכרון ענן בין מכשירים כלול ב-Zettask Pro.';
+
+  @override
+  String get proContextCustomThemes =>
+      'AMOLED שחור טהור וצבעי הדגשה מותאמים כלולים ב-Zettask Pro.';
+
+  @override
+  String get proContextWidgetStyles =>
+      'סגנונות ווידג\'ט AMOLED ושקוף כלולים ב-Zettask Pro.';
+
+  @override
+  String get cloudSyncPausedShort =>
+      'סנכרון ענן מושהה · הנתונים המקומיים בטוחים';
+
+  @override
+  String get cloudSyncPausedTitle => 'סנכרון ענן מושהה';
+
+  @override
+  String get cloudSyncPausedBody =>
+      'מנוי Zettask Pro שלך אינו פעיל. המשימות וההערות המקומיות נשארות שמורות במכשיר זה.';
+
+  @override
+  String get resumeSyncWithProButton => 'חדש סנכרון עם Pro';
 }

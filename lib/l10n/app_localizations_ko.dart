@@ -1480,4 +1480,44 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get widgetStyleTranslucent => '반투명';
+
+  @override
+  String get proContextUnlimitedProjects =>
+      '무료 플랜에서는 프로젝트를 최대 3개까지 만들 수 있습니다. Zettask Pro에서 무제한으로 이용해 보세요.';
+
+  @override
+  String get proContextCalendarSync =>
+      '기기 캘린더 연동 및 공휴일 표시는 Zettask Pro에 포함되어 있습니다.';
+
+  @override
+  String get proContextAppLock =>
+      '생체 인식 앱 잠금 및 최근 앱 보호는 Zettask Pro에 포함되어 있습니다.';
+
+  @override
+  String get proContextCsvExport =>
+      '할 일 및 메모 CSV 내보내기는 Zettask Pro에 포함되어 있습니다.';
+
+  @override
+  String get proContextCloudSync => '멀티 디바이스 클라우드 동기화는 Zettask Pro에 포함되어 있습니다.';
+
+  @override
+  String get proContextCustomThemes =>
+      'AMOLED 퓨어 블랙과 맞춤 강조 색상은 Zettask Pro에 포함되어 있습니다.';
+
+  @override
+  String get proContextWidgetStyles =>
+      'AMOLED 및 반투명 위젯 스타일은 Zettask Pro에 포함되어 있습니다.';
+
+  @override
+  String get cloudSyncPausedShort => '클라우드 동기화 일시 중지 · 로컬 데이터 안전';
+
+  @override
+  String get cloudSyncPausedTitle => '클라우드 동기화 일시 중지됨';
+
+  @override
+  String get cloudSyncPausedBody =>
+      'Zettask Pro 구독이 비활성 상태입니다. 로컬 할 일과 메모는 이 기기에 안전하게 보관됩니다.';
+
+  @override
+  String get resumeSyncWithProButton => 'Pro로 동기화 재개';
 }

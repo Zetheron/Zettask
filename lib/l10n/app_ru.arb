@@ -462,5 +462,16 @@
   "widgetStyleSection": "Стиль виджета главного экрана",
   "widgetStyleStandard": "Стандартный",
   "widgetStyleAmoled": "AMOLED",
-  "widgetStyleTranslucent": "Полупрозрачный"
+  "widgetStyleTranslucent": "Полупрозрачный",
+  "proContextUnlimitedProjects": "В бесплатном тарифе доступно до 3 проектов. Оформите Zettask Pro для безлимитных проектов.",
+  "proContextCalendarSync": "Синхронизация календаря и праздники доступны в Zettask Pro.",
+  "proContextAppLock": "Биометрическая блокировка и скрытие в недавних доступны в Zettask Pro.",
+  "proContextCsvExport": "Экспорт задач и заметок в CSV доступен в Zettask Pro.",
+  "proContextCloudSync": "Облачная синхронизация между устройствами доступна в Zettask Pro.",
+  "proContextCustomThemes": "AMOLED чистый черный и свои цвета акцента доступны в Zettask Pro.",
+  "proContextWidgetStyles": "Стили виджета AMOLED и полупрозрачный доступны в Zettask Pro.",
+  "cloudSyncPausedShort": "Синхронизация на паузе · Локальные данные в безопасности",
+  "cloudSyncPausedTitle": "Облачная синхронизация на паузе",
+  "cloudSyncPausedBody": "Подписка Zettask Pro неактивна. Локальные задачи и заметки остаются в безопасности на устройстве.",
+  "resumeSyncWithProButton": "Возобновить с Pro"
 }

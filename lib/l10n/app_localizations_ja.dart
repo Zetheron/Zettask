@@ -1480,4 +1480,41 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get widgetStyleTranslucent => '半透明';
+
+  @override
+  String get proContextUnlimitedProjects =>
+      '無料プランではプロジェクトは最大3件まで作成できます。Zettask Proで無制限に作成できます。';
+
+  @override
+  String get proContextCalendarSync => '端末カレンダー連携と祝日表示はZettask Proに含まれています。';
+
+  @override
+  String get proContextAppLock => '生体認証アプリロックと最近使ったアプリの保護はZettask Proに含まれています。';
+
+  @override
+  String get proContextCsvExport => 'タスクとメモのCSVエクスポートはZettask Proに含まれています。';
+
+  @override
+  String get proContextCloudSync => 'マルチデバイスのクラウド同期はZettask Proに含まれています。';
+
+  @override
+  String get proContextCustomThemes =>
+      'AMOLEDピュアブラックとカスタムアクセントカラーはZettask Proに含まれています。';
+
+  @override
+  String get proContextWidgetStyles =>
+      'AMOLEDおよび半透明ウィジェットスタイルはZettask Proに含まれています。';
+
+  @override
+  String get cloudSyncPausedShort => 'クラウド同期一時停止中 · ローカルデータは安全です';
+
+  @override
+  String get cloudSyncPausedTitle => 'クラウド同期は一時停止中';
+
+  @override
+  String get cloudSyncPausedBody =>
+      'Zettask Proプランが有効ではありません。ローカルのタスクとメモはこの端末に安全に保持されています。';
+
+  @override
+  String get resumeSyncWithProButton => 'Proで同期を再開';
 }

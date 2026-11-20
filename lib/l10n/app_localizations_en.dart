@@ -1523,4 +1523,45 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get widgetStyleTranslucent => 'Translucent';
+
+  @override
+  String get proContextUnlimitedProjects =>
+      'Free plan includes up to 3 projects. Upgrade to Zettask Pro for unlimited projects.';
+
+  @override
+  String get proContextCalendarSync =>
+      'Device calendar sync and national holidays are included in Zettask Pro.';
+
+  @override
+  String get proContextAppLock =>
+      'Biometric App Lock and Recent Apps privacy are included in Zettask Pro.';
+
+  @override
+  String get proContextCsvExport =>
+      'Exporting tasks and notes to CSV is included in Zettask Pro.';
+
+  @override
+  String get proContextCloudSync =>
+      'Cloud sync across devices is included in Zettask Pro.';
+
+  @override
+  String get proContextCustomThemes =>
+      'AMOLED Pure Black and custom accent colors are included in Zettask Pro.';
+
+  @override
+  String get proContextWidgetStyles =>
+      'AMOLED and Translucent Home Screen Widget styles are included in Zettask Pro.';
+
+  @override
+  String get cloudSyncPausedShort => 'Cloud sync paused · Local data safe';
+
+  @override
+  String get cloudSyncPausedTitle => 'Cloud sync paused';
+
+  @override
+  String get cloudSyncPausedBody =>
+      'Your Zettask Pro plan is inactive. Local tasks and notes remain safe on this device.';
+
+  @override
+  String get resumeSyncWithProButton => 'Resume Sync with Pro';
 }

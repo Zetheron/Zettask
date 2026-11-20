@@ -1527,6 +1527,48 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get widgetStyleTranslucent => 'Translúcido';
+
+  @override
+  String get proContextUnlimitedProjects =>
+      'O plano gratuito inclui até 3 projetos. Atualize para o Zettask Pro para projetos ilimitados.';
+
+  @override
+  String get proContextCalendarSync =>
+      'A sincronização de calendário e feriados nacionais está incluída no Zettask Pro.';
+
+  @override
+  String get proContextAppLock =>
+      'O bloqueio biométrico e a privacidade em apps recentes estão incluídos no Zettask Pro.';
+
+  @override
+  String get proContextCsvExport =>
+      'A exportação CSV de tarefas e notas está incluída no Zettask Pro.';
+
+  @override
+  String get proContextCloudSync =>
+      'A sincronização na nuvem entre dispositivos está incluída no Zettask Pro.';
+
+  @override
+  String get proContextCustomThemes =>
+      'AMOLED preto puro e cores de destaque personalizadas estão incluídos no Zettask Pro.';
+
+  @override
+  String get proContextWidgetStyles =>
+      'Os estilos de widget AMOLED e translúcido estão incluídos no Zettask Pro.';
+
+  @override
+  String get cloudSyncPausedShort =>
+      'Sincronização em pausa · Dados locais seguros';
+
+  @override
+  String get cloudSyncPausedTitle => 'Sincronização na nuvem em pausa';
+
+  @override
+  String get cloudSyncPausedBody =>
+      'O seu plano Zettask Pro está inativo. As tarefas e notas locais continuam seguras neste dispositivo.';
+
+  @override
+  String get resumeSyncWithProButton => 'Retomar sincronização com Pro';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -3050,4 +3092,46 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get widgetStyleTranslucent => 'Translúcido';
+
+  @override
+  String get proContextUnlimitedProjects =>
+      'O plano gratuito permite até 3 projetos. Assine o Zettask Pro para projetos ilimitados.';
+
+  @override
+  String get proContextCalendarSync =>
+      'A sincronização de calendário e feriados nacionais faz parte do Zettask Pro.';
+
+  @override
+  String get proContextAppLock =>
+      'O bloqueio biométrico e a privacidade nos apps recentes fazem parte do Zettask Pro.';
+
+  @override
+  String get proContextCsvExport =>
+      'A exportação de tarefas e notas para CSV faz parte do Zettask Pro.';
+
+  @override
+  String get proContextCloudSync =>
+      'A sincronização na nuvem entre dispositivos faz parte do Zettask Pro.';
+
+  @override
+  String get proContextCustomThemes =>
+      'AMOLED preto puro e cores de destaque personalizadas fazem parte do Zettask Pro.';
+
+  @override
+  String get proContextWidgetStyles =>
+      'Os estilos de widget AMOLED e translúcido fazem parte do Zettask Pro.';
+
+  @override
+  String get cloudSyncPausedShort =>
+      'Sincronização pausada · Dados locais seguros';
+
+  @override
+  String get cloudSyncPausedTitle => 'Sincronização na nuvem pausada';
+
+  @override
+  String get cloudSyncPausedBody =>
+      'Seu plano Zettask Pro está inativo. Suas tarefas e notas locais continuam seguras neste dispositivo.';
+
+  @override
+  String get resumeSyncWithProButton => 'Retomar sincronização com Pro';
 }

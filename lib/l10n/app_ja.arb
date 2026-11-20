@@ -462,5 +462,16 @@
   "widgetStyleSection": "ホーム画面ウィジェットスタイル",
   "widgetStyleStandard": "標準",
   "widgetStyleAmoled": "AMOLED",
-  "widgetStyleTranslucent": "半透明"
+  "widgetStyleTranslucent": "半透明",
+  "proContextUnlimitedProjects": "無料プランではプロジェクトは最大3件まで作成できます。Zettask Proで無制限に作成できます。",
+  "proContextCalendarSync": "端末カレンダー連携と祝日表示はZettask Proに含まれています。",
+  "proContextAppLock": "生体認証アプリロックと最近使ったアプリの保護はZettask Proに含まれています。",
+  "proContextCsvExport": "タスクとメモのCSVエクスポートはZettask Proに含まれています。",
+  "proContextCloudSync": "マルチデバイスのクラウド同期はZettask Proに含まれています。",
+  "proContextCustomThemes": "AMOLEDピュアブラックとカスタムアクセントカラーはZettask Proに含まれています。",
+  "proContextWidgetStyles": "AMOLEDおよび半透明ウィジェットスタイルはZettask Proに含まれています。",
+  "cloudSyncPausedShort": "クラウド同期一時停止中 · ローカルデータは安全です",
+  "cloudSyncPausedTitle": "クラウド同期は一時停止中",
+  "cloudSyncPausedBody": "Zettask Proプランが有効ではありません。ローカルのタスクとメモはこの端末に安全に保持されています。",
+  "resumeSyncWithProButton": "Proで同期を再開"
 }

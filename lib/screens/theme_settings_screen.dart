@@ -7,6 +7,7 @@ import '../models/subscription_model.dart';
 import '../models/task_model.dart';
 import '../providers/subscription_provider.dart';
 import '../providers/theme_provider.dart';
+import '../widgets/pro_badge.dart';
 import 'pro_paywall_screen.dart';
 
 class ThemeSettingsScreen extends StatelessWidget {
@@ -242,7 +243,7 @@ class ThemeSettingsScreen extends StatelessWidget {
                     ),
                     if (!isPro) ...[
                       const SizedBox(width: 8),
-                      _ProTagBadge(label: l10n.proBadge),
+                      const ProBadge(),
                     ],
                   ],
                 ),
@@ -264,7 +265,6 @@ class ThemeSettingsScreen extends StatelessWidget {
                     key: ValueKey('accent_chip_${accent.key}'),
                     accent: accent,
                     label: _accentLabel(accent, l10n),
-                    proBadgeLabel: l10n.proBadge,
                     isSelected: themeProvider.accentColor == accent,
                     showProBadge: accent.isPro && !isPro,
                     onTap: () => _handleSelectAccent(
@@ -289,7 +289,6 @@ class ThemeSettingsScreen extends StatelessWidget {
                       ),
                       style: WidgetStyle.values[i],
                       label: _widgetStyleLabel(WidgetStyle.values[i], l10n),
-                      proBadgeLabel: l10n.proBadge,
                       isSelected:
                           themeProvider.widgetStyle == WidgetStyle.values[i],
                       showProBadge: WidgetStyle.values[i].isPro && !isPro,
@@ -313,40 +312,11 @@ class ThemeSettingsScreen extends StatelessWidget {
   }
 }
 
-class _ProTagBadge extends StatelessWidget {
-  const _ProTagBadge({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    final theme = Theme.of(context);
-    final colorScheme = theme.colorScheme;
-    return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 6, vertical: 2),
-      decoration: BoxDecoration(
-        color: colorScheme.primaryContainer,
-        borderRadius: BorderRadius.circular(5),
-      ),
-      child: Text(
-        label,
-        style: theme.textTheme.labelSmall?.copyWith(
-          color: colorScheme.onPrimaryContainer,
-          fontSize: 9.5,
-          fontWeight: FontWeight.w700,
-          letterSpacing: 0.5,
-        ),
-      ),
-    );
-  }
-}
-
 class _AccentColorChip extends StatelessWidget {
   const _AccentColorChip({
     super.key,
     required this.accent,
     required this.label,
-    required this.proBadgeLabel,
     required this.isSelected,
     required this.showProBadge,
     required this.onTap,
@@ -354,7 +324,6 @@ class _AccentColorChip extends StatelessWidget {
 
   final ProAccentColor accent;
   final String label;
-  final String proBadgeLabel;
   final bool isSelected;
   final bool showProBadge;
   final VoidCallback onTap;
@@ -413,7 +382,7 @@ class _AccentColorChip extends StatelessWidget {
                 ),
                 if (showProBadge) ...[
                   const SizedBox(width: 6),
-                  _ProTagBadge(label: proBadgeLabel),
+                  const ProBadge(),
                 ],
               ],
             ),
@@ -429,7 +398,6 @@ class _WidgetStyleCard extends StatelessWidget {
     super.key,
     required this.style,
     required this.label,
-    required this.proBadgeLabel,
     required this.isSelected,
     required this.showProBadge,
     required this.onTap,
@@ -437,7 +405,6 @@ class _WidgetStyleCard extends StatelessWidget {
 
   final WidgetStyle style;
   final String label;
-  final String proBadgeLabel;
   final bool isSelected;
   final bool showProBadge;
   final VoidCallback onTap;
@@ -539,7 +506,7 @@ class _WidgetStyleCard extends StatelessWidget {
                     ),
                   ),
                   if (showProBadge)
-                    _ProTagBadge(label: proBadgeLabel)
+                    const ProBadge()
                   else if (isSelected)
                     Icon(
                       Icons.check_circle_rounded,

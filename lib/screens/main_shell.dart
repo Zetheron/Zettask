@@ -5,9 +5,11 @@ import 'package:provider/provider.dart';
 
 import '../l10n/app_localizations.dart';
 import '../models/repeating_task_model.dart';
+import '../models/subscription_model.dart';
 import '../models/task_model.dart';
 import '../providers/auth_provider.dart';
 import '../providers/calendar_provider.dart';
+import '../providers/subscription_provider.dart';
 import '../providers/task_provider.dart';
 import '../providers/workspace_provider.dart';
 import '../services/home_widget_service.dart';
@@ -62,9 +64,16 @@ class _MainShellState extends State<MainShell> {
 
       if (widget.autoLoad) {
         final calendarProvider = context.read<CalendarProvider>();
+        final subscriptionProvider = context.read<SubscriptionProvider?>();
+        final allowCalendarSync = subscriptionProvider == null ||
+            !subscriptionProvider.isInitialized ||
+            subscriptionProvider.hasAccess(ProFeature.calendarSync);
         _taskProvider!.initialize();
         _workspaceProvider!.initialize();
-        calendarProvider.initialize(initialDate: _taskProvider!.selectedDate);
+        calendarProvider.initialize(
+          initialDate: _taskProvider!.selectedDate,
+          allowSync: allowCalendarSync,
+        );
       }
 
       _initHomeWidgetListener();

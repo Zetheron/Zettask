@@ -123,6 +123,9 @@ class _ZettaskAppState extends State<ZettaskApp> {
   late final ThemeProvider _themeProvider;
   late final LocaleProvider _localeProvider;
   late final SubscriptionProvider _subscriptionProvider;
+  late final AppLockProvider _appLockProvider;
+  late final CalendarProvider _calendarProvider;
+  late final AuthProvider _authProvider;
 
   HomeWidgetSyncService get _homeWidgetService =>
       widget.homeWidgetService ?? AndroidHomeWidgetService.instance;
@@ -140,17 +143,30 @@ class _ZettaskAppState extends State<ZettaskApp> {
       homeWidgetStyleService: styleService,
     );
 
+    _appLockProvider = AppLockProvider(
+      appLockService: widget.appLockService,
+      privacyService: widget.privacyService,
+      nowProvider: widget.nowProvider,
+    );
+
+    _calendarProvider = CalendarProvider(
+      calendarService: widget.calendarService,
+      initialDate: widget.initialDate,
+    );
+
+    _authProvider = AuthProvider(
+      authService: widget.authService,
+      cloudSyncService: widget.cloudSyncService,
+      databaseService: widget.databaseService,
+    );
+
     _subscriptionProvider = SubscriptionProvider(
       subscriptionService: widget.subscriptionService,
       nowProvider: widget.nowProvider,
-      onProStatusChanged: (isPro) {
-        if (!isPro) {
-          _themeProvider.enforceProEntitlement(false);
-        }
-      },
+      onProStatusChanged: _handleProStatusChanged,
     );
 
-    _initializeThemeAndSubscription();
+    _initializeEntitlementAndDependents();
 
     _localeProvider = LocaleProvider(
       initialLocale: widget.initialLocale,
@@ -176,15 +192,31 @@ class _ZettaskAppState extends State<ZettaskApp> {
     }
   }
 
-  Future<void> _initializeThemeAndSubscription() async {
+  Future<void> _handleProStatusChanged(bool isPro) async {
+    _authProvider.setCloudSyncPaused(!isPro);
+    if (!isPro) {
+      await _themeProvider.enforceProEntitlement(false);
+      await _appLockProvider.disableForDowngrade();
+      await _calendarProvider.disableForDowngrade();
+    }
+  }
+
+  Future<void> _initializeEntitlementAndDependents() async {
     await _subscriptionProvider.initialize();
+    if (!mounted) return;
+    final isPro = _subscriptionProvider.isPro;
+    _authProvider.setCloudSyncPaused(!isPro);
+    await _appLockProvider.initialize(allowEnabled: isPro);
     if (!mounted) return;
     await _themeProvider.loadSavedPreferences(
       restoreMode: widget.initialThemeMode == null,
       restorePreset: widget.initialThemePreset == null,
       restoreProOptions: true,
-      isPro: _subscriptionProvider.isPro,
+      isPro: isPro,
     );
+    if (!isPro) {
+      await _calendarProvider.disableForDowngrade();
+    }
   }
 
   Future<void> _syncWidgetLabelsForLocale(Locale effectiveLocale) async {
@@ -200,6 +232,9 @@ class _ZettaskAppState extends State<ZettaskApp> {
     _themeProvider.dispose();
     _localeProvider.dispose();
     _subscriptionProvider.dispose();
+    _appLockProvider.dispose();
+    _calendarProvider.dispose();
+    _authProvider.dispose();
     super.dispose();
   }
 
@@ -212,13 +247,7 @@ class _ZettaskAppState extends State<ZettaskApp> {
         ChangeNotifierProvider<SubscriptionProvider>.value(
           value: _subscriptionProvider,
         ),
-        ChangeNotifierProvider<AppLockProvider>(
-          create: (_) => AppLockProvider(
-            appLockService: widget.appLockService,
-            privacyService: widget.privacyService,
-            nowProvider: widget.nowProvider,
-          )..initialize(),
-        ),
+        ChangeNotifierProvider<AppLockProvider>.value(value: _appLockProvider),
         ChangeNotifierProvider<TaskProvider>(
           create: (_) => TaskProvider(
             databaseService: widget.databaseService,
@@ -228,11 +257,8 @@ class _ZettaskAppState extends State<ZettaskApp> {
             nowProvider: widget.nowProvider,
           ),
         ),
-        ChangeNotifierProvider<CalendarProvider>(
-          create: (_) => CalendarProvider(
-            calendarService: widget.calendarService,
-            initialDate: widget.initialDate,
-          ),
+        ChangeNotifierProvider<CalendarProvider>.value(
+          value: _calendarProvider,
         ),
         ChangeNotifierProvider<WorkspaceProvider>(
           create: (_) => WorkspaceProvider(
@@ -241,13 +267,7 @@ class _ZettaskAppState extends State<ZettaskApp> {
             nowProvider: widget.nowProvider,
           ),
         ),
-        ChangeNotifierProvider<AuthProvider>(
-          create: (_) => AuthProvider(
-            authService: widget.authService,
-            cloudSyncService: widget.cloudSyncService,
-            databaseService: widget.databaseService,
-          ),
-        ),
+        ChangeNotifierProvider<AuthProvider>.value(value: _authProvider),
       ],
       child: Consumer2<ThemeProvider, LocaleProvider>(
         builder: (context, themeProvider, localeProvider, _) {

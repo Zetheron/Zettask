@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
 import '../models/subscription_model.dart';
 import '../providers/subscription_provider.dart';
+import '../widgets/pro_badge.dart';
 
 String localizedProPlanName(ProPlanType plan, AppLocalizations l10n) {
   return switch (plan) {
@@ -41,6 +42,35 @@ class ProPaywallScreen extends StatefulWidget {
 
 class _ProPaywallScreenState extends State<ProPaywallScreen> {
   ProPlanType _selectedPlan = ProPlanType.yearly;
+
+  String? _contextualFeatureCopy(AppLocalizations l10n) {
+    final feature = widget.highlightedFeature;
+    if (feature == null) return null;
+    return switch (feature) {
+      ProFeature.unlimitedProjects => l10n.proContextUnlimitedProjects,
+      ProFeature.calendarSync => l10n.proContextCalendarSync,
+      ProFeature.appLock => l10n.proContextAppLock,
+      ProFeature.csvExport => l10n.proContextCsvExport,
+      ProFeature.cloudSync => l10n.proContextCloudSync,
+      ProFeature.customThemes => l10n.proContextCustomThemes,
+      ProFeature.widgetStyles => l10n.proContextWidgetStyles,
+    };
+  }
+
+  bool _isBenefitHighlighted(ProFeature benefitFeature) {
+    final highlighted = widget.highlightedFeature;
+    if (highlighted == null) return false;
+    if (highlighted == benefitFeature) return true;
+    if (highlighted == ProFeature.csvExport &&
+        benefitFeature == ProFeature.unlimitedProjects) {
+      return true;
+    }
+    if (highlighted == ProFeature.widgetStyles &&
+        benefitFeature == ProFeature.customThemes) {
+      return true;
+    }
+    return false;
+  }
 
   String _resolvePrice(
     ProPlanType plan,
@@ -168,7 +198,14 @@ class _ProPaywallScreenState extends State<ProPaywallScreen> {
               isPro: isPro,
               activePlan: subscriptionProvider.activePlan,
             ),
-            const SizedBox(height: 18),
+            if (!isPro && _contextualFeatureCopy(l10n) != null) ...[
+              const SizedBox(height: 12),
+              _ContextualFeatureBanner(
+                key: const ValueKey('paywall_context_banner'),
+                message: _contextualFeatureCopy(l10n)!,
+              ),
+            ],
+            const SizedBox(height: 16),
             Container(
               padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
               decoration: BoxDecoration(
@@ -182,11 +219,7 @@ class _ProPaywallScreenState extends State<ProPaywallScreen> {
                     _BenefitRow(
                       icon: benefits[i].$2,
                       text: benefits[i].$3,
-                      highlighted:
-                          widget.highlightedFeature == benefits[i].$1 ||
-                              (widget.highlightedFeature ==
-                                      ProFeature.widgetStyles &&
-                                  benefits[i].$1 == ProFeature.customThemes),
+                      highlighted: _isBenefitHighlighted(benefits[i].$1),
                     ),
                     if (i < benefits.length - 1) ...[
                       const SizedBox(height: 10),
@@ -364,25 +397,7 @@ class _PaywallHeader extends StatelessWidget {
                       ),
                     ),
                     const SizedBox(width: 8),
-                    Container(
-                      padding: const EdgeInsets.symmetric(
-                        horizontal: 7,
-                        vertical: 2,
-                      ),
-                      decoration: BoxDecoration(
-                        color: colorScheme.primary,
-                        borderRadius: BorderRadius.circular(6),
-                      ),
-                      child: Text(
-                        l10n.proBadge,
-                        style: theme.textTheme.labelSmall?.copyWith(
-                          color: colorScheme.onPrimary,
-                          fontSize: 10,
-                          fontWeight: FontWeight.w700,
-                          letterSpacing: 0.6,
-                        ),
-                      ),
-                    ),
+                    const ProBadge(filled: true),
                   ],
                 ),
                 const SizedBox(height: 6),
@@ -400,6 +415,57 @@ class _PaywallHeader extends StatelessWidget {
                   ),
                 ),
               ],
+            ),
+          ),
+        ],
+      ),
+    );
+  }
+}
+
+class _ContextualFeatureBanner extends StatelessWidget {
+  const _ContextualFeatureBanner({
+    super.key,
+    required this.message,
+  });
+
+  final String message;
+
+  @override
+  Widget build(BuildContext context) {
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 11),
+      decoration: BoxDecoration(
+        color: colorScheme.primaryContainer.withValues(alpha: 0.45),
+        borderRadius: BorderRadius.circular(12),
+        border: Border.all(
+          color: colorScheme.primary.withValues(alpha: 0.4),
+          width: 1,
+        ),
+      ),
+      child: Row(
+        crossAxisAlignment: CrossAxisAlignment.start,
+        children: [
+          Padding(
+            padding: const EdgeInsets.only(top: 1),
+            child: Icon(
+              Icons.info_outline_rounded,
+              size: 16,
+              color: colorScheme.primary,
+            ),
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Text(
+              message,
+              style: theme.textTheme.bodySmall?.copyWith(
+                color: colorScheme.onSurface,
+                fontWeight: FontWeight.w500,
+                height: 1.4,
+              ),
             ),
           ),
         ],

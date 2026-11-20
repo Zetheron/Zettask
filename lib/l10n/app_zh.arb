@@ -462,5 +462,16 @@
   "widgetStyleSection": "主屏幕小组件样式",
   "widgetStyleStandard": "标准",
   "widgetStyleAmoled": "AMOLED",
-  "widgetStyleTranslucent": "半透明"
+  "widgetStyleTranslucent": "半透明",
+  "proContextUnlimitedProjects": "免费版最多可创建 3 个项目。升级至 Zettask Pro 可创建无限项目。",
+  "proContextCalendarSync": "设备日历同步与法定节假日包含在 Zettask Pro 中。",
+  "proContextAppLock": "生物识别应用锁与最近任务隐私保护包含在 Zettask Pro 中。",
+  "proContextCsvExport": "任务与笔记 CSV 导出包含在 Zettask Pro 中。",
+  "proContextCloudSync": "多设备云端同步包含在 Zettask Pro 中。",
+  "proContextCustomThemes": "AMOLED 纯黑主题与自定义强调色包含在 Zettask Pro 中。",
+  "proContextWidgetStyles": "AMOLED 与半透明主屏幕小组件样式包含在 Zettask Pro 中。",
+  "cloudSyncPausedShort": "云端同步已暂停 · 本地数据安全",
+  "cloudSyncPausedTitle": "云端同步已暂停",
+  "cloudSyncPausedBody": "你的 Zettask Pro 订阅未激活。本地任务和笔记仍安全保存在此设备上。",
+  "resumeSyncWithProButton": "使用 Pro 恢复同步"
 }

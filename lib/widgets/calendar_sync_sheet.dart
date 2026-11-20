@@ -4,8 +4,12 @@ import 'package:provider/provider.dart';
 import '../core/theme/app_theme.dart';
 import '../l10n/app_localizations.dart';
 import '../models/calendar_event_model.dart';
+import '../models/subscription_model.dart';
 import '../providers/app_lock_provider.dart';
 import '../providers/calendar_provider.dart';
+import '../providers/subscription_provider.dart';
+import '../screens/pro_paywall_screen.dart';
+import 'pro_badge.dart';
 
 class CalendarSyncSheet extends StatefulWidget {
   const CalendarSyncSheet({super.key});
@@ -68,8 +72,19 @@ class _CalendarSyncSheetState extends State<CalendarSyncSheet>
     CalendarProvider calendarProvider,
     bool enabled,
   ) async {
-    if (enabled && !calendarProvider.hasPermission) {
-      _suspendAppLock();
+    if (enabled) {
+      final subscriptionProvider = context.read<SubscriptionProvider?>();
+      if (subscriptionProvider != null &&
+          !subscriptionProvider.hasAccess(ProFeature.calendarSync)) {
+        await showProPaywall(
+          context,
+          highlightedFeature: ProFeature.calendarSync,
+        );
+        return;
+      }
+      if (!calendarProvider.hasPermission) {
+        _suspendAppLock();
+      }
     }
     await calendarProvider.setSyncEnabled(enabled);
   }
@@ -77,6 +92,15 @@ class _CalendarSyncSheetState extends State<CalendarSyncSheet>
   Future<void> _handleRequestPermission(
     CalendarProvider calendarProvider,
   ) async {
+    final subscriptionProvider = context.read<SubscriptionProvider?>();
+    if (subscriptionProvider != null &&
+        !subscriptionProvider.hasAccess(ProFeature.calendarSync)) {
+      await showProPaywall(
+        context,
+        highlightedFeature: ProFeature.calendarSync,
+      );
+      return;
+    }
     _suspendAppLock();
     await calendarProvider.requestCalendarPermission();
   }
@@ -91,6 +115,9 @@ class _CalendarSyncSheetState extends State<CalendarSyncSheet>
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final l10n = AppLocalizations.of(context);
+    final subscriptionProvider = context.watch<SubscriptionProvider?>();
+    final showProBadge = subscriptionProvider != null &&
+        !subscriptionProvider.hasAccess(ProFeature.calendarSync);
     final maxHeight = MediaQuery.sizeOf(context).height * 0.82;
 
     return Consumer<CalendarProvider>(
@@ -145,6 +172,7 @@ class _CalendarSyncSheetState extends State<CalendarSyncSheet>
                       _SyncToggleCard(
                         value: calendarProvider.isSyncEnabled,
                         isBusy: calendarProvider.isRequestingPermission,
+                        showProBadge: showProBadge,
                         onChanged: (enabled) =>
                             _handleToggleSync(calendarProvider, enabled),
                       ),
@@ -224,11 +252,13 @@ class _SyncToggleCard extends StatelessWidget {
     required this.value,
     required this.isBusy,
     required this.onChanged,
+    this.showProBadge = false,
   });
 
   final bool value;
   final bool isBusy;
   final ValueChanged<bool> onChanged;
+  final bool showProBadge;
 
   @override
   Widget build(BuildContext context) {
@@ -247,9 +277,19 @@ class _SyncToggleCard extends StatelessWidget {
         value: value,
         onChanged: isBusy ? null : onChanged,
         contentPadding: const EdgeInsets.symmetric(horizontal: 14, vertical: 4),
-        title: Text(
-          l10n.showCalendarEventsTitle,
-          style: theme.textTheme.titleMedium?.copyWith(fontSize: 15),
+        title: Row(
+          children: [
+            Flexible(
+              child: Text(
+                l10n.showCalendarEventsTitle,
+                style: theme.textTheme.titleMedium?.copyWith(fontSize: 15),
+              ),
+            ),
+            if (showProBadge) ...[
+              const SizedBox(width: 8),
+              const ProBadge(),
+            ],
+          ],
         ),
         subtitle: Text(
           l10n.showCalendarEventsSubtitle,

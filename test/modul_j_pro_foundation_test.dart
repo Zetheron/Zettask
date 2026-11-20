@@ -108,11 +108,9 @@ void main() {
       await provider.initialize();
       expect(provider.isPro, isFalse);
       expect(provider.activePlan, isNull);
-      // Tahap 1: fitur lama tetap terbuka, fitur kustomisasi baru butuh Pro
-      expect(provider.hasAccess(ProFeature.cloudSync), isTrue);
-      expect(provider.hasAccess(ProFeature.calendarSync), isTrue);
-      expect(provider.hasAccess(ProFeature.customThemes), isFalse);
-      expect(provider.hasAccess(ProFeature.widgetStyles), isFalse);
+      for (final feature in ProFeature.values) {
+        expect(provider.hasAccess(feature), isFalse);
+      }
 
       // Beli paket Bulanan -> transisi ke Pro + tersimpan di SharedPreferences
       final purchaseRes = await provider.purchasePlan(ProPlanType.monthly);
@@ -120,8 +118,9 @@ void main() {
       expect(billing.lastPurchasedPlan, ProPlanType.monthly);
       expect(provider.isPro, isTrue);
       expect(provider.activePlan, ProPlanType.monthly);
-      expect(provider.hasAccess(ProFeature.customThemes), isTrue);
-      expect(provider.hasAccess(ProFeature.widgetStyles), isTrue);
+      for (final feature in ProFeature.values) {
+        expect(provider.hasAccess(feature), isTrue);
+      }
 
       final prefs = await SharedPreferences.getInstance();
       expect(prefs.getBool(prefProIsActiveKey), isTrue);

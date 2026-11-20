@@ -1530,4 +1530,45 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get widgetStyleTranslucent => 'Transparan';
+
+  @override
+  String get proContextUnlimitedProjects =>
+      'Paket Gratis mendukung hingga 3 proyek. Upgrade ke Zettask Pro untuk proyek tanpa batas.';
+
+  @override
+  String get proContextCalendarSync =>
+      'Integrasi kalender perangkat dan Hari Libur Nasional tersedia di Zettask Pro.';
+
+  @override
+  String get proContextAppLock =>
+      'Kunci Aplikasi Biometrik dan privasi Recent Apps tersedia di Zettask Pro.';
+
+  @override
+  String get proContextCsvExport =>
+      'Ekspor tugas dan catatan ke berkas CSV tersedia di Zettask Pro.';
+
+  @override
+  String get proContextCloudSync =>
+      'Sinkronisasi Cloud antar perangkat tersedia di Zettask Pro.';
+
+  @override
+  String get proContextCustomThemes =>
+      'Tema AMOLED Pure Black dan warna aksen kustom tersedia di Zettask Pro.';
+
+  @override
+  String get proContextWidgetStyles =>
+      'Gaya Home Screen Widget AMOLED dan Transparan tersedia di Zettask Pro.';
+
+  @override
+  String get cloudSyncPausedShort => 'Sinkronisasi dijeda · Data lokal aman';
+
+  @override
+  String get cloudSyncPausedTitle => 'Sinkronisasi Cloud dijeda';
+
+  @override
+  String get cloudSyncPausedBody =>
+      'Langganan Zettask Pro tidak aktif. Tugas dan catatan lokal Anda tetap aman di perangkat ini.';
+
+  @override
+  String get resumeSyncWithProButton => 'Lanjutkan Sinkronisasi dengan Pro';
 }

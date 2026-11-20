@@ -3,8 +3,12 @@ import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
 import '../l10n/app_localizations.dart';
+import '../models/subscription_model.dart';
 import '../providers/auth_provider.dart';
 import '../providers/locale_provider.dart';
+import '../providers/subscription_provider.dart';
+import '../screens/pro_paywall_screen.dart';
+import 'pro_badge.dart';
 
 class AccountSheet extends StatelessWidget {
   const AccountSheet({super.key});
@@ -158,6 +162,7 @@ class AccountSheet extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final l10n = AppLocalizations.of(context);
     final authProvider = context.watch<AuthProvider>();
+    final subscriptionProvider = context.watch<SubscriptionProvider?>();
     final user = authProvider.user;
 
     if (user == null) {
@@ -166,17 +171,29 @@ class AccountSheet extends StatelessWidget {
 
     final isBusy = authProvider.isAuthBusy;
     final isSyncing = authProvider.isSyncing;
+    final hasCloudSyncAccess =
+        subscriptionProvider?.hasAccess(ProFeature.cloudSync) ?? true;
+    final isCloudSyncPaused =
+        !hasCloudSyncAccess || authProvider.isCloudSyncPaused;
     final localizedError = authProvider.localizedError(l10n);
 
-    final (syncIcon, syncColor) = switch (authProvider.syncStatus) {
-      SyncStatus.synced => (Icons.cloud_done_outlined, colorScheme.primary),
-      SyncStatus.syncing => (Icons.cloud_sync_outlined, colorScheme.primary),
-      SyncStatus.error => (Icons.cloud_off_outlined, colorScheme.error),
-      SyncStatus.idle => (
-          Icons.cloud_queue_outlined,
-          colorScheme.onSurfaceVariant,
-        ),
-    };
+    final (syncIcon, syncColor) = isCloudSyncPaused
+        ? (Icons.cloud_off_outlined, colorScheme.onSurfaceVariant)
+        : switch (authProvider.syncStatus) {
+            SyncStatus.synced => (
+                Icons.cloud_done_outlined,
+                colorScheme.primary,
+              ),
+            SyncStatus.syncing => (
+                Icons.cloud_sync_outlined,
+                colorScheme.primary,
+              ),
+            SyncStatus.error => (Icons.cloud_off_outlined, colorScheme.error),
+            SyncStatus.idle => (
+                Icons.cloud_queue_outlined,
+                colorScheme.onSurfaceVariant,
+              ),
+          };
 
     return SafeArea(
       top: false,
@@ -298,25 +315,45 @@ class AccountSheet extends StatelessWidget {
                           child: Column(
                             crossAxisAlignment: CrossAxisAlignment.start,
                             children: [
-                              Text(
-                                _syncStatusLabel(authProvider.syncStatus, l10n),
-                                style: theme.textTheme.titleMedium?.copyWith(
-                                  fontSize: 14,
-                                  color: syncColor,
-                                ),
+                              Row(
+                                children: [
+                                  Flexible(
+                                    child: Text(
+                                      isCloudSyncPaused
+                                          ? l10n.cloudSyncPausedTitle
+                                          : _syncStatusLabel(
+                                              authProvider.syncStatus,
+                                              l10n,
+                                            ),
+                                      style:
+                                          theme.textTheme.titleMedium?.copyWith(
+                                        fontSize: 14,
+                                        color: syncColor,
+                                      ),
+                                    ),
+                                  ),
+                                  if (isCloudSyncPaused) ...[
+                                    const SizedBox(width: 8),
+                                    const ProBadge(),
+                                  ],
+                                ],
                               ),
                               const SizedBox(height: 2),
                               Text(
-                                l10n.lastSyncedPrefix(
-                                  _formatSyncTime(
-                                    context,
-                                    authProvider.lastSyncedAt,
-                                    l10n,
-                                  ),
-                                ),
+                                isCloudSyncPaused
+                                    ? l10n.cloudSyncPausedBody
+                                    : l10n.lastSyncedPrefix(
+                                        _formatSyncTime(
+                                          context,
+                                          authProvider.lastSyncedAt,
+                                          l10n,
+                                        ),
+                                      ),
                                 style: theme.textTheme.bodySmall,
                               ),
-                              if (authProvider.syncStatus == SyncStatus.error) ...[
+                              if (!isCloudSyncPaused &&
+                                  authProvider.syncStatus ==
+                                      SyncStatus.error) ...[
                                 const SizedBox(height: 4),
                                 Text(
                                   l10n.syncFailedMessage,
@@ -355,7 +392,12 @@ class AccountSheet extends StatelessWidget {
                   FilledButton.icon(
                     onPressed: (isBusy || isSyncing)
                         ? null
-                        : () => _handleSync(context),
+                        : isCloudSyncPaused
+                            ? () => showProPaywall(
+                                  context,
+                                  highlightedFeature: ProFeature.cloudSync,
+                                )
+                            : () => _handleSync(context),
                     style: FilledButton.styleFrom(
                       minimumSize: const Size.fromHeight(48),
                       elevation: 0,
@@ -372,9 +414,18 @@ class AccountSheet extends StatelessWidget {
                               color: Colors.white,
                             ),
                           )
-                        : const Icon(Icons.sync_rounded, size: 18),
+                        : Icon(
+                            isCloudSyncPaused
+                                ? Icons.workspace_premium_outlined
+                                : Icons.sync_rounded,
+                            size: 18,
+                          ),
                     label: Text(
-                      isSyncing ? l10n.syncingLabel : l10n.syncNowButton,
+                      isCloudSyncPaused
+                          ? l10n.resumeSyncWithProButton
+                          : (isSyncing
+                              ? l10n.syncingLabel
+                              : l10n.syncNowButton),
                     ),
                   ),
                   const SizedBox(height: 10),

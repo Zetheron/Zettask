@@ -3,6 +3,7 @@ import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
 import '../l10n/app_localizations.dart';
+import '../models/subscription_model.dart';
 import '../providers/app_lock_provider.dart';
 import '../providers/auth_provider.dart';
 import '../providers/calendar_provider.dart';
@@ -16,6 +17,7 @@ import '../widgets/about_sheet.dart';
 import '../widgets/account_sheet.dart';
 import '../widgets/calendar_sync_sheet.dart';
 import '../widgets/language_picker_sheet.dart';
+import '../widgets/pro_badge.dart';
 import '../widgets/weekly_stats_card.dart';
 import 'auth_welcome_screen.dart';
 import 'notes_screen.dart';
@@ -59,6 +61,16 @@ class WorkspaceScreen extends StatelessWidget {
   }
 
   Future<void> _openExportSheet(BuildContext context) async {
+    final subscriptionProvider = context.read<SubscriptionProvider?>();
+    if (subscriptionProvider != null &&
+        !subscriptionProvider.hasAccess(ProFeature.csvExport)) {
+      await showProPaywall(
+        context,
+        highlightedFeature: ProFeature.csvExport,
+      );
+      return;
+    }
+
     final l10n = AppLocalizations.of(context);
     final target = await showModalBottomSheet<ExportTarget>(
       context: context,
@@ -317,6 +329,18 @@ class WorkspaceScreen extends StatelessWidget {
     AppLockProvider appLockProvider,
     bool value,
   ) async {
+    if (value) {
+      final subscriptionProvider = context.read<SubscriptionProvider?>();
+      if (subscriptionProvider != null &&
+          !subscriptionProvider.hasAccess(ProFeature.appLock)) {
+        await showProPaywall(
+          context,
+          highlightedFeature: ProFeature.appLock,
+        );
+        return;
+      }
+    }
+
     final l10n = AppLocalizations.of(context);
     final success = await appLockProvider.setEnabled(value);
     if (!context.mounted) return;
@@ -330,18 +354,46 @@ class WorkspaceScreen extends StatelessWidget {
     }
   }
 
+  Future<void> _openCalendarSync(
+    BuildContext context,
+    CalendarProvider calendarProvider,
+  ) async {
+    final subscriptionProvider = context.read<SubscriptionProvider?>();
+    final hasAccess =
+        subscriptionProvider?.hasAccess(ProFeature.calendarSync) ?? true;
+    if (!hasAccess && !calendarProvider.isSyncEnabled) {
+      await showProPaywall(
+        context,
+        highlightedFeature: ProFeature.calendarSync,
+      );
+      return;
+    }
+    await CalendarSyncSheet.show(context);
+  }
+
   void _openAccountFlow(BuildContext context, AuthProvider authProvider) {
     if (authProvider.isSignedIn) {
+      // Signed-in users must always be able to access AccountSheet for
+      // Sign Out & Delete Account (Google Play Data Safety compliance).
       AccountSheet.show(context);
-    } else {
-      authProvider.clearError();
-      Navigator.of(context).push(
-        MaterialPageRoute<bool>(
-          settings: const RouteSettings(name: AuthWelcomeScreen.routeName),
-          builder: (_) => const AuthWelcomeScreen(),
-        ),
-      );
+      return;
     }
+    final subscriptionProvider = context.read<SubscriptionProvider?>();
+    if (subscriptionProvider != null &&
+        !subscriptionProvider.hasAccess(ProFeature.cloudSync)) {
+      showProPaywall(
+        context,
+        highlightedFeature: ProFeature.cloudSync,
+      );
+      return;
+    }
+    authProvider.clearError();
+    Navigator.of(context).push(
+      MaterialPageRoute<bool>(
+        settings: const RouteSettings(name: AuthWelcomeScreen.routeName),
+        builder: (_) => const AuthWelcomeScreen(),
+      ),
+    );
   }
 
   @override
@@ -352,6 +404,14 @@ class WorkspaceScreen extends StatelessWidget {
     final localeProvider = context.watch<LocaleProvider>();
     final themeProvider = context.watch<ThemeProvider>();
     final subscriptionProvider = context.watch<SubscriptionProvider?>();
+    final hasCloudSyncAccess =
+        subscriptionProvider?.hasAccess(ProFeature.cloudSync) ?? true;
+    final hasCalendarAccess =
+        subscriptionProvider?.hasAccess(ProFeature.calendarSync) ?? true;
+    final hasCsvAccess =
+        subscriptionProvider?.hasAccess(ProFeature.csvExport) ?? true;
+    final hasAppLockAccess =
+        subscriptionProvider?.hasAccess(ProFeature.appLock) ?? true;
 
     return Consumer4<CalendarProvider, TaskProvider, WorkspaceProvider,
         AuthProvider>(
@@ -427,8 +487,13 @@ class WorkspaceScreen extends StatelessWidget {
                   const SizedBox(height: 10),
                 ],
                 _AccountSummaryCard(
+                  key: const ValueKey('workspace_account_card'),
                   authProvider: authProvider,
-                  syncStatusLabel: _syncStatusLabel(authProvider.syncStatus, l10n),
+                  syncStatusLabel: !hasCloudSyncAccess ||
+                          authProvider.isCloudSyncPaused
+                      ? l10n.cloudSyncPausedShort
+                      : _syncStatusLabel(authProvider.syncStatus, l10n),
+                  showProBadge: !authProvider.isSignedIn && !hasCloudSyncAccess,
                   onTap: () => _openAccountFlow(context, authProvider),
                 ),
                 const SizedBox(height: 10),
@@ -514,13 +579,15 @@ class WorkspaceScreen extends StatelessWidget {
                     ),
                     const Divider(),
                     _SettingsTile(
+                      key: const ValueKey('workspace_calendar_sync_tile'),
                       icon: Icons.calendar_month_outlined,
                       iconColor: isCalendarActive
                           ? colorScheme.primary
                           : colorScheme.onSurfaceVariant,
                       title: l10n.calendarSyncTitle,
                       subtitle: calendarSubtitle,
-                      onTap: () => CalendarSyncSheet.show(context),
+                      showProBadge: !hasCalendarAccess,
+                      onTap: () => _openCalendarSync(context, calendarProvider),
                     ),
                   ],
                 ),
@@ -545,10 +612,12 @@ class WorkspaceScreen extends StatelessWidget {
                     ),
                     const Divider(),
                     _SettingsTile(
+                      key: const ValueKey('workspace_export_csv_tile'),
                       icon: Icons.file_download_outlined,
                       iconColor: colorScheme.onSurfaceVariant,
                       title: l10n.exportCsvTitle,
                       subtitle: l10n.exportCsvSubtitle,
+                      showProBadge: !hasCsvAccess,
                       onTap: () => _openExportSheet(context),
                     ),
                     const Divider(),
@@ -607,11 +676,21 @@ class WorkspaceScreen extends StatelessWidget {
                                 ? colorScheme.primary
                                 : colorScheme.onSurfaceVariant,
                           ),
-                          title: Text(
-                            l10n.appLockTitle,
-                            style: theme.textTheme.titleMedium?.copyWith(
-                              fontSize: 14.5,
-                            ),
+                          title: Row(
+                            children: [
+                              Flexible(
+                                child: Text(
+                                  l10n.appLockTitle,
+                                  style: theme.textTheme.titleMedium?.copyWith(
+                                    fontSize: 14.5,
+                                  ),
+                                ),
+                              ),
+                              if (!hasAppLockAccess) ...[
+                                const SizedBox(width: 8),
+                                const ProBadge(),
+                              ],
+                            ],
                           ),
                           subtitle: Text(
                             l10n.appLockSubtitle,
@@ -785,6 +864,7 @@ class _SettingsTile extends StatelessWidget {
     required this.title,
     required this.subtitle,
     required this.onTap,
+    this.showProBadge = false,
   });
 
   final IconData icon;
@@ -792,6 +872,7 @@ class _SettingsTile extends StatelessWidget {
   final String title;
   final String subtitle;
   final VoidCallback onTap;
+  final bool showProBadge;
 
   @override
   Widget build(BuildContext context) {
@@ -812,11 +893,21 @@ class _SettingsTile extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
-                      title,
-                      style: theme.textTheme.titleMedium?.copyWith(
-                        fontSize: 14.5,
-                      ),
+                    Row(
+                      children: [
+                        Flexible(
+                          child: Text(
+                            title,
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontSize: 14.5,
+                            ),
+                          ),
+                        ),
+                        if (showProBadge) ...[
+                          const SizedBox(width: 8),
+                          const ProBadge(),
+                        ],
+                      ],
                     ),
                     const SizedBox(height: 2),
                     Text(
@@ -841,14 +932,17 @@ class _SettingsTile extends StatelessWidget {
 
 class _AccountSummaryCard extends StatelessWidget {
   const _AccountSummaryCard({
+    super.key,
     required this.authProvider,
     required this.syncStatusLabel,
     required this.onTap,
+    this.showProBadge = false,
   });
 
   final AuthProvider authProvider;
   final String syncStatusLabel;
   final VoidCallback onTap;
+  final bool showProBadge;
 
   @override
   Widget build(BuildContext context) {
@@ -909,13 +1003,23 @@ class _AccountSummaryCard extends StatelessWidget {
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
-                      Text(
-                        title,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: theme.textTheme.titleMedium?.copyWith(
-                          fontSize: 14.5,
-                        ),
+                      Row(
+                        children: [
+                          Flexible(
+                            child: Text(
+                              title,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                fontSize: 14.5,
+                              ),
+                            ),
+                          ),
+                          if (showProBadge) ...[
+                            const SizedBox(width: 8),
+                            const ProBadge(),
+                          ],
+                        ],
                       ),
                       const SizedBox(height: 2),
                       Text(
@@ -1021,25 +1125,7 @@ class _ProBannerCard extends StatelessWidget {
                             ),
                           ),
                           const SizedBox(width: 6),
-                          Container(
-                            padding: const EdgeInsets.symmetric(
-                              horizontal: 6,
-                              vertical: 1.5,
-                            ),
-                            decoration: BoxDecoration(
-                              color: colorScheme.primary,
-                              borderRadius: BorderRadius.circular(5),
-                            ),
-                            child: Text(
-                              l10n.proBadge,
-                              style: theme.textTheme.labelSmall?.copyWith(
-                                color: colorScheme.onPrimary,
-                                fontSize: 9.5,
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: 0.5,
-                              ),
-                            ),
-                          ),
+                          const ProBadge(filled: true),
                         ],
                       ),
                       const SizedBox(height: 1),

@@ -2902,6 +2902,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Translucent'**
   String get widgetStyleTranslucent;
+
+  /// No description provided for @proContextUnlimitedProjects.
+  ///
+  /// In en, this message translates to:
+  /// **'Free plan includes up to 3 projects. Upgrade to Zettask Pro for unlimited projects.'**
+  String get proContextUnlimitedProjects;
+
+  /// No description provided for @proContextCalendarSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Device calendar sync and national holidays are included in Zettask Pro.'**
+  String get proContextCalendarSync;
+
+  /// No description provided for @proContextAppLock.
+  ///
+  /// In en, this message translates to:
+  /// **'Biometric App Lock and Recent Apps privacy are included in Zettask Pro.'**
+  String get proContextAppLock;
+
+  /// No description provided for @proContextCsvExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Exporting tasks and notes to CSV is included in Zettask Pro.'**
+  String get proContextCsvExport;
+
+  /// No description provided for @proContextCloudSync.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud sync across devices is included in Zettask Pro.'**
+  String get proContextCloudSync;
+
+  /// No description provided for @proContextCustomThemes.
+  ///
+  /// In en, this message translates to:
+  /// **'AMOLED Pure Black and custom accent colors are included in Zettask Pro.'**
+  String get proContextCustomThemes;
+
+  /// No description provided for @proContextWidgetStyles.
+  ///
+  /// In en, this message translates to:
+  /// **'AMOLED and Translucent Home Screen Widget styles are included in Zettask Pro.'**
+  String get proContextWidgetStyles;
+
+  /// No description provided for @cloudSyncPausedShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud sync paused · Local data safe'**
+  String get cloudSyncPausedShort;
+
+  /// No description provided for @cloudSyncPausedTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Cloud sync paused'**
+  String get cloudSyncPausedTitle;
+
+  /// No description provided for @cloudSyncPausedBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your Zettask Pro plan is inactive. Local tasks and notes remain safe on this device.'**
+  String get cloudSyncPausedBody;
+
+  /// No description provided for @resumeSyncWithProButton.
+  ///
+  /// In en, this message translates to:
+  /// **'Resume Sync with Pro'**
+  String get resumeSyncWithProButton;
 }
 
 class _AppLocalizationsDelegate

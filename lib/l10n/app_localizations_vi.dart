@@ -1519,4 +1519,46 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get widgetStyleTranslucent => 'Bán trong suốt';
+
+  @override
+  String get proContextUnlimitedProjects =>
+      'Gói miễn phí hỗ trợ tối đa 3 dự án. Nâng cấp Zettask Pro để tạo dự án không giới hạn.';
+
+  @override
+  String get proContextCalendarSync =>
+      'Đồng bộ lịch thiết bị và ngày lễ quốc gia có trong Zettask Pro.';
+
+  @override
+  String get proContextAppLock =>
+      'Khóa sinh trắc học và ẩn ứng dụng gần đây có trong Zettask Pro.';
+
+  @override
+  String get proContextCsvExport =>
+      'Xuất công việc và ghi chú ra CSV có trong Zettask Pro.';
+
+  @override
+  String get proContextCloudSync =>
+      'Đồng bộ đám mây giữa các thiết bị có trong Zettask Pro.';
+
+  @override
+  String get proContextCustomThemes =>
+      'AMOLED đen thuần và màu nhấn tùy chỉnh có trong Zettask Pro.';
+
+  @override
+  String get proContextWidgetStyles =>
+      'Kiểu Widget AMOLED và bán trong suốt có trong Zettask Pro.';
+
+  @override
+  String get cloudSyncPausedShort =>
+      'Tạm dừng đồng bộ · Dữ liệu cục bộ an toàn';
+
+  @override
+  String get cloudSyncPausedTitle => 'Đồng bộ đám mây đang tạm dừng';
+
+  @override
+  String get cloudSyncPausedBody =>
+      'Gói Zettask Pro chưa hoạt động. Công việc và ghi chú cục bộ vẫn được lưu an toàn trên thiết bị này.';
+
+  @override
+  String get resumeSyncWithProButton => 'Tiếp tục đồng bộ với Pro';
 }

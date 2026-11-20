@@ -39,20 +39,71 @@ class AppLockProvider extends ChangeNotifier {
   bool get isInitialized => _isInitialized;
   String? get errorMessage => _errorMessage;
 
-  Future<void> initialize() async {
-    if (_isInitialized) return;
+  Future<void> initialize({bool allowEnabled = true}) async {
+    if (_isInitialized) {
+      if (!allowEnabled && (_isEnabled || _isLocked)) {
+        await disableForDowngrade();
+      }
+      return;
+    }
     _isDeviceSupported = await _appLockService.isDeviceSupported();
+    var storedEnabled = false;
     try {
       final prefs = await SharedPreferences.getInstance();
-      _isEnabled = prefs.getBool(prefAppLockEnabledKey) ?? false;
+      storedEnabled = prefs.getBool(prefAppLockEnabledKey) ?? false;
     } catch (_) {
-      _isEnabled = false;
+      storedEnabled = false;
     }
+
+    if (storedEnabled && !allowEnabled) {
+      _isEnabled = false;
+      _isLocked = false;
+      _isPrivacyShieldVisible = false;
+      _pausedAt = null;
+      _suspendUntil = null;
+      _errorMessage = null;
+      _isInitialized = true;
+      try {
+        final prefs = await SharedPreferences.getInstance();
+        await prefs.setBool(prefAppLockEnabledKey, false);
+      } catch (_) {
+        // Keep unlocked state even if preference write fails.
+      }
+      await _applySecureScreen(false);
+      notifyListeners();
+      return;
+    }
+
+    _isEnabled = storedEnabled;
     _isLocked = _isEnabled;
     _isPrivacyShieldVisible = false;
     _isInitialized = true;
     await _applySecureScreen(_isEnabled);
     notifyListeners();
+  }
+
+  /// Disables App Lock and Recent Apps privacy without biometric prompt so an
+  /// expired Pro subscription never locks the user out of their own data.
+  Future<void> disableForDowngrade() async {
+    final wasActive = _isEnabled || _isLocked || _isPrivacyShieldVisible;
+    _isEnabled = false;
+    _isLocked = false;
+    _isPrivacyShieldVisible = false;
+    _pausedAt = null;
+    _suspendUntil = null;
+    _errorMessage = null;
+
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(prefAppLockEnabledKey, false);
+    } catch (_) {
+      // Never block safe downgrade unlock if preference write fails.
+    }
+
+    await _applySecureScreen(false);
+    if (wasActive || _isInitialized) {
+      notifyListeners();
+    }
   }
 
   Future<void> _applySecureScreen(bool enabled) async {
