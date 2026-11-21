@@ -22,6 +22,7 @@ import '../widgets/weekly_stats_card.dart';
 import '../widgets/zettask_loaders.dart';
 import 'auth_welcome_screen.dart';
 import 'notes_screen.dart';
+import 'onboarding_screen.dart';
 import 'pro_paywall_screen.dart';
 import 'repeating_tasks_screen.dart';
 import 'stats_screen.dart';
@@ -738,6 +739,21 @@ class WorkspaceScreen extends StatelessWidget {
                       subtitle: Text(
                         l10n.showCompletedWorkspaceSubtitle,
                         style: theme.textTheme.bodySmall,
+                      ),
+                    ),
+                    const Divider(),
+                    _SettingsTile(
+                      key: const ValueKey('workspace_app_guide_tile'),
+                      icon: Icons.help_outline_rounded,
+                      iconColor: colorScheme.onSurfaceVariant,
+                      title: l10n.appGuideTitle,
+                      subtitle: l10n.appGuideSubtitle,
+                      onTap: () => Navigator.of(context).push(
+                        MaterialPageRoute<void>(
+                          builder: (_) => const OnboardingScreen(
+                            isReplay: true,
+                          ),
+                        ),
                       ),
                     ),
                     const Divider(),

@@ -473,5 +473,16 @@
   "cloudSyncPausedShort": "Sinkronisasi dijeda · Data lokal aman",
   "cloudSyncPausedTitle": "Sinkronisasi Cloud dijeda",
   "cloudSyncPausedBody": "Langganan Zettask Pro tidak aktif. Tugas dan catatan lokal Anda tetap aman di perangkat ini.",
-  "resumeSyncWithProButton": "Lanjutkan Sinkronisasi dengan Pro"
+  "resumeSyncWithProButton": "Lanjutkan Sinkronisasi dengan Pro",
+  "onboardingSkip": "Lewati",
+  "onboardingNext": "Lanjut",
+  "onboardingGetStarted": "Mulai Sekarang",
+  "onboardingSlide1Title": "Catat tugas tanpa distraksi",
+  "onboardingSlide1Body": "Tambahkan tugas harian dalam hitungan detik, pecah menjadi sub-tugas, dan selesaikan dengan satu ketukan.",
+  "onboardingSlide2Title": "Timeline rapi & terencana",
+  "onboardingSlide2Body": "Lihat jadwal harian secara kronologis, kelompokkan ke dalam proyek, dan tetap tepat waktu dengan pengingat lokal.",
+  "onboardingSlide3Title": "Cepat, offline, dan privat",
+  "onboardingSlide3Body": "Semua data tersimpan lokal di perangkat Anda. Tanpa wajib akun dan tetap cepat tanpa internet.",
+  "appGuideTitle": "Panduan Aplikasi",
+  "appGuideSubtitle": "Putar ulang panduan singkat Zettask"
 }

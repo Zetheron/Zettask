@@ -1571,4 +1571,40 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get resumeSyncWithProButton => 'Reprendre la sync avec Pro';
+
+  @override
+  String get onboardingSkip => 'Ignorer';
+
+  @override
+  String get onboardingNext => 'Suivant';
+
+  @override
+  String get onboardingGetStarted => 'Commencer';
+
+  @override
+  String get onboardingSlide1Title => 'Notez vos tâches sans distraction';
+
+  @override
+  String get onboardingSlide1Body =>
+      'Ajoutez vos tâches en quelques secondes, créez des sous-tâches et cochez-les en un geste.';
+
+  @override
+  String get onboardingSlide2Title => 'Chronologie et projets clairs';
+
+  @override
+  String get onboardingSlide2Body =>
+      'Suivez votre journée dans l\'ordre, regroupez vos projets et recevez vos rappels locaux à l\'heure.';
+
+  @override
+  String get onboardingSlide3Title => 'Rapide, hors ligne et privé';
+
+  @override
+  String get onboardingSlide3Body =>
+      'Vos données restent d\'abord sur votre appareil. Aucun compte requis et fonctionnel sans internet.';
+
+  @override
+  String get appGuideTitle => 'Guide de l\'application';
+
+  @override
+  String get appGuideSubtitle => 'Revoir la présentation rapide de Zettask';
 }

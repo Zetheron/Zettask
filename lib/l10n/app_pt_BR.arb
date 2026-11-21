@@ -473,5 +473,16 @@
   "cloudSyncPausedShort": "Sincronização pausada · Dados locais seguros",
   "cloudSyncPausedTitle": "Sincronização na nuvem pausada",
   "cloudSyncPausedBody": "Seu plano Zettask Pro está inativo. Suas tarefas e notas locais continuam seguras neste dispositivo.",
-  "resumeSyncWithProButton": "Retomar sincronização com Pro"
+  "resumeSyncWithProButton": "Retomar sincronização com Pro",
+  "onboardingSkip": "Pular",
+  "onboardingNext": "Próximo",
+  "onboardingGetStarted": "Começar agora",
+  "onboardingSlide1Title": "Anote tarefas sem distrações",
+  "onboardingSlide1Body": "Adicione tarefas diárias em segundos, divida em checklists e conclua com um toque.",
+  "onboardingSlide2Title": "Linha do tempo e projetos claros",
+  "onboardingSlide2Body": "Veja seu dia em ordem cronológica, organize projetos e cumpra horários com lembretes locais.",
+  "onboardingSlide3Title": "Rápido, offline e privado",
+  "onboardingSlide3Body": "Seus dados ficam primeiro no seu aparelho. Sem conta obrigatória e pronto mesmo sem internet.",
+  "appGuideTitle": "Guia do aplicativo",
+  "appGuideSubtitle": "Rever a apresentação rápida do Zettask"
 }

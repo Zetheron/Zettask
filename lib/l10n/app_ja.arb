@@ -473,5 +473,16 @@
   "cloudSyncPausedShort": "クラウド同期一時停止中 · ローカルデータは安全です",
   "cloudSyncPausedTitle": "クラウド同期は一時停止中",
   "cloudSyncPausedBody": "Zettask Proプランが有効ではありません。ローカルのタスクとメモはこの端末に安全に保持されています。",
-  "resumeSyncWithProButton": "Proで同期を再開"
+  "resumeSyncWithProButton": "Proで同期を再開",
+  "onboardingSkip": "スキップ",
+  "onboardingNext": "次へ",
+  "onboardingGetStarted": "今すぐ始める",
+  "onboardingSlide1Title": "迷わずタスクを記録",
+  "onboardingSlide1Body": "日々のタスクを数秒で追加し、チェックリストで整理してワンタップで完了できます。",
+  "onboardingSlide2Title": "見やすいタイムラインとプロジェクト",
+  "onboardingSlide2Body": "1日の予定を時系列で確認し、プロジェクトごとに整理。ローカル通知で時間に遅れません。",
+  "onboardingSlide3Title": "高速・オフライン・安心のプライバシー",
+  "onboardingSlide3Body": "データは端末内にローカル保存されます。アカウント登録不要でオフラインでも軽快に動作します。",
+  "appGuideTitle": "アプリガイド",
+  "appGuideSubtitle": "Zettaskの簡単なガイドをもう一度見る"
 }

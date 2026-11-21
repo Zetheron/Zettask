@@ -1561,4 +1561,40 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get resumeSyncWithProButton => 'Возобновить с Pro';
+
+  @override
+  String get onboardingSkip => 'Пропустить';
+
+  @override
+  String get onboardingNext => 'Далее';
+
+  @override
+  String get onboardingGetStarted => 'Начать';
+
+  @override
+  String get onboardingSlide1Title => 'Задачи без лишнего шума';
+
+  @override
+  String get onboardingSlide1Body =>
+      'Добавляйте дела за секунды, разбивайте на подзадачи и отмечайте выполнение одним касанием.';
+
+  @override
+  String get onboardingSlide2Title => 'Четкий таймлайн и проекты';
+
+  @override
+  String get onboardingSlide2Body =>
+      'Смотрите расписание по часам, группируйте задачи в проекты и получайте локальные напоминания вовремя.';
+
+  @override
+  String get onboardingSlide3Title => 'Быстро, офлайн и приватно';
+
+  @override
+  String get onboardingSlide3Body =>
+      'Все данные хранятся локально на вашем устройстве. Аккаунт не требуется, работает без интернета.';
+
+  @override
+  String get appGuideTitle => 'Гид по приложению';
+
+  @override
+  String get appGuideSubtitle => 'Повторить краткое знакомство с Zettask';
 }

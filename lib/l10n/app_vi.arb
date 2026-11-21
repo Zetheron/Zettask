@@ -473,5 +473,16 @@
   "cloudSyncPausedShort": "Tạm dừng đồng bộ · Dữ liệu cục bộ an toàn",
   "cloudSyncPausedTitle": "Đồng bộ đám mây đang tạm dừng",
   "cloudSyncPausedBody": "Gói Zettask Pro chưa hoạt động. Công việc và ghi chú cục bộ vẫn được lưu an toàn trên thiết bị này.",
-  "resumeSyncWithProButton": "Tiếp tục đồng bộ với Pro"
+  "resumeSyncWithProButton": "Tiếp tục đồng bộ với Pro",
+  "onboardingSkip": "Bỏ qua",
+  "onboardingNext": "Tiếp theo",
+  "onboardingGetStarted": "Bắt đầu ngay",
+  "onboardingSlide1Title": "Ghi việc nhanh, không xao nhãng",
+  "onboardingSlide1Body": "Thêm việc hằng ngày trong vài giây, chia nhỏ thành danh sách kiểm tra và hoàn thành chỉ với một chạm.",
+  "onboardingSlide2Title": "Dòng thời gian & dự án rõ ràng",
+  "onboardingSlide2Body": "Xem lịch trình theo thứ tự thời gian, gom việc theo dự án và nhận lời nhắc cục bộ đúng giờ.",
+  "onboardingSlide3Title": "Nhanh, ngoại tuyến và riêng tư",
+  "onboardingSlide3Body": "Mọi dữ liệu được lưu cục bộ trên thiết bị của bạn trước. Không cần tài khoản và dùng ngay không cần mạng.",
+  "appGuideTitle": "Hướng dẫn ứng dụng",
+  "appGuideSubtitle": "Xem lại giới thiệu ngắn về Zettask"
 }

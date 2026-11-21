@@ -1571,4 +1571,40 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get resumeSyncWithProButton => 'Lanjutkan Sinkronisasi dengan Pro';
+
+  @override
+  String get onboardingSkip => 'Lewati';
+
+  @override
+  String get onboardingNext => 'Lanjut';
+
+  @override
+  String get onboardingGetStarted => 'Mulai Sekarang';
+
+  @override
+  String get onboardingSlide1Title => 'Catat tugas tanpa distraksi';
+
+  @override
+  String get onboardingSlide1Body =>
+      'Tambahkan tugas harian dalam hitungan detik, pecah menjadi sub-tugas, dan selesaikan dengan satu ketukan.';
+
+  @override
+  String get onboardingSlide2Title => 'Timeline rapi & terencana';
+
+  @override
+  String get onboardingSlide2Body =>
+      'Lihat jadwal harian secara kronologis, kelompokkan ke dalam proyek, dan tetap tepat waktu dengan pengingat lokal.';
+
+  @override
+  String get onboardingSlide3Title => 'Cepat, offline, dan privat';
+
+  @override
+  String get onboardingSlide3Body =>
+      'Semua data tersimpan lokal di perangkat Anda. Tanpa wajib akun dan tetap cepat tanpa internet.';
+
+  @override
+  String get appGuideTitle => 'Panduan Aplikasi';
+
+  @override
+  String get appGuideSubtitle => 'Putar ulang panduan singkat Zettask';
 }

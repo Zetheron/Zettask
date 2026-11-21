@@ -473,5 +473,16 @@
   "cloudSyncPausedShort": "Cloud-Sync pausiert · Lokale Daten sicher",
   "cloudSyncPausedTitle": "Cloud-Sync pausiert",
   "cloudSyncPausedBody": "Dein Zettask Pro-Abo ist inaktiv. Lokale Aufgaben und Notizen bleiben sicher auf diesem Gerät.",
-  "resumeSyncWithProButton": "Sync mit Pro fortsetzen"
+  "resumeSyncWithProButton": "Sync mit Pro fortsetzen",
+  "onboardingSkip": "Überspringen",
+  "onboardingNext": "Weiter",
+  "onboardingGetStarted": "Jetzt starten",
+  "onboardingSlide1Title": "Aufgaben ohne Ablenkung",
+  "onboardingSlide1Body": "Erfasse tägliche Aufgaben in Sekunden, teile sie in Checklisten auf und hake sie mit einem Tippen ab.",
+  "onboardingSlide2Title": "Klare Timeline & Projekte",
+  "onboardingSlide2Body": "Sieh deinen Tag chronologisch, ordne Aufgaben in Projekte und bleibe mit lokalen Erinnerungen pünktlich.",
+  "onboardingSlide3Title": "Schnell, offline und privat",
+  "onboardingSlide3Body": "Alle Daten bleiben zuerst lokal auf deinem Gerät. Kein Konto nötig und sofort ohne Internet bereit.",
+  "appGuideTitle": "App-Einführung",
+  "appGuideSubtitle": "Kurze Zettask-Einführung erneut ansehen"
 }

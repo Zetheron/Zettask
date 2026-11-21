@@ -1557,4 +1557,40 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get resumeSyncWithProButton => 'استئناف المزامنة مع Pro';
+
+  @override
+  String get onboardingSkip => 'تخطي';
+
+  @override
+  String get onboardingNext => 'التالي';
+
+  @override
+  String get onboardingGetStarted => 'ابدأ الآن';
+
+  @override
+  String get onboardingSlide1Title => 'سجّل مهامك دون تشتيت';
+
+  @override
+  String get onboardingSlide1Body =>
+      'أضف مهامك اليومية خلال ثوانٍ، قسّمها إلى قوائم فرعية، وأنجزها بنقرة واحدة.';
+
+  @override
+  String get onboardingSlide2Title => 'جدول زمني ومشاريع واضحة';
+
+  @override
+  String get onboardingSlide2Body =>
+      'استعرض يومك بترتيب زمني، نظّم أعمالك في مشاريع، والتزم بمواعيدك مع التذكيرات المحلية.';
+
+  @override
+  String get onboardingSlide3Title => 'سريع، دون إنترنت، وخاص';
+
+  @override
+  String get onboardingSlide3Body =>
+      'تُحفظ بياناتك محليًا على جهازك أولًا. لا حاجة لحساب ويعمل بسرعة حتى دون اتصال.';
+
+  @override
+  String get appGuideTitle => 'دليل التطبيق';
+
+  @override
+  String get appGuideSubtitle => 'إعادة عرض الجولة السريعة لتطبيق Zettask';
 }

@@ -473,5 +473,16 @@
   "cloudSyncPausedShort": "Синхронизация на паузе · Локальные данные в безопасности",
   "cloudSyncPausedTitle": "Облачная синхронизация на паузе",
   "cloudSyncPausedBody": "Подписка Zettask Pro неактивна. Локальные задачи и заметки остаются в безопасности на устройстве.",
-  "resumeSyncWithProButton": "Возобновить с Pro"
+  "resumeSyncWithProButton": "Возобновить с Pro",
+  "onboardingSkip": "Пропустить",
+  "onboardingNext": "Далее",
+  "onboardingGetStarted": "Начать",
+  "onboardingSlide1Title": "Задачи без лишнего шума",
+  "onboardingSlide1Body": "Добавляйте дела за секунды, разбивайте на подзадачи и отмечайте выполнение одним касанием.",
+  "onboardingSlide2Title": "Четкий таймлайн и проекты",
+  "onboardingSlide2Body": "Смотрите расписание по часам, группируйте задачи в проекты и получайте локальные напоминания вовремя.",
+  "onboardingSlide3Title": "Быстро, офлайн и приватно",
+  "onboardingSlide3Body": "Все данные хранятся локально на вашем устройстве. Аккаунт не требуется, работает без интернета.",
+  "appGuideTitle": "Гид по приложению",
+  "appGuideSubtitle": "Повторить краткое знакомство с Zettask"
 }

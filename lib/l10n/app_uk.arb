@@ -473,5 +473,16 @@
   "cloudSyncPausedShort": "Синхронізацію призупинено · Локальні дані в безпеці",
   "cloudSyncPausedTitle": "Хмарну синхронізацію призупинено",
   "cloudSyncPausedBody": "Підписка Zettask Pro неактивна. Локальні завдання та нотатки залишаються в безпеці на цьому пристрої.",
-  "resumeSyncWithProButton": "Відновити з Pro"
+  "resumeSyncWithProButton": "Відновити з Pro",
+  "onboardingSkip": "Пропустити",
+  "onboardingNext": "Далі",
+  "onboardingGetStarted": "Почати зараз",
+  "onboardingSlide1Title": "Записуйте завдання без відволікань",
+  "onboardingSlide1Body": "Додавайте щоденні справи за секунди, діліть на чеклісти та завершуйте одним дотиком.",
+  "onboardingSlide2Title": "Чіткий таймлайн і проєкти",
+  "onboardingSlide2Body": "Переглядайте день хронологічно, групуйте справи в проєкти та отримуйте локальні нагадування вчасно.",
+  "onboardingSlide3Title": "Швидко, офлайн і приватно",
+  "onboardingSlide3Body": "Усі дані зберігаються локально на вашому пристрої. Без обов'язкового акаунта та без інтернету.",
+  "appGuideTitle": "Посібник додатку",
+  "appGuideSubtitle": "Переглянути короткий вступ Zettask ще раз"
 }

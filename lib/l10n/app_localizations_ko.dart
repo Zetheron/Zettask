@@ -1520,4 +1520,40 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get resumeSyncWithProButton => 'Pro로 동기화 재개';
+
+  @override
+  String get onboardingSkip => '건너뛰기';
+
+  @override
+  String get onboardingNext => '다음';
+
+  @override
+  String get onboardingGetStarted => '지금 시작하기';
+
+  @override
+  String get onboardingSlide1Title => '방해 없이 빠르게 할 일 기록';
+
+  @override
+  String get onboardingSlide1Body =>
+      '몇 초 만에 할 일을 추가하고 체크리스트로 나누어 한 번의 탭으로 완료하세요.';
+
+  @override
+  String get onboardingSlide2Title => '깔끔한 타임라인과 프로젝트';
+
+  @override
+  String get onboardingSlide2Body =>
+      '하루 일정을 시간순으로 보고 프로젝트별로 정리하며 로컬 알림으로 제시간에 챙기세요.';
+
+  @override
+  String get onboardingSlide3Title => '빠르고 안전한 오프라인 우선';
+
+  @override
+  String get onboardingSlide3Body =>
+      '모든 데이터는 기기에 먼저 저장됩니다. 계정 없이도 인터넷 없이 빠르게 사용할 수 있습니다.';
+
+  @override
+  String get appGuideTitle => '앱 가이드';
+
+  @override
+  String get appGuideSubtitle => 'Zettask 간단 안내 다시 보기';
 }

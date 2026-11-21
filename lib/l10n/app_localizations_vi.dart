@@ -1561,4 +1561,40 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get resumeSyncWithProButton => 'Tiếp tục đồng bộ với Pro';
+
+  @override
+  String get onboardingSkip => 'Bỏ qua';
+
+  @override
+  String get onboardingNext => 'Tiếp theo';
+
+  @override
+  String get onboardingGetStarted => 'Bắt đầu ngay';
+
+  @override
+  String get onboardingSlide1Title => 'Ghi việc nhanh, không xao nhãng';
+
+  @override
+  String get onboardingSlide1Body =>
+      'Thêm việc hằng ngày trong vài giây, chia nhỏ thành danh sách kiểm tra và hoàn thành chỉ với một chạm.';
+
+  @override
+  String get onboardingSlide2Title => 'Dòng thời gian & dự án rõ ràng';
+
+  @override
+  String get onboardingSlide2Body =>
+      'Xem lịch trình theo thứ tự thời gian, gom việc theo dự án và nhận lời nhắc cục bộ đúng giờ.';
+
+  @override
+  String get onboardingSlide3Title => 'Nhanh, ngoại tuyến và riêng tư';
+
+  @override
+  String get onboardingSlide3Body =>
+      'Mọi dữ liệu được lưu cục bộ trên thiết bị của bạn trước. Không cần tài khoản và dùng ngay không cần mạng.';
+
+  @override
+  String get appGuideTitle => 'Hướng dẫn ứng dụng';
+
+  @override
+  String get appGuideSubtitle => 'Xem lại giới thiệu ngắn về Zettask';
 }

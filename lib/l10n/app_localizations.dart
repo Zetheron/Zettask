@@ -2968,6 +2968,72 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Resume Sync with Pro'**
   String get resumeSyncWithProButton;
+
+  /// No description provided for @onboardingSkip.
+  ///
+  /// In en, this message translates to:
+  /// **'Skip'**
+  String get onboardingSkip;
+
+  /// No description provided for @onboardingNext.
+  ///
+  /// In en, this message translates to:
+  /// **'Next'**
+  String get onboardingNext;
+
+  /// No description provided for @onboardingGetStarted.
+  ///
+  /// In en, this message translates to:
+  /// **'Get Started'**
+  String get onboardingGetStarted;
+
+  /// No description provided for @onboardingSlide1Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Capture tasks without clutter'**
+  String get onboardingSlide1Title;
+
+  /// No description provided for @onboardingSlide1Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Add daily tasks in seconds, break them into checklists, and check them off with one tap.'**
+  String get onboardingSlide1Body;
+
+  /// No description provided for @onboardingSlide2Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Clear timeline & projects'**
+  String get onboardingSlide2Title;
+
+  /// No description provided for @onboardingSlide2Body.
+  ///
+  /// In en, this message translates to:
+  /// **'See your day chronologically, group work into projects, and stay on time with local reminders.'**
+  String get onboardingSlide2Body;
+
+  /// No description provided for @onboardingSlide3Title.
+  ///
+  /// In en, this message translates to:
+  /// **'Fast, offline, and private'**
+  String get onboardingSlide3Title;
+
+  /// No description provided for @onboardingSlide3Body.
+  ///
+  /// In en, this message translates to:
+  /// **'Everything is stored locally on your device first. No account required and ready without internet.'**
+  String get onboardingSlide3Body;
+
+  /// No description provided for @appGuideTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'App Guide'**
+  String get appGuideTitle;
+
+  /// No description provided for @appGuideSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Replay the quick Zettask walkthrough'**
+  String get appGuideSubtitle;
 }
 
 class _AppLocalizationsDelegate

@@ -1575,4 +1575,40 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get resumeSyncWithProButton => 'Sync mit Pro fortsetzen';
+
+  @override
+  String get onboardingSkip => 'Überspringen';
+
+  @override
+  String get onboardingNext => 'Weiter';
+
+  @override
+  String get onboardingGetStarted => 'Jetzt starten';
+
+  @override
+  String get onboardingSlide1Title => 'Aufgaben ohne Ablenkung';
+
+  @override
+  String get onboardingSlide1Body =>
+      'Erfasse tägliche Aufgaben in Sekunden, teile sie in Checklisten auf und hake sie mit einem Tippen ab.';
+
+  @override
+  String get onboardingSlide2Title => 'Klare Timeline & Projekte';
+
+  @override
+  String get onboardingSlide2Body =>
+      'Sieh deinen Tag chronologisch, ordne Aufgaben in Projekte und bleibe mit lokalen Erinnerungen pünktlich.';
+
+  @override
+  String get onboardingSlide3Title => 'Schnell, offline und privat';
+
+  @override
+  String get onboardingSlide3Body =>
+      'Alle Daten bleiben zuerst lokal auf deinem Gerät. Kein Konto nötig und sofort ohne Internet bereit.';
+
+  @override
+  String get appGuideTitle => 'App-Einführung';
+
+  @override
+  String get appGuideSubtitle => 'Kurze Zettask-Einführung erneut ansehen';
 }

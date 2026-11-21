@@ -1569,6 +1569,42 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get resumeSyncWithProButton => 'Retomar sincronização com Pro';
+
+  @override
+  String get onboardingSkip => 'Ignorar';
+
+  @override
+  String get onboardingNext => 'Seguinte';
+
+  @override
+  String get onboardingGetStarted => 'Começar agora';
+
+  @override
+  String get onboardingSlide1Title => 'Registe tarefas sem distrações';
+
+  @override
+  String get onboardingSlide1Body =>
+      'Adicione tarefas diárias em segundos, divida em listas e conclua com um toque.';
+
+  @override
+  String get onboardingSlide2Title => 'Linha temporal e projetos claros';
+
+  @override
+  String get onboardingSlide2Body =>
+      'Veja o seu dia por ordem cronológica, organize projetos e cumpra horários com lembretes locais.';
+
+  @override
+  String get onboardingSlide3Title => 'Rápido, offline e privado';
+
+  @override
+  String get onboardingSlide3Body =>
+      'Os seus dados ficam primeiro no dispositivo. Sem conta obrigatória e pronto mesmo sem internet.';
+
+  @override
+  String get appGuideTitle => 'Guia da aplicação';
+
+  @override
+  String get appGuideSubtitle => 'Rever o guia rápido do Zettask';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -3134,4 +3170,40 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get resumeSyncWithProButton => 'Retomar sincronização com Pro';
+
+  @override
+  String get onboardingSkip => 'Pular';
+
+  @override
+  String get onboardingNext => 'Próximo';
+
+  @override
+  String get onboardingGetStarted => 'Começar agora';
+
+  @override
+  String get onboardingSlide1Title => 'Anote tarefas sem distrações';
+
+  @override
+  String get onboardingSlide1Body =>
+      'Adicione tarefas diárias em segundos, divida em checklists e conclua com um toque.';
+
+  @override
+  String get onboardingSlide2Title => 'Linha do tempo e projetos claros';
+
+  @override
+  String get onboardingSlide2Body =>
+      'Veja seu dia em ordem cronológica, organize projetos e cumpra horários com lembretes locais.';
+
+  @override
+  String get onboardingSlide3Title => 'Rápido, offline e privado';
+
+  @override
+  String get onboardingSlide3Body =>
+      'Seus dados ficam primeiro no seu aparelho. Sem conta obrigatória e pronto mesmo sem internet.';
+
+  @override
+  String get appGuideTitle => 'Guia do aplicativo';
+
+  @override
+  String get appGuideSubtitle => 'Rever a apresentação rápida do Zettask';
 }

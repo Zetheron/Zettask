@@ -473,5 +473,16 @@
   "cloudSyncPausedShort": "المزامنة السحابية متوقفة · البيانات المحلية آمنة",
   "cloudSyncPausedTitle": "المزامنة السحابية متوقفة مؤقتًا",
   "cloudSyncPausedBody": "اشتراك Zettask Pro غير نشط. تبقى مهامك وملاحظاتك المحلية آمنة على هذا الجهاز.",
-  "resumeSyncWithProButton": "استئناف المزامنة مع Pro"
+  "resumeSyncWithProButton": "استئناف المزامنة مع Pro",
+  "onboardingSkip": "تخطي",
+  "onboardingNext": "التالي",
+  "onboardingGetStarted": "ابدأ الآن",
+  "onboardingSlide1Title": "سجّل مهامك دون تشتيت",
+  "onboardingSlide1Body": "أضف مهامك اليومية خلال ثوانٍ، قسّمها إلى قوائم فرعية، وأنجزها بنقرة واحدة.",
+  "onboardingSlide2Title": "جدول زمني ومشاريع واضحة",
+  "onboardingSlide2Body": "استعرض يومك بترتيب زمني، نظّم أعمالك في مشاريع، والتزم بمواعيدك مع التذكيرات المحلية.",
+  "onboardingSlide3Title": "سريع، دون إنترنت، وخاص",
+  "onboardingSlide3Body": "تُحفظ بياناتك محليًا على جهازك أولًا. لا حاجة لحساب ويعمل بسرعة حتى دون اتصال.",
+  "appGuideTitle": "دليل التطبيق",
+  "appGuideSubtitle": "إعادة عرض الجولة السريعة لتطبيق Zettask"
 }

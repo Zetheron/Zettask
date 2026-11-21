@@ -1505,4 +1505,37 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get resumeSyncWithProButton => '使用 Pro 恢复同步';
+
+  @override
+  String get onboardingSkip => '跳过';
+
+  @override
+  String get onboardingNext => '下一步';
+
+  @override
+  String get onboardingGetStarted => '立即开始';
+
+  @override
+  String get onboardingSlide1Title => '专注记录每日任务';
+
+  @override
+  String get onboardingSlide1Body => '几秒内添加任务，拆分为子任务清单，轻点一下即可完成打卡。';
+
+  @override
+  String get onboardingSlide2Title => '清晰的时间线与项目';
+
+  @override
+  String get onboardingSlide2Body => '按时间顺序查看日程，按项目整理工作，并通过本地提醒准时推进。';
+
+  @override
+  String get onboardingSlide3Title => '快速、离线且注重隐私';
+
+  @override
+  String get onboardingSlide3Body => '所有数据优先保存在本地设备。无需账号，没有网络也能流畅使用。';
+
+  @override
+  String get appGuideTitle => '应用指南';
+
+  @override
+  String get appGuideSubtitle => '重新查看 Zettask 快速引导';
 }

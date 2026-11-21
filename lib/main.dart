@@ -16,6 +16,7 @@ import 'providers/task_provider.dart';
 import 'providers/theme_provider.dart';
 import 'providers/workspace_provider.dart';
 import 'screens/main_shell.dart';
+import 'screens/onboarding_screen.dart';
 import 'services/app_lock_service.dart';
 import 'services/auth_service.dart';
 import 'services/calendar_service.dart';
@@ -24,10 +25,12 @@ import 'services/database_service.dart';
 import 'services/export_service.dart';
 import 'services/home_widget_service.dart';
 import 'services/notification_service.dart';
+import 'services/onboarding_service.dart';
 import 'services/subscription_service.dart';
 import 'widgets/app_lock_gate.dart';
 
 export 'providers/locale_provider.dart' show prefLocaleKey;
+export 'services/onboarding_service.dart' show prefHasSeenOnboardingKey;
 export 'providers/theme_provider.dart'
     show
         prefThemeModeKey,
@@ -68,11 +71,14 @@ Future<void> main() async {
   await NotificationService.instance.init();
   final (initialThemeMode, initialPreset) = await _loadSavedThemeConfig();
   final initialLocale = await LocaleProvider.loadStoredLocale();
+  final initialHasSeenOnboarding =
+      await OnboardingService.instance.hasSeenOnboarding();
   runApp(
     ZettaskApp(
       initialThemeMode: initialThemeMode,
       initialThemePreset: initialPreset,
       initialLocale: initialLocale,
+      initialHasSeenOnboarding: initialHasSeenOnboarding,
     ),
   );
 }
@@ -91,10 +97,12 @@ class ZettaskApp extends StatefulWidget {
     this.privacyService,
     this.homeWidgetService,
     this.subscriptionService,
+    this.onboardingService,
     this.initialDate,
     this.initialThemeMode,
     this.initialThemePreset,
     this.initialLocale,
+    this.initialHasSeenOnboarding = true,
     this.nowProvider,
   });
 
@@ -109,10 +117,12 @@ class ZettaskApp extends StatefulWidget {
   final ScreenPrivacyService? privacyService;
   final HomeWidgetSyncService? homeWidgetService;
   final SubscriptionService? subscriptionService;
+  final OnboardingService? onboardingService;
   final DateTime? initialDate;
   final ThemeMode? initialThemeMode;
   final AppThemePreset? initialThemePreset;
   final Locale? initialLocale;
+  final bool initialHasSeenOnboarding;
   final DateTime Function()? nowProvider;
 
   @override
@@ -126,6 +136,7 @@ class _ZettaskAppState extends State<ZettaskApp> {
   late final AppLockProvider _appLockProvider;
   late final CalendarProvider _calendarProvider;
   late final AuthProvider _authProvider;
+  late bool _hasSeenOnboarding;
 
   HomeWidgetSyncService get _homeWidgetService =>
       widget.homeWidgetService ?? AndroidHomeWidgetService.instance;
@@ -133,6 +144,7 @@ class _ZettaskAppState extends State<ZettaskApp> {
   @override
   void initState() {
     super.initState();
+    _hasSeenOnboarding = widget.initialHasSeenOnboarding;
     final styleService = _homeWidgetService is HomeWidgetStyleService
         ? _homeWidgetService as HomeWidgetStyleService
         : null;
@@ -287,12 +299,28 @@ class _ZettaskAppState extends State<ZettaskApp> {
               );
             },
             home: AppLockGate(
-              child: MainShell(
-                themeMode: themeProvider.themeMode,
-                onToggleTheme: themeProvider.toggleThemeMode,
-                onSelectThemeMode: themeProvider.setThemeMode,
-                autoLoad: widget.autoLoadTasks,
-                homeWidgetService: widget.homeWidgetService,
+              child: AnimatedSwitcher(
+                duration: const Duration(milliseconds: 240),
+                switchInCurve: Curves.easeOutCubic,
+                switchOutCurve: Curves.easeIn,
+                child: _hasSeenOnboarding
+                    ? MainShell(
+                        key: const ValueKey('zettask_main_shell'),
+                        themeMode: themeProvider.themeMode,
+                        onToggleTheme: themeProvider.toggleThemeMode,
+                        onSelectThemeMode: themeProvider.setThemeMode,
+                        autoLoad: widget.autoLoadTasks,
+                        homeWidgetService: widget.homeWidgetService,
+                      )
+                    : OnboardingScreen(
+                        key: const ValueKey('zettask_onboarding_screen'),
+                        onboardingService: widget.onboardingService,
+                        onCompleted: () {
+                          if (mounted) {
+                            setState(() => _hasSeenOnboarding = true);
+                          }
+                        },
+                      ),
               ),
             ),
           );

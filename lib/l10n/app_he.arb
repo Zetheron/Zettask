@@ -473,5 +473,16 @@
   "cloudSyncPausedShort": "סנכרון ענן מושהה · הנתונים המקומיים בטוחים",
   "cloudSyncPausedTitle": "סנכרון ענן מושהה",
   "cloudSyncPausedBody": "מנוי Zettask Pro שלך אינו פעיל. המשימות וההערות המקומיות נשארות שמורות במכשיר זה.",
-  "resumeSyncWithProButton": "חדש סנכרון עם Pro"
+  "resumeSyncWithProButton": "חדש סנכרון עם Pro",
+  "onboardingSkip": "דלג",
+  "onboardingNext": "הבא",
+  "onboardingGetStarted": "התחל עכשיו",
+  "onboardingSlide1Title": "רשום משימות בלי הסחות דעת",
+  "onboardingSlide1Body": "הוסף משימות יומיות בשניות, פרק לרשימות משנה וסמן כהושלם בהקשה אחת.",
+  "onboardingSlide2Title": "ציר זמן ופרויקטים מסודרים",
+  "onboardingSlide2Body": "צפה ביום שלך לפי סדר השעות, ארגן משימות בפרויקטים ועמוד בזמנים עם תזכורות מקומיות.",
+  "onboardingSlide3Title": "מהיר, אופליין ופרטי",
+  "onboardingSlide3Body": "הנתונים נשמרים קודם כל מקומית במכשיר שלך. בלי צורך בחשבון ומוכן גם ללא אינטרנט.",
+  "appGuideTitle": "מדריך האפליקציה",
+  "appGuideSubtitle": "הפעל מחדש את ההיכרות הקצרה עם Zettask"
 }

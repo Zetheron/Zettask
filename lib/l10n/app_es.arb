@@ -473,5 +473,16 @@
   "cloudSyncPausedShort": "Sincronización pausada · Datos locales seguros",
   "cloudSyncPausedTitle": "Sincronización en la nube pausada",
   "cloudSyncPausedBody": "Tu suscripción Zettask Pro está inactiva. Tus tareas y notas locales siguen seguras en este dispositivo.",
-  "resumeSyncWithProButton": "Reanudar sincronización con Pro"
+  "resumeSyncWithProButton": "Reanudar sincronización con Pro",
+  "onboardingSkip": "Omitir",
+  "onboardingNext": "Siguiente",
+  "onboardingGetStarted": "Comenzar ahora",
+  "onboardingSlide1Title": "Anota tareas sin distracciones",
+  "onboardingSlide1Body": "Agrega tareas diarias en segundos, divídelas en listas y complétalas con un toque.",
+  "onboardingSlide2Title": "Línea de tiempo y proyectos claros",
+  "onboardingSlide2Body": "Visualiza tu día en orden cronológico, agrupa tareas en proyectos y llega a tiempo con recordatorios locales.",
+  "onboardingSlide3Title": "Rápido, sin conexión y privado",
+  "onboardingSlide3Body": "Tus datos se guardan primero en tu dispositivo. Sin cuenta obligatoria y listo sin internet.",
+  "appGuideTitle": "Guía de la app",
+  "appGuideSubtitle": "Volver a ver la guía rápida de Zettask"
 }

@@ -473,5 +473,16 @@
   "cloudSyncPausedShort": "云端同步已暂停 · 本地数据安全",
   "cloudSyncPausedTitle": "云端同步已暂停",
   "cloudSyncPausedBody": "你的 Zettask Pro 订阅未激活。本地任务和笔记仍安全保存在此设备上。",
-  "resumeSyncWithProButton": "使用 Pro 恢复同步"
+  "resumeSyncWithProButton": "使用 Pro 恢复同步",
+  "onboardingSkip": "跳过",
+  "onboardingNext": "下一步",
+  "onboardingGetStarted": "立即开始",
+  "onboardingSlide1Title": "专注记录每日任务",
+  "onboardingSlide1Body": "几秒内添加任务，拆分为子任务清单，轻点一下即可完成打卡。",
+  "onboardingSlide2Title": "清晰的时间线与项目",
+  "onboardingSlide2Body": "按时间顺序查看日程，按项目整理工作，并通过本地提醒准时推进。",
+  "onboardingSlide3Title": "快速、离线且注重隐私",
+  "onboardingSlide3Body": "所有数据优先保存在本地设备。无需账号，没有网络也能流畅使用。",
+  "appGuideTitle": "应用指南",
+  "appGuideSubtitle": "重新查看 Zettask 快速引导"
 }

@@ -761,5 +761,16 @@
   "cloudSyncPausedShort": "Cloud sync paused · Local data safe",
   "cloudSyncPausedTitle": "Cloud sync paused",
   "cloudSyncPausedBody": "Your Zettask Pro plan is inactive. Local tasks and notes remain safe on this device.",
-  "resumeSyncWithProButton": "Resume Sync with Pro"
+  "resumeSyncWithProButton": "Resume Sync with Pro",
+  "onboardingSkip": "Skip",
+  "onboardingNext": "Next",
+  "onboardingGetStarted": "Get Started",
+  "onboardingSlide1Title": "Capture tasks without clutter",
+  "onboardingSlide1Body": "Add daily tasks in seconds, break them into checklists, and check them off with one tap.",
+  "onboardingSlide2Title": "Clear timeline & projects",
+  "onboardingSlide2Body": "See your day chronologically, group work into projects, and stay on time with local reminders.",
+  "onboardingSlide3Title": "Fast, offline, and private",
+  "onboardingSlide3Body": "Everything is stored locally on your device first. No account required and ready without internet.",
+  "appGuideTitle": "App Guide",
+  "appGuideSubtitle": "Replay the quick Zettask walkthrough"
 }
