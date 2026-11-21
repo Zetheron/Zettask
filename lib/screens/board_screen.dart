@@ -12,6 +12,7 @@ import '../widgets/pro_badge.dart';
 import '../widgets/task_editor_sheet.dart';
 import '../widgets/task_search_sheet.dart';
 import '../widgets/zettask_loaders.dart';
+import '../widgets/zettask_motion.dart';
 import 'pro_paywall_screen.dart';
 import 'project_detail_screen.dart';
 
@@ -321,18 +322,24 @@ class _BoardScreenState extends State<BoardScreen> {
                                 ? workspaceProvider
                                     .progressForProject(project.id!)
                                 : const ProjectProgress();
-                            return _ProjectCard(
-                              project: project,
-                              progress: progress,
-                              onTap: () => Navigator.of(context).push(
-                                MaterialPageRoute<void>(
-                                  builder: (_) =>
-                                      ProjectDetailScreen(project: project),
-                                ),
+                            return ZettaskLineReveal(
+                              key: ValueKey(
+                                'board_project_reveal_${project.id ?? index}',
                               ),
-                              onEdit: () =>
-                                  _openProjectEditor(project: project),
-                              onDelete: () => _deleteProject(project),
+                              index: index,
+                              child: _ProjectCard(
+                                project: project,
+                                progress: progress,
+                                onTap: () => Navigator.of(context).push(
+                                  MaterialPageRoute<void>(
+                                    builder: (_) =>
+                                        ProjectDetailScreen(project: project),
+                                  ),
+                                ),
+                                onEdit: () =>
+                                    _openProjectEditor(project: project),
+                                onDelete: () => _deleteProject(project),
+                              ),
                             );
                           },
                         ),

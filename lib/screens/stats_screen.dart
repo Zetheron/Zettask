@@ -11,6 +11,7 @@ import '../models/task_model.dart';
 import '../providers/locale_provider.dart';
 import '../providers/workspace_provider.dart';
 import '../widgets/zettask_loaders.dart';
+import '../widgets/zettask_motion.dart';
 
 enum StatsRange {
   last7Days,
@@ -27,10 +28,12 @@ class StatsScreen extends StatefulWidget {
 class _StatsScreenState extends State<StatsScreen> {
   StatsRange _range = StatsRange.last7Days;
   int _selectedDayIndex = 6;
+  final ScrollController _scrollController = ScrollController();
   final ScrollController _chart30ScrollController = ScrollController();
 
   @override
   void dispose() {
+    _scrollController.dispose();
     _chart30ScrollController.dispose();
     super.dispose();
   }
@@ -114,6 +117,7 @@ class _StatsScreenState extends State<StatsScreen> {
             child: workspaceProvider.isLoading
                 ? const ZettaskTaskListSkeleton()
                 : ListView(
+              controller: _scrollController,
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
               children: [
                 SegmentedButton<StatsRange>(
@@ -147,291 +151,318 @@ class _StatsScreenState extends State<StatsScreen> {
                   ),
                 ),
                 const SizedBox(height: 14),
-                Row(
-                  children: [
-                    Expanded(
-                      child: _MetricCard(
-                        label: l10n.completedToday,
-                        value: '${stats.completedToday}',
-                        accentColor: colorScheme.primary,
+                ZettaskStackingCard(
+                  scrollController: _scrollController,
+                  child: Column(
+                    children: [
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _MetricCard(
+                              label: l10n.completedToday,
+                              value: '${stats.completedToday}',
+                              accentColor: colorScheme.primary,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: _MetricCard(
+                              label: is30Days
+                                  ? l10n.last30DaysLabel
+                                  : l10n.last7DaysLabel,
+                              value: '$rangeTasks',
+                              accentColor: colorScheme.secondary,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: _MetricCard(
-                        label: is30Days
-                            ? l10n.last30DaysLabel
-                            : l10n.last7DaysLabel,
-                        value: '$rangeTasks',
-                        accentColor: colorScheme.secondary,
+                      const SizedBox(height: 10),
+                      Row(
+                        children: [
+                          Expanded(
+                            child: _MetricCard(
+                              label: l10n.allTimeLabel,
+                              value: '${stats.allTimeCompletedTasks}',
+                              accentColor: colorScheme.onSurface,
+                            ),
+                          ),
+                          const SizedBox(width: 10),
+                          Expanded(
+                            child: _MetricCard(
+                              label: l10n.completionRateLabel,
+                              value: '${stats.completionPercentage}%',
+                              accentColor: colorScheme.primary,
+                            ),
+                          ),
+                        ],
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(height: 10),
-                Row(
-                  children: [
-                    Expanded(
-                      child: _MetricCard(
-                        label: l10n.allTimeLabel,
-                        value: '${stats.allTimeCompletedTasks}',
-                        accentColor: colorScheme.onSurface,
-                      ),
-                    ),
-                    const SizedBox(width: 10),
-                    Expanded(
-                      child: _MetricCard(
-                        label: l10n.completionRateLabel,
-                        value: '${stats.completionPercentage}%',
-                        accentColor: colorScheme.primary,
-                      ),
-                    ),
-                  ],
+                    ],
+                  ),
                 ),
                 const SizedBox(height: 18),
                 _SectionLabel(
                   title: is30Days ? l10n.activity30Days : l10n.activity7Days,
                 ),
                 const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.fromLTRB(12, 16, 12, 14),
-                  decoration: BoxDecoration(
-                    color: colorScheme.surface,
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: colorScheme.outline, width: 1),
-                  ),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      if (!is30Days)
-                        _SevenDayBarChart(
-                          days: days,
-                          selectedIndex: safeIndex,
-                          maxTasks: maxTasks,
-                          weekdayBuilder: (date) =>
-                              _weekdayShort(date, localeTag),
-                          onSelectDay: (index) =>
-                              setState(() => _selectedDayIndex = index),
-                        )
-                      else
-                        _ThirtyDayBarChart(
-                          controller: _chart30ScrollController,
-                          days: days,
-                          selectedIndex: safeIndex,
-                          maxTasks: maxTasks,
-                          onSelectDay: (index) =>
-                              setState(() => _selectedDayIndex = index),
-                        ),
-                      if (selectedDay != null) ...[
-                        const SizedBox(height: 12),
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                            horizontal: 12,
-                            vertical: 10,
+                ZettaskStackingCard(
+                  scrollController: _scrollController,
+                  child: Container(
+                    padding: const EdgeInsets.fromLTRB(12, 16, 12, 14),
+                    decoration: BoxDecoration(
+                      color: colorScheme.surface,
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(color: colorScheme.outline, width: 1),
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        if (!is30Days)
+                          _SevenDayBarChart(
+                            days: days,
+                            selectedIndex: safeIndex,
+                            maxTasks: maxTasks,
+                            weekdayBuilder: (date) =>
+                                _weekdayShort(date, localeTag),
+                            onSelectDay: (index) =>
+                                setState(() => _selectedDayIndex = index),
+                          )
+                        else
+                          _ThirtyDayBarChart(
+                            controller: _chart30ScrollController,
+                            days: days,
+                            selectedIndex: safeIndex,
+                            maxTasks: maxTasks,
+                            onSelectDay: (index) =>
+                                setState(() => _selectedDayIndex = index),
                           ),
-                          decoration: BoxDecoration(
-                            color: colorScheme.surfaceContainerHighest,
-                            borderRadius: BorderRadius.circular(10),
-                            border: Border.all(
-                              color: colorScheme.outline,
-                              width: 1,
+                        if (selectedDay != null) ...[
+                          const SizedBox(height: 12),
+                          Container(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 12,
+                              vertical: 10,
                             ),
-                          ),
-                          child: Row(
-                            children: [
-                              Expanded(
-                                child: Text(
-                                  _formatFullDay(selectedDay.date, localeTag),
-                                  style: theme.textTheme.labelMedium?.copyWith(
-                                    fontSize: 12.5,
+                            decoration: BoxDecoration(
+                              color: colorScheme.surfaceContainerHighest,
+                              borderRadius: BorderRadius.circular(10),
+                              border: Border.all(
+                                color: colorScheme.outline,
+                                width: 1,
+                              ),
+                            ),
+                            child: Row(
+                              children: [
+                                Expanded(
+                                  child: Text(
+                                    _formatFullDay(selectedDay.date, localeTag),
+                                    style:
+                                        theme.textTheme.labelMedium?.copyWith(
+                                      fontSize: 12.5,
+                                    ),
                                   ),
                                 ),
-                              ),
-                              Text(
-                                l10n.dayDetailSummary(
-                                  selectedDay.completedTasks,
-                                  selectedDay.completedChecklists,
+                                Text(
+                                  l10n.dayDetailSummary(
+                                    selectedDay.completedTasks,
+                                    selectedDay.completedChecklists,
+                                  ),
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                    color: colorScheme.onSurface,
+                                    fontFeatures: const [
+                                      FontFeature.tabularFigures(),
+                                    ],
+                                  ),
                                 ),
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  fontWeight: FontWeight.w600,
-                                  color: colorScheme.onSurface,
-                                  fontFeatures: const [
-                                    FontFeature.tabularFigures(),
-                                  ],
-                                ),
-                              ),
-                            ],
+                              ],
+                            ),
+                          ),
+                        ],
+                        const SizedBox(height: 10),
+                        Text(
+                          l10n.totalRangeSummary(
+                            is30Days ? 30 : 7,
+                            rangeTasks,
+                            rangeChecklists,
+                          ),
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: colorScheme.onSurfaceVariant,
                           ),
                         ),
                       ],
-                      const SizedBox(height: 10),
-                      Text(
-                        l10n.totalRangeSummary(
-                          is30Days ? 30 : 7,
-                          rangeTasks,
-                          rangeChecklists,
-                        ),
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: colorScheme.onSurfaceVariant,
-                        ),
-                      ),
-                    ],
+                    ),
                   ),
                 ),
                 const SizedBox(height: 18),
                 _SectionLabel(title: l10n.completedByPriority),
                 const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: colorScheme.surface,
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: colorScheme.outline, width: 1),
-                  ),
-                  child: Column(
-                    children: [
-                      for (final priority in const [
-                        TaskPriority.high,
-                        TaskPriority.medium,
-                        TaskPriority.low,
-                      ])
-                        Padding(
-                          padding: EdgeInsets.only(
-                            bottom: priority == TaskPriority.low ? 0 : 12,
-                          ),
-                          child: _BreakdownRow(
-                            label: _priorityLabel(priority, l10n),
-                            trailing: l10n.completedCountLabel(
-                              stats.breakdownByPriority[priority] ?? 0,
+                ZettaskStackingCard(
+                  scrollController: _scrollController,
+                  child: Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: colorScheme.surface,
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(color: colorScheme.outline, width: 1),
+                    ),
+                    child: Column(
+                      children: [
+                        for (final priority in const [
+                          TaskPriority.high,
+                          TaskPriority.medium,
+                          TaskPriority.low,
+                        ])
+                          Padding(
+                            padding: EdgeInsets.only(
+                              bottom: priority == TaskPriority.low ? 0 : 12,
                             ),
-                            ratio: (stats.breakdownByPriority[priority] ?? 0) /
-                                maxPriorityCount,
-                            accentColor: AppTheme.priorityColor(
-                              priority,
-                              theme.brightness,
+                            child: _BreakdownRow(
+                              label: _priorityLabel(priority, l10n),
+                              trailing: l10n.completedCountLabel(
+                                stats.breakdownByPriority[priority] ?? 0,
+                              ),
+                              ratio:
+                                  (stats.breakdownByPriority[priority] ?? 0) /
+                                      maxPriorityCount,
+                              accentColor: AppTheme.priorityColor(
+                                priority,
+                                theme.brightness,
+                              ),
                             ),
                           ),
-                        ),
-                    ],
+                      ],
+                    ),
                   ),
                 ),
                 const SizedBox(height: 18),
                 _SectionLabel(title: l10n.progressByProject),
                 const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: colorScheme.surface,
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: colorScheme.outline, width: 1),
-                  ),
-                  child: stats.breakdownByProject.isEmpty
-                      ? Text(
-                          l10n.noProjectsCreated,
-                          style: theme.textTheme.bodySmall,
-                        )
-                      : Column(
-                          children: List.generate(
-                            stats.breakdownByProject.length,
-                            (index) {
-                              final item = stats.breakdownByProject[index];
-                              return Padding(
-                                padding: EdgeInsets.only(
-                                  bottom: index <
-                                          stats.breakdownByProject.length - 1
-                                      ? 12
-                                      : 0,
-                                ),
-                                child: _BreakdownRow(
-                                  label: item.project.name,
-                                  trailing:
-                                      '${item.completedCount}/${item.totalCount} · ${item.percentage}%',
-                                  ratio: item.ratio,
-                                  accentColor: AppTheme.resolveTagColor(
-                                    item.project.colorHex,
-                                    theme.brightness,
+                ZettaskStackingCard(
+                  scrollController: _scrollController,
+                  child: Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: colorScheme.surface,
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(color: colorScheme.outline, width: 1),
+                    ),
+                    child: stats.breakdownByProject.isEmpty
+                        ? Text(
+                            l10n.noProjectsCreated,
+                            style: theme.textTheme.bodySmall,
+                          )
+                        : Column(
+                            children: List.generate(
+                              stats.breakdownByProject.length,
+                              (index) {
+                                final item = stats.breakdownByProject[index];
+                                return Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom: index <
+                                            stats.breakdownByProject.length - 1
+                                        ? 12
+                                        : 0,
                                   ),
-                                ),
-                              );
-                            },
+                                  child: _BreakdownRow(
+                                    label: item.project.name,
+                                    trailing:
+                                        '${item.completedCount}/${item.totalCount} · ${item.percentage}%',
+                                    ratio: item.ratio,
+                                    accentColor: AppTheme.resolveTagColor(
+                                      item.project.colorHex,
+                                      theme.brightness,
+                                    ),
+                                  ),
+                                );
+                              },
+                            ),
                           ),
-                        ),
+                  ),
                 ),
                 const SizedBox(height: 18),
                 _SectionLabel(title: l10n.breakdownByTag),
                 const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: colorScheme.surface,
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: colorScheme.outline, width: 1),
-                  ),
-                  child: stats.breakdownByTag.isEmpty
-                      ? Text(
-                          l10n.noTagsCreated,
-                          style: theme.textTheme.bodySmall,
-                        )
-                      : Column(
-                          children: List.generate(
-                            stats.breakdownByTag.length,
-                            (index) {
-                              final item = stats.breakdownByTag[index];
-                              return Padding(
-                                padding: EdgeInsets.only(
-                                  bottom:
-                                      index < stats.breakdownByTag.length - 1
-                                          ? 12
-                                          : 0,
-                                ),
-                                child: _BreakdownRow(
-                                  label: '#${item.tag.name}',
-                                  trailing: l10n.tagBreakdownTrailing(
-                                    item.completedCount,
-                                    item.totalCount,
+                ZettaskStackingCard(
+                  scrollController: _scrollController,
+                  child: Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: colorScheme.surface,
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(color: colorScheme.outline, width: 1),
+                    ),
+                    child: stats.breakdownByTag.isEmpty
+                        ? Text(
+                            l10n.noTagsCreated,
+                            style: theme.textTheme.bodySmall,
+                          )
+                        : Column(
+                            children: List.generate(
+                              stats.breakdownByTag.length,
+                              (index) {
+                                final item = stats.breakdownByTag[index];
+                                return Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom: index <
+                                            stats.breakdownByTag.length - 1
+                                        ? 12
+                                        : 0,
                                   ),
-                                  ratio: item.ratio,
-                                  accentColor: AppTheme.resolveTagColor(
-                                    item.tag.colorHex,
-                                    theme.brightness,
+                                  child: _BreakdownRow(
+                                    label: '#${item.tag.name}',
+                                    trailing: l10n.tagBreakdownTrailing(
+                                      item.completedCount,
+                                      item.totalCount,
+                                    ),
+                                    ratio: item.ratio,
+                                    accentColor: AppTheme.resolveTagColor(
+                                      item.tag.colorHex,
+                                      theme.brightness,
+                                    ),
                                   ),
-                                ),
-                              );
-                            },
+                                );
+                              },
+                            ),
                           ),
-                        ),
+                  ),
                 ),
                 const SizedBox(height: 18),
                 _SectionLabel(title: l10n.habits30Days),
                 const SizedBox(height: 8),
-                Container(
-                  padding: const EdgeInsets.all(14),
-                  decoration: BoxDecoration(
-                    color: colorScheme.surface,
-                    borderRadius: BorderRadius.circular(14),
-                    border: Border.all(color: colorScheme.outline, width: 1),
-                  ),
-                  child: stats.habitStats.isEmpty
-                      ? Text(
-                          l10n.noActiveHabits,
-                          style: theme.textTheme.bodySmall,
-                        )
-                      : Column(
-                          children: List.generate(
-                            stats.habitStats.length,
-                            (index) {
-                              final habit = stats.habitStats[index];
-                              return Padding(
-                                padding: EdgeInsets.only(
-                                  bottom: index < stats.habitStats.length - 1
-                                      ? 14
-                                      : 0,
-                                ),
-                                child: _HabitStatRow(habit: habit, l10n: l10n),
-                              );
-                            },
+                ZettaskStackingCard(
+                  scrollController: _scrollController,
+                  child: Container(
+                    padding: const EdgeInsets.all(14),
+                    decoration: BoxDecoration(
+                      color: colorScheme.surface,
+                      borderRadius: BorderRadius.circular(14),
+                      border: Border.all(color: colorScheme.outline, width: 1),
+                    ),
+                    child: stats.habitStats.isEmpty
+                        ? Text(
+                            l10n.noActiveHabits,
+                            style: theme.textTheme.bodySmall,
+                          )
+                        : Column(
+                            children: List.generate(
+                              stats.habitStats.length,
+                              (index) {
+                                final habit = stats.habitStats[index];
+                                return Padding(
+                                  padding: EdgeInsets.only(
+                                    bottom: index < stats.habitStats.length - 1
+                                        ? 14
+                                        : 0,
+                                  ),
+                                  child: _HabitStatRow(
+                                    habit: habit,
+                                    l10n: l10n,
+                                  ),
+                                );
+                              },
+                            ),
                           ),
-                        ),
+                  ),
                 ),
               ],
             ),

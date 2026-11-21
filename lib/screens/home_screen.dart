@@ -21,6 +21,7 @@ import '../widgets/timeline_calendar_event_item.dart';
 import '../widgets/timeline_options_sheet.dart';
 import '../widgets/timeline_task_item.dart';
 import '../widgets/zettask_loaders.dart';
+import '../widgets/zettask_motion.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -584,87 +585,86 @@ class _HomeScreenState extends State<HomeScreen> {
     final quickAddLabel = taskProvider.isSelectedDateToday
         ? l10n.addTaskToday
         : l10n.addTask;
+    final selectedDateKey = TaskModel.formatDateKey(taskProvider.selectedDate);
 
-    return ListView(
-      padding: const EdgeInsetsDirectional.fromSTEB(12, 8, 16, 108),
-      children: [
+    final selectedDayItems = <Widget>[
+      Padding(
+        padding: const EdgeInsetsDirectional.fromSTEB(16, 4, 16, 14),
+        child: _SummaryCardsRow(
+          todoCount: taskProvider.activeTaskCount,
+          overdueCount: taskProvider.overdueCount,
+          unplannedCount: taskProvider.unplannedCount,
+          onTapOverdue: () => _openOverdueSheet(context),
+          onTapUnplanned: widget.onOpenUnplannedTab,
+        ),
+      ),
+      if (selectedAllDayEntries.isEmpty && selectedScheduledEntries.isEmpty)
         Padding(
-          padding: const EdgeInsetsDirectional.fromSTEB(4, 0, 0, 14),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              Text(
-                _formatShortDate(taskProvider.selectedDate, intlLocale),
-                style: theme.textTheme.labelMedium?.copyWith(
-                  color: colorScheme.onSurfaceVariant,
-                  fontSize: 13,
-                ),
-              ),
-              const SizedBox(height: 2),
-              Text(
-                _formatDayHeading(taskProvider.selectedDate, l10n, intlLocale),
-                style: theme.textTheme.headlineSmall?.copyWith(
-                  fontSize: 26,
-                  fontWeight: FontWeight.w700,
-                  letterSpacing: -0.6,
-                ),
-              ),
-              const SizedBox(height: 14),
-              _SummaryCardsRow(
-                todoCount: taskProvider.activeTaskCount,
-                overdueCount: taskProvider.overdueCount,
-                unplannedCount: taskProvider.unplannedCount,
-                onTapOverdue: () => _openOverdueSheet(context),
-                onTapUnplanned: widget.onOpenUnplannedTab,
-              ),
-            ],
+          padding: const EdgeInsetsDirectional.fromSTEB(16, 8, 16, 12),
+          child: Text(
+            l10n.noTasksForDate,
+            style: theme.textTheme.bodySmall,
           ),
         ),
-        if (selectedAllDayEntries.isEmpty && selectedScheduledEntries.isEmpty)
-          Padding(
-            padding: const EdgeInsetsDirectional.only(
-              start: 4,
-              top: 8,
-              bottom: 12,
-            ),
-            child: Text(
-              l10n.noTasksForDate,
-              style: theme.textTheme.bodySmall,
-            ),
-          ),
-        if (selectedAllDayEntries.isNotEmpty) ...[
-          _TimelineSectionHeader(
+      if (selectedAllDayEntries.isNotEmpty) ...[
+        Padding(
+          padding: const EdgeInsetsDirectional.fromSTEB(12, 0, 16, 0),
+          child: _TimelineSectionHeader(
             title: l10n.allDay,
             count: selectedAllDayEntries.length,
           ),
-          const SizedBox(height: 8),
-          for (var i = 0; i < selectedAllDayEntries.length; i++)
-            _buildTimelineEntryItem(
-              context: context,
-              taskProvider: taskProvider,
-              entry: selectedAllDayEntries[i],
-              isFirstInSection: i == 0,
-              isLastInSection: i == selectedAllDayEntries.length - 1 &&
-                  selectedScheduledEntries.isNotEmpty,
+        ),
+        const SizedBox(height: 8),
+        for (var i = 0; i < selectedAllDayEntries.length; i++)
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(12, 0, 16, 0),
+            child: ZettaskLineReveal(
+              key: ValueKey(
+                'reveal_${selectedDateKey}_all_${_timelineEntryKey(selectedAllDayEntries[i], i)}',
+              ),
+              index: i,
+              child: _buildTimelineEntryItem(
+                context: context,
+                taskProvider: taskProvider,
+                entry: selectedAllDayEntries[i],
+                isFirstInSection: i == 0,
+                isLastInSection: i == selectedAllDayEntries.length - 1 &&
+                    selectedScheduledEntries.isNotEmpty,
+              ),
             ),
-          if (selectedScheduledEntries.isNotEmpty) const SizedBox(height: 12),
-        ],
-        if (selectedScheduledEntries.isNotEmpty) ...[
-          _TimelineSectionHeader(
+          ),
+        if (selectedScheduledEntries.isNotEmpty) const SizedBox(height: 12),
+      ],
+      if (selectedScheduledEntries.isNotEmpty) ...[
+        Padding(
+          padding: const EdgeInsetsDirectional.fromSTEB(12, 0, 16, 0),
+          child: _TimelineSectionHeader(
             title: l10n.scheduled,
             count: selectedScheduledEntries.length,
           ),
-          const SizedBox(height: 8),
-          for (var i = 0; i < selectedScheduledEntries.length; i++)
-            _buildTimelineEntryItem(
-              context: context,
-              taskProvider: taskProvider,
-              entry: selectedScheduledEntries[i],
-              isFirstInSection: i == 0,
-              isLastInSection: false,
+        ),
+        const SizedBox(height: 8),
+        for (var i = 0; i < selectedScheduledEntries.length; i++)
+          Padding(
+            padding: const EdgeInsetsDirectional.fromSTEB(12, 0, 16, 0),
+            child: ZettaskLineReveal(
+              key: ValueKey(
+                'reveal_${selectedDateKey}_sch_${_timelineEntryKey(selectedScheduledEntries[i], i)}',
+              ),
+              index: selectedAllDayEntries.length + i,
+              child: _buildTimelineEntryItem(
+                context: context,
+                taskProvider: taskProvider,
+                entry: selectedScheduledEntries[i],
+                isFirstInSection: i == 0,
+                isLastInSection: false,
+              ),
             ),
-        ],
-        _TimelineQuickAddRow(
+          ),
+      ],
+      Padding(
+        padding: const EdgeInsetsDirectional.fromSTEB(12, 0, 16, 0),
+        child: _TimelineQuickAddRow(
           label: quickAddLabel,
           showTopLine: selectedAllDayEntries.isNotEmpty ||
               selectedScheduledEntries.isNotEmpty,
@@ -673,21 +673,85 @@ class _HomeScreenState extends State<HomeScreen> {
             defaultDate: taskProvider.selectedDate,
           ),
         ),
-        if (upcomingDates.isNotEmpty) ...[
-          const SizedBox(height: 20),
-          for (final upcomingDate in upcomingDates)
-            ..._buildUpcomingDaySection(
-              context: context,
-              taskProvider: taskProvider,
-              calendarProvider: calendarProvider,
-              date: upcomingDate,
+      ),
+    ];
+
+    final upcomingSlivers = <Widget>[];
+    for (final upcomingDate in upcomingDates) {
+      final sliverGroup = _buildUpcomingDaySliverGroup(
+        context: context,
+        taskProvider: taskProvider,
+        calendarProvider: calendarProvider,
+        date: upcomingDate,
+      );
+      if (sliverGroup != null) {
+        upcomingSlivers.add(sliverGroup);
+      }
+    }
+
+    return CustomScrollView(
+      slivers: [
+        SliverMainAxisGroup(
+          slivers: [
+            SliverPersistentHeader(
+              pinned: true,
+              delegate: ZettaskPinnedHeaderDelegate(
+                height: 66,
+                padding: const EdgeInsetsDirectional.fromSTEB(16, 6, 16, 6),
+                child: Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      _formatShortDate(taskProvider.selectedDate, intlLocale),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.labelMedium?.copyWith(
+                        color: colorScheme.onSurfaceVariant,
+                        fontSize: 13,
+                      ),
+                    ),
+                    const SizedBox(height: 1),
+                    Text(
+                      _formatDayHeading(
+                        taskProvider.selectedDate,
+                        l10n,
+                        intlLocale,
+                      ),
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.headlineSmall?.copyWith(
+                        fontSize: 25,
+                        height: 1.15,
+                        fontWeight: FontWeight.w700,
+                        letterSpacing: -0.6,
+                      ),
+                    ),
+                  ],
+                ),
+              ),
             ),
-        ],
+            SliverList(
+              delegate: SliverChildListDelegate(selectedDayItems),
+            ),
+          ],
+        ),
+        if (upcomingSlivers.isNotEmpty)
+          const SliverToBoxAdapter(child: SizedBox(height: 16)),
+        ...upcomingSlivers,
+        const SliverToBoxAdapter(child: SizedBox(height: 108)),
       ],
     );
   }
 
-  List<Widget> _buildUpcomingDaySection({
+  String _timelineEntryKey(TimelineEntry entry, int fallbackIndex) {
+    return switch (entry) {
+      TaskTimelineEntry(:final task) => 't_${task.id ?? fallbackIndex}',
+      CalendarEventTimelineEntry(:final event) => 'e_${event.id}',
+    };
+  }
+
+  Widget? _buildUpcomingDaySliverGroup({
     required BuildContext context,
     required TaskProvider taskProvider,
     required CalendarProvider calendarProvider,
@@ -702,7 +766,7 @@ class _HomeScreenState extends State<HomeScreen> {
       events: calendarProvider.scheduledEventsForDate(date),
     );
     final combined = [...allDayEntries, ...scheduledEntries];
-    if (combined.isEmpty) return const [];
+    if (combined.isEmpty) return null;
 
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
@@ -710,36 +774,48 @@ class _HomeScreenState extends State<HomeScreen> {
     final intlLocale =
         LocaleProvider.intlLocaleTag(Localizations.localeOf(context));
 
-    return [
-      Padding(
-        padding: const EdgeInsetsDirectional.fromSTEB(4, 6, 0, 10),
-        child: Row(
-          children: [
-            Text(
-              '${_formatDayHeading(date, l10n, intlLocale)} · ${_formatShortDate(date, intlLocale)}',
-              style: theme.textTheme.titleMedium?.copyWith(
-                fontSize: 14.5,
-                fontWeight: FontWeight.w700,
+    return SliverMainAxisGroup(
+      slivers: [
+        SliverPersistentHeader(
+          pinned: true,
+          delegate: ZettaskPinnedHeaderDelegate(
+            height: 40,
+            padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
+            child: Row(
+              children: [
+                Text(
+                  '${_formatDayHeading(date, l10n, intlLocale)} · ${_formatShortDate(date, intlLocale)}',
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontSize: 14.5,
+                    fontWeight: FontWeight.w700,
+                  ),
+                ),
+                const SizedBox(width: 8),
+                Expanded(
+                  child: Divider(color: colorScheme.outline),
+                ),
+              ],
+            ),
+          ),
+        ),
+        SliverPadding(
+          padding: const EdgeInsetsDirectional.fromSTEB(12, 4, 16, 12),
+          sliver: SliverList(
+            delegate: SliverChildBuilderDelegate(
+              (context, index) => _buildTimelineEntryItem(
+                context: context,
+                taskProvider: taskProvider,
+                calendarProvider: calendarProvider,
+                entry: combined[index],
+                isFirstInSection: index == 0,
+                isLastInSection: index == combined.length - 1,
               ),
+              childCount: combined.length,
             ),
-            const SizedBox(width: 8),
-            Expanded(
-              child: Divider(color: colorScheme.outline),
-            ),
-          ],
+          ),
         ),
-      ),
-      for (var i = 0; i < combined.length; i++)
-        _buildTimelineEntryItem(
-          context: context,
-          taskProvider: taskProvider,
-          calendarProvider: calendarProvider,
-          entry: combined[i],
-          isFirstInSection: i == 0,
-          isLastInSection: i == combined.length - 1,
-        ),
-      const SizedBox(height: 12),
-    ];
+      ],
+    );
   }
 
   Widget _buildTimelineEntryItem({

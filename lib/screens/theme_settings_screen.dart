@@ -8,6 +8,7 @@ import '../models/task_model.dart';
 import '../providers/subscription_provider.dart';
 import '../providers/theme_provider.dart';
 import '../widgets/pro_badge.dart';
+import '../widgets/zettask_motion.dart';
 import 'pro_paywall_screen.dart';
 
 class ThemeSettingsScreen extends StatelessWidget {
@@ -279,31 +280,36 @@ class ThemeSettingsScreen extends StatelessWidget {
             const SizedBox(height: 22),
             _SectionHeader(title: l10n.widgetStyleSection),
             const SizedBox(height: 8),
-            Row(
-              children: [
-                for (var i = 0; i < WidgetStyle.values.length; i++) ...[
-                  Expanded(
-                    child: _WidgetStyleCard(
-                      key: ValueKey(
-                        'widget_style_${WidgetStyle.values[i].key}',
-                      ),
-                      style: WidgetStyle.values[i],
-                      label: _widgetStyleLabel(WidgetStyle.values[i], l10n),
-                      isSelected:
-                          themeProvider.widgetStyle == WidgetStyle.values[i],
-                      showProBadge: WidgetStyle.values[i].isPro && !isPro,
-                      onTap: () => _handleSelectWidgetStyle(
-                        context,
-                        themeProvider,
-                        isPro,
-                        WidgetStyle.values[i],
-                      ),
-                    ),
-                  ),
-                  if (i < WidgetStyle.values.length - 1)
-                    const SizedBox(width: 8),
-                ],
-              ],
+            ZettaskFocusFrameSlider(
+              key: const ValueKey('widget_style_focus_slider'),
+              itemCount: WidgetStyle.values.length,
+              selectedIndex: WidgetStyle.values.indexOf(
+                themeProvider.widgetStyle,
+              ),
+              height: 126,
+              viewportFraction: 0.78,
+              onPageChanged: (index) {
+                final style = WidgetStyle.values[index];
+                if (!style.isPro || isPro) {
+                  themeProvider.setWidgetStyle(style);
+                }
+              },
+              onItemTap: (index) => _handleSelectWidgetStyle(
+                context,
+                themeProvider,
+                isPro,
+                WidgetStyle.values[index],
+              ),
+              itemBuilder: (context, index, isFocused) {
+                final style = WidgetStyle.values[index];
+                return _WidgetStyleCard(
+                  key: ValueKey('widget_style_${style.key}'),
+                  style: style,
+                  label: _widgetStyleLabel(style, l10n),
+                  isSelected: themeProvider.widgetStyle == style,
+                  showProBadge: style.isPro && !isPro,
+                );
+              },
             ),
           ],
         ),
@@ -400,14 +406,12 @@ class _WidgetStyleCard extends StatelessWidget {
     required this.label,
     required this.isSelected,
     required this.showProBadge,
-    required this.onTap,
   });
 
   final WidgetStyle style;
   final String label;
   final bool isSelected;
   final bool showProBadge;
-  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -432,92 +436,78 @@ class _WidgetStyleCard extends StatelessWidget {
         previewLine = const Color(0xFFFAFAFA);
     }
 
-    return Material(
-      color: colorScheme.surface,
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
-        side: BorderSide(
-          color: isSelected ? colorScheme.primary : colorScheme.outline,
-          width: isSelected ? 1.5 : 1,
-        ),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(10),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                height: 46,
-                padding: const EdgeInsets.all(8),
-                decoration: BoxDecoration(
-                  color: previewBg,
-                  borderRadius: BorderRadius.circular(10),
-                  border: Border.all(color: previewBorder, width: 1),
-                ),
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Container(
-                      width: 34,
-                      height: 5,
-                      decoration: BoxDecoration(
-                        color: previewLine.withValues(alpha: 0.85),
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                    ),
-                    Container(
-                      width: double.infinity,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: previewLine.withValues(alpha: 0.35),
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                    ),
-                    Container(
-                      width: 44,
-                      height: 4,
-                      decoration: BoxDecoration(
-                        color: previewLine.withValues(alpha: 0.35),
-                        borderRadius: BorderRadius.circular(999),
-                      ),
-                    ),
-                  ],
-                ),
+    return Padding(
+      padding: const EdgeInsets.all(12),
+      child: Column(
+        crossAxisAlignment: CrossAxisAlignment.stretch,
+        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+        children: [
+          Expanded(
+            child: Container(
+              padding: const EdgeInsets.all(10),
+              decoration: BoxDecoration(
+                color: previewBg,
+                borderRadius: BorderRadius.circular(10),
+                border: Border.all(color: previewBorder, width: 1),
               ),
-              const SizedBox(height: 8),
-              Row(
+              child: Column(
+                crossAxisAlignment: CrossAxisAlignment.start,
                 mainAxisAlignment: MainAxisAlignment.spaceBetween,
                 children: [
-                  Flexible(
-                    child: Text(
-                      label,
-                      maxLines: 1,
-                      overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.labelMedium?.copyWith(
-                        fontSize: 12,
-                        fontWeight:
-                            isSelected ? FontWeight.w700 : FontWeight.w600,
-                      ),
+                  Container(
+                    width: 48,
+                    height: 5,
+                    decoration: BoxDecoration(
+                      color: previewLine.withValues(alpha: 0.85),
+                      borderRadius: BorderRadius.circular(999),
                     ),
                   ),
-                  if (showProBadge)
-                    const ProBadge()
-                  else if (isSelected)
-                    Icon(
-                      Icons.check_circle_rounded,
-                      size: 15,
-                      color: colorScheme.primary,
+                  Container(
+                    width: double.infinity,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: previewLine.withValues(alpha: 0.35),
+                      borderRadius: BorderRadius.circular(999),
                     ),
+                  ),
+                  Container(
+                    width: 72,
+                    height: 4,
+                    decoration: BoxDecoration(
+                      color: previewLine.withValues(alpha: 0.35),
+                      borderRadius: BorderRadius.circular(999),
+                    ),
+                  ),
                 ],
               ),
+            ),
+          ),
+          const SizedBox(height: 8),
+          Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            children: [
+              Flexible(
+                child: Text(
+                  label,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.labelMedium?.copyWith(
+                    fontSize: 13,
+                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
+                  ),
+                ),
+              ),
+              if (showProBadge)
+                const ProBadge()
+              else if (isSelected)
+                Icon(
+                  Icons.check_circle_rounded,
+                  size: 16,
+                  color: colorScheme.primary,
+                ),
             ],
           ),
-        ),
+        ],
       ),
     );
   }

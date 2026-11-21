@@ -6,6 +6,7 @@ import '../models/subscription_model.dart';
 import '../providers/subscription_provider.dart';
 import '../widgets/pro_badge.dart';
 import '../widgets/zettask_loaders.dart';
+import '../widgets/zettask_motion.dart';
 
 String localizedProPlanName(ProPlanType plan, AppLocalizations l10n) {
   return switch (plan) {
@@ -217,10 +218,13 @@ class _ProPaywallScreenState extends State<ProPaywallScreen> {
               child: Column(
                 children: [
                   for (var i = 0; i < benefits.length; i++) ...[
-                    _BenefitRow(
-                      icon: benefits[i].$2,
-                      text: benefits[i].$3,
-                      highlighted: _isBenefitHighlighted(benefits[i].$1),
+                    ZettaskLineReveal(
+                      index: i,
+                      child: _BenefitRow(
+                        icon: benefits[i].$2,
+                        text: benefits[i].$3,
+                        highlighted: _isBenefitHighlighted(benefits[i].$1),
+                      ),
                     ),
                     if (i < benefits.length - 1) ...[
                       const SizedBox(height: 10),
