@@ -7,6 +7,7 @@ import '../l10n/app_localizations.dart';
 import '../models/task_model.dart';
 import '../providers/locale_provider.dart';
 import '../providers/task_provider.dart';
+import 'zettask_loaders.dart';
 
 class TaskSearchSheet extends StatefulWidget {
   const TaskSearchSheet({
@@ -166,9 +167,10 @@ class _TaskSearchSheetState extends State<TaskSearchSheet> {
         LocaleProvider.intlLocaleTag(Localizations.localeOf(context));
 
     if (_isSearching) {
-      return const Padding(
-        padding: EdgeInsets.symmetric(vertical: 32),
-        child: Center(child: CircularProgressIndicator.adaptive()),
+      return const ZettaskTaskListSkeleton(
+        itemCount: 3,
+        shrinkWrap: true,
+        padding: EdgeInsets.fromLTRB(16, 12, 16, 20),
       );
     }
 

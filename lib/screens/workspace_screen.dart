@@ -19,6 +19,7 @@ import '../widgets/calendar_sync_sheet.dart';
 import '../widgets/language_picker_sheet.dart';
 import '../widgets/pro_badge.dart';
 import '../widgets/weekly_stats_card.dart';
+import '../widgets/zettask_loaders.dart';
 import 'auth_welcome_screen.dart';
 import 'notes_screen.dart';
 import 'pro_paywall_screen.dart';
@@ -475,9 +476,17 @@ class WorkspaceScreen extends StatelessWidget {
             ],
           ),
           body: SafeArea(
-            child: ListView(
-              padding: const EdgeInsets.fromLTRB(16, 10, 16, 32),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
               children: [
+                if (authProvider.isSyncing ||
+                    calendarProvider.isLoadingEvents ||
+                    workspaceProvider.isExporting)
+                  const ZettaskIndeterminateBar(),
+                Expanded(
+                  child: ListView(
+                    padding: const EdgeInsets.fromLTRB(16, 10, 16, 32),
+                    children: [
                 if (subscriptionProvider != null) ...[
                   _ProBannerCard(
                     key: const ValueKey('workspace_pro_banner'),
@@ -618,7 +627,15 @@ class WorkspaceScreen extends StatelessWidget {
                       title: l10n.exportCsvTitle,
                       subtitle: l10n.exportCsvSubtitle,
                       showProBadge: !hasCsvAccess,
-                      onTap: () => _openExportSheet(context),
+                      trailing: workspaceProvider.isExporting
+                          ? ZettaskSpinnerArc(
+                              size: 18,
+                              color: colorScheme.primary,
+                            )
+                          : null,
+                      onTap: workspaceProvider.isExporting
+                          ? () {}
+                          : () => _openExportSheet(context),
                     ),
                     const Divider(),
                     _SettingsTile(
@@ -739,6 +756,9 @@ class WorkspaceScreen extends StatelessWidget {
                     subscriptionProvider: subscriptionProvider,
                   ),
                 ],
+                    ],
+                  ),
+                ),
               ],
             ),
           ),
@@ -865,6 +885,7 @@ class _SettingsTile extends StatelessWidget {
     required this.subtitle,
     required this.onTap,
     this.showProBadge = false,
+    this.trailing,
   });
 
   final IconData icon;
@@ -873,6 +894,7 @@ class _SettingsTile extends StatelessWidget {
   final String subtitle;
   final VoidCallback onTap;
   final bool showProBadge;
+  final Widget? trailing;
 
   @override
   Widget build(BuildContext context) {
@@ -917,11 +939,12 @@ class _SettingsTile extends StatelessWidget {
                   ],
                 ),
               ),
-              Icon(
-                Icons.chevron_right_rounded,
-                size: 20,
-                color: colorScheme.onSurfaceVariant,
-              ),
+              trailing ??
+                  Icon(
+                    Icons.chevron_right_rounded,
+                    size: 20,
+                    color: colorScheme.onSurfaceVariant,
+                  ),
             ],
           ),
         ),
@@ -1022,17 +1045,29 @@ class _AccountSummaryCard extends StatelessWidget {
                         ],
                       ),
                       const SizedBox(height: 2),
-                      Text(
-                        subtitle,
-                        maxLines: 1,
-                        overflow: TextOverflow.ellipsis,
-                        style: theme.textTheme.bodySmall?.copyWith(
-                          color: user != null &&
-                                  authProvider.syncStatus == SyncStatus.error
-                              ? colorScheme.error
-                              : colorScheme.onSurfaceVariant,
+                      if (user != null && authProvider.isSyncing)
+                        ZettaskTextShimmer(
+                          text: subtitle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          baseColor: colorScheme.primary,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: colorScheme.primary,
+                            fontWeight: FontWeight.w600,
+                          ),
+                        )
+                      else
+                        Text(
+                          subtitle,
+                          maxLines: 1,
+                          overflow: TextOverflow.ellipsis,
+                          style: theme.textTheme.bodySmall?.copyWith(
+                            color: user != null &&
+                                    authProvider.syncStatus == SyncStatus.error
+                                ? colorScheme.error
+                                : colorScheme.onSurfaceVariant,
+                          ),
                         ),
-                      ),
                     ],
                   ),
                 ),

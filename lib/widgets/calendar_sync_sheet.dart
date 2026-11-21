@@ -10,6 +10,7 @@ import '../providers/calendar_provider.dart';
 import '../providers/subscription_provider.dart';
 import '../screens/pro_paywall_screen.dart';
 import 'pro_badge.dart';
+import 'zettask_loaders.dart';
 
 class CalendarSyncSheet extends StatefulWidget {
   const CalendarSyncSheet({super.key});
@@ -163,6 +164,9 @@ class _CalendarSyncSheetState extends State<CalendarSyncSheet>
                 ),
               ),
               const Divider(),
+              if (calendarProvider.isLoadingCalendars ||
+                  calendarProvider.isLoadingEvents)
+                const ZettaskIndeterminateBar(),
               Flexible(
                 child: SingleChildScrollView(
                   padding: const EdgeInsets.fromLTRB(20, 14, 20, 24),
@@ -414,10 +418,9 @@ class _PermissionCard extends StatelessWidget {
                 ),
               ),
               child: isRequesting
-                  ? const SizedBox(
-                      width: 18,
-                      height: 18,
-                      child: CircularProgressIndicator.adaptive(strokeWidth: 2),
+                  ? ZettaskSpinnerArc(
+                      size: 18,
+                      color: colorScheme.onPrimary,
                     )
                   : Text(l10n.grantCalendarPermission),
             ),
@@ -516,9 +519,10 @@ class _CalendarListSection extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
 
     if (isLoading) {
-      return const Padding(
-        padding: EdgeInsets.symmetric(vertical: 24),
-        child: Center(child: CircularProgressIndicator.adaptive()),
+      return const ZettaskTaskListSkeleton(
+        itemCount: 3,
+        shrinkWrap: true,
+        padding: EdgeInsets.zero,
       );
     }
 

@@ -5,6 +5,7 @@ import '../l10n/app_localizations.dart';
 import '../providers/app_lock_provider.dart';
 import '../providers/auth_provider.dart';
 import '../widgets/about_sheet.dart';
+import '../widgets/zettask_loaders.dart';
 import 'login_screen.dart';
 import 'signup_screen.dart';
 
@@ -182,10 +183,9 @@ class AuthWelcomeScreen extends StatelessWidget {
                   ),
                 ),
                 child: isBusy
-                    ? const SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(strokeWidth: 2),
+                    ? ZettaskSpinnerArc(
+                        size: 20,
+                        color: colorScheme.primary,
                       )
                     : Row(
                         mainAxisAlignment: MainAxisAlignment.center,

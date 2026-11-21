@@ -9,6 +9,7 @@ import '../providers/locale_provider.dart';
 import '../providers/subscription_provider.dart';
 import '../screens/pro_paywall_screen.dart';
 import 'pro_badge.dart';
+import 'zettask_loaders.dart';
 
 class AccountSheet extends StatelessWidget {
   const AccountSheet({super.key});
@@ -235,6 +236,7 @@ class AccountSheet extends StatelessWidget {
               ),
             ),
             const Divider(),
+            if (isSyncing || isBusy) const ZettaskIndeterminateBar(),
             Padding(
               padding: const EdgeInsets.fromLTRB(20, 16, 20, 24),
               child: Column(
@@ -318,19 +320,32 @@ class AccountSheet extends StatelessWidget {
                               Row(
                                 children: [
                                   Flexible(
-                                    child: Text(
-                                      isCloudSyncPaused
-                                          ? l10n.cloudSyncPausedTitle
-                                          : _syncStatusLabel(
+                                    child: !isCloudSyncPaused && isSyncing
+                                        ? ZettaskTextShimmer(
+                                            text: _syncStatusLabel(
                                               authProvider.syncStatus,
                                               l10n,
                                             ),
-                                      style:
-                                          theme.textTheme.titleMedium?.copyWith(
-                                        fontSize: 14,
-                                        color: syncColor,
-                                      ),
-                                    ),
+                                            baseColor: syncColor,
+                                            style: theme.textTheme.titleMedium
+                                                ?.copyWith(
+                                              fontSize: 14,
+                                              color: syncColor,
+                                            ),
+                                          )
+                                        : Text(
+                                            isCloudSyncPaused
+                                                ? l10n.cloudSyncPausedTitle
+                                                : _syncStatusLabel(
+                                                    authProvider.syncStatus,
+                                                    l10n,
+                                                  ),
+                                            style: theme.textTheme.titleMedium
+                                                ?.copyWith(
+                                              fontSize: 14,
+                                              color: syncColor,
+                                            ),
+                                          ),
                                   ),
                                   if (isCloudSyncPaused) ...[
                                     const SizedBox(width: 8),
@@ -406,13 +421,9 @@ class AccountSheet extends StatelessWidget {
                       ),
                     ),
                     icon: isSyncing
-                        ? const SizedBox(
-                            width: 18,
-                            height: 18,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
+                        ? ZettaskSpinnerArc(
+                            size: 18,
+                            color: colorScheme.onPrimary,
                           )
                         : Icon(
                             isCloudSyncPaused
@@ -420,13 +431,17 @@ class AccountSheet extends StatelessWidget {
                                 : Icons.sync_rounded,
                             size: 18,
                           ),
-                    label: Text(
-                      isCloudSyncPaused
-                          ? l10n.resumeSyncWithProButton
-                          : (isSyncing
-                              ? l10n.syncingLabel
-                              : l10n.syncNowButton),
-                    ),
+                    label: !isCloudSyncPaused && isSyncing
+                        ? ZettaskTextShimmer(
+                            text: l10n.syncingLabel,
+                            baseColor: colorScheme.onSurfaceVariant,
+                            highlightColor: colorScheme.primary,
+                          )
+                        : Text(
+                            isCloudSyncPaused
+                                ? l10n.resumeSyncWithProButton
+                                : l10n.syncNowButton,
+                          ),
                   ),
                   const SizedBox(height: 10),
                   OutlinedButton.icon(
@@ -438,7 +453,12 @@ class AccountSheet extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    icon: const Icon(Icons.logout_rounded, size: 18),
+                    icon: isBusy
+                        ? ZettaskSpinnerArc(
+                            size: 18,
+                            color: colorScheme.onSurfaceVariant,
+                          )
+                        : const Icon(Icons.logout_rounded, size: 18),
                     label: Text(l10n.signOutButton),
                   ),
                   const SizedBox(height: 10),
@@ -456,7 +476,12 @@ class AccountSheet extends StatelessWidget {
                         borderRadius: BorderRadius.circular(12),
                       ),
                     ),
-                    icon: const Icon(Icons.delete_forever_outlined, size: 18),
+                    icon: isBusy
+                        ? ZettaskSpinnerArc(
+                            size: 18,
+                            color: colorScheme.error,
+                          )
+                        : const Icon(Icons.delete_forever_outlined, size: 18),
                     label: Text(l10n.deleteAccountButton),
                   ),
                 ],

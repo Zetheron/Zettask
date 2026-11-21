@@ -5,6 +5,7 @@ import '../l10n/app_localizations.dart';
 import '../models/subscription_model.dart';
 import '../providers/subscription_provider.dart';
 import '../widgets/pro_badge.dart';
+import '../widgets/zettask_loaders.dart';
 
 String localizedProPlanName(ProPlanType plan, AppLocalizations l10n) {
   return switch (plan) {
@@ -289,13 +290,9 @@ class _ProPaywallScreenState extends State<ProPaywallScreen> {
                   ),
                 ),
                 child: isLoading
-                    ? SizedBox(
-                        width: 20,
-                        height: 20,
-                        child: CircularProgressIndicator(
-                          strokeWidth: 2,
-                          color: colorScheme.onPrimary,
-                        ),
+                    ? ZettaskSpinnerArc(
+                        size: 20,
+                        color: colorScheme.onPrimary,
                       )
                     : Text(
                         isPro

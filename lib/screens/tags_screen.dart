@@ -11,6 +11,7 @@ import '../providers/locale_provider.dart';
 import '../providers/task_provider.dart';
 import '../providers/workspace_provider.dart';
 import '../widgets/task_editor_sheet.dart';
+import '../widgets/zettask_loaders.dart';
 
 class TagsScreen extends StatelessWidget {
   const TagsScreen({super.key});
@@ -320,7 +321,7 @@ class _TagTasksScreenState extends State<_TagTasksScreen> {
       ),
       body: SafeArea(
         child: _isLoading
-            ? const Center(child: CircularProgressIndicator.adaptive())
+            ? const ZettaskTaskListSkeleton()
             : _tasks.isEmpty
                 ? Center(
                     child: Text(

@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../l10n/app_localizations.dart';
 import '../providers/app_lock_provider.dart';
+import '../widgets/zettask_loaders.dart';
 
 class LockScreen extends StatelessWidget {
   const LockScreen({super.key});
@@ -115,22 +116,28 @@ class LockScreen extends StatelessWidget {
                       ),
                     ),
                     icon: isAuthenticating
-                        ? const SizedBox(
-                            width: 18,
-                            height: 18,
-                            child: CircularProgressIndicator(
-                              strokeWidth: 2,
-                              color: Colors.white,
-                            ),
+                        ? ZettaskSpinnerArc(
+                            size: 18,
+                            color: colorScheme.onPrimary,
                           )
                         : const Icon(Icons.fingerprint_rounded, size: 20),
-                    label: Text(
-                      isAuthenticating ? l10n.verifyingButton : l10n.unlockButton,
-                      style: const TextStyle(
-                        fontWeight: FontWeight.w600,
-                        fontSize: 15,
-                      ),
-                    ),
+                    label: isAuthenticating
+                        ? ZettaskTextShimmer(
+                            text: l10n.verifyingButton,
+                            baseColor: colorScheme.onSurfaceVariant,
+                            highlightColor: colorScheme.primary,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                            ),
+                          )
+                        : Text(
+                            l10n.unlockButton,
+                            style: const TextStyle(
+                              fontWeight: FontWeight.w600,
+                              fontSize: 15,
+                            ),
+                          ),
                   ),
                 ],
               ),

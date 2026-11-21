@@ -6,6 +6,7 @@ import '../l10n/app_localizations.dart';
 import '../models/repeating_task_model.dart';
 import '../models/task_model.dart';
 import '../models/timeline_entry.dart';
+import '../providers/auth_provider.dart';
 import '../providers/calendar_provider.dart';
 import '../providers/locale_provider.dart';
 import '../providers/task_provider.dart';
@@ -19,6 +20,7 @@ import '../widgets/task_search_sheet.dart';
 import '../widgets/timeline_calendar_event_item.dart';
 import '../widgets/timeline_options_sheet.dart';
 import '../widgets/timeline_task_item.dart';
+import '../widgets/zettask_loaders.dart';
 
 class HomeScreen extends StatefulWidget {
   const HomeScreen({
@@ -473,6 +475,9 @@ class _HomeScreenState extends State<HomeScreen> {
           body: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
+              if (calendarProvider.isLoadingEvents ||
+                  (context.watch<AuthProvider?>()?.isSyncing ?? false))
+                const ZettaskIndeterminateBar(),
               Expanded(
                 child: Stack(
                   children: [
@@ -526,9 +531,7 @@ class _HomeScreenState extends State<HomeScreen> {
         LocaleProvider.intlLocaleTag(Localizations.localeOf(context));
 
     if (taskProvider.isLoading) {
-      return const Center(
-        child: CircularProgressIndicator.adaptive(),
-      );
+      return const ZettaskTaskListSkeleton();
     }
 
     if (taskProvider.errorMessage != null) {

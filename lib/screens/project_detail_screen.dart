@@ -12,6 +12,7 @@ import '../providers/locale_provider.dart';
 import '../providers/task_provider.dart';
 import '../providers/workspace_provider.dart';
 import '../widgets/task_editor_sheet.dart';
+import '../widgets/zettask_loaders.dart';
 
 class ProjectDetailScreen extends StatefulWidget {
   const ProjectDetailScreen({
@@ -290,7 +291,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
             ),
             Expanded(
               child: _isLoading
-                  ? const Center(child: CircularProgressIndicator.adaptive())
+                  ? const ZettaskTaskListSkeleton()
                   : _tasks.isEmpty
                       ? Center(
                           child: Padding(

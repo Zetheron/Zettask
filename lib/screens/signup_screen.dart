@@ -4,6 +4,7 @@ import 'package:provider/provider.dart';
 import '../l10n/app_localizations.dart';
 import '../providers/app_lock_provider.dart';
 import '../providers/auth_provider.dart';
+import '../widgets/zettask_loaders.dart';
 import 'auth_welcome_screen.dart';
 import 'login_screen.dart';
 
@@ -225,13 +226,9 @@ class _SignUpScreenState extends State<SignUpScreen> {
                     ),
                   ),
                   child: isBusy
-                      ? const SizedBox(
-                          width: 20,
-                          height: 20,
-                          child: CircularProgressIndicator(
-                            strokeWidth: 2,
-                            color: Colors.white,
-                          ),
+                      ? ZettaskSpinnerArc(
+                          size: 20,
+                          color: colorScheme.onPrimary,
                         )
                       : Text(
                           l10n.createNewAccount,

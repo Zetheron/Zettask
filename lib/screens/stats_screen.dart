@@ -10,6 +10,7 @@ import '../models/stats_model.dart';
 import '../models/task_model.dart';
 import '../providers/locale_provider.dart';
 import '../providers/workspace_provider.dart';
+import '../widgets/zettask_loaders.dart';
 
 enum StatsRange {
   last7Days,
@@ -110,7 +111,9 @@ class _StatsScreenState extends State<StatsScreen> {
             title: Text(l10n.statsTitle),
           ),
           body: SafeArea(
-            child: ListView(
+            child: workspaceProvider.isLoading
+                ? const ZettaskTaskListSkeleton()
+                : ListView(
               padding: const EdgeInsets.fromLTRB(16, 12, 16, 32),
               children: [
                 SegmentedButton<StatsRange>(

@@ -11,6 +11,7 @@ import '../providers/workspace_provider.dart';
 import '../widgets/pro_badge.dart';
 import '../widgets/task_editor_sheet.dart';
 import '../widgets/task_search_sheet.dart';
+import '../widgets/zettask_loaders.dart';
 import 'pro_paywall_screen.dart';
 import 'project_detail_screen.dart';
 
@@ -301,7 +302,9 @@ class _BoardScreenState extends State<BoardScreen> {
                   const SizedBox(height: 8),
                 ],
                 Expanded(
-                  child: visibleProjects.isEmpty
+                  child: workspaceProvider.isLoading && allProjects.isEmpty
+                      ? const ZettaskTaskListSkeleton()
+                      : visibleProjects.isEmpty
                       ? _BoardEmptyState(
                           isFiltered:
                               allProjects.isNotEmpty && _searchQuery.isNotEmpty,
