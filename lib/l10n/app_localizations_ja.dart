@@ -1552,4 +1552,10 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get appGuideSubtitle => 'Zettaskの簡単なガイドをもう一度見る';
+
+  @override
+  String get dynamicColorTitle => 'Material You（壁紙カラー）';
+
+  @override
+  String get dynamicColorSubtitle => '端末の壁紙に合わせてアクセントカラーを調整（Android 12+）';
 }

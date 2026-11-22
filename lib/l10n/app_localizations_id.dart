@@ -1607,4 +1607,11 @@ class AppLocalizationsId extends AppLocalizations {
 
   @override
   String get appGuideSubtitle => 'Putar ulang panduan singkat Zettask';
+
+  @override
+  String get dynamicColorTitle => 'Material You (Warna Wallpaper)';
+
+  @override
+  String get dynamicColorSubtitle =>
+      'Sesuaikan warna aksen dengan wallpaper perangkat (Android 12+)';
 }

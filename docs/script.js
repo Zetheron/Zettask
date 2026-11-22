@@ -6,17 +6,17 @@
 
   var COPY = {
     id: {
-      heroKicker: 'ANDROID · OFFLINE-FIRST · SQLITE',
+      heroBadge: 'Android Beta • 100% Gratis & Bebas Iklan',
       heroTitle: 'Catat hari Anda. Selesaikan tanpa distraksi.',
       heroLead:
-        'Daftar tugas timeline harian yang ringkas untuk Android. Berjalan lokal di perangkat dengan SQLite, cepat dibuka, tanpa paksaan login, dan siap dipakai bahkan saat offline.',
+        'Daftar tugas timeline harian yang ringkas untuk Android. Berjalan lokal di perangkat secara offline-first, ringan dibuka, tanpa paksaan login, dan mendukung Material You serta AMOLED Pure Black.',
       ctaDownload: 'Unduh APK Beta (Android)',
       ctaGithub: 'Lihat di GitHub',
       specAdsLabel: 'Iklan & pelacak lintas aplikasi',
       specLangLabel: 'Bahasa antarmuka tersedia',
       specDbLabel: 'Penyimpanan lokal offline-first',
 
-      phoneDateEyebrow: 'SAB, 21 NOV',
+      phoneDateEyebrow: 'MIN, 22 NOV',
       phoneDayTitle: 'Hari Ini',
       phoneAccentLabel: 'AKSEN MOCKUP',
       phoneHint: 'Ketuk tugas untuk mencentang · Klik titik aksen untuk ganti warna',
@@ -38,14 +38,14 @@
 
       feat2Title: 'Offline-First & Privasi Terjaga',
       feat2Desc:
-        'Seluruh tugas, proyek, dan catatan disimpan lokal di SQLite perangkat. Tidak wajib membuat akun, tanpa iklan, dan sinkronisasi cloud sepenuhnya opsional.',
+        'Penyimpanan lokal cepat berbasis SQLite langsung di perangkat Anda. Tanpa paksaan login, bisa dipakai penuh tanpa internet, dan cadangan cloud sepenuhnya opsional.',
       feat2Pill1: 'SQLite lokal',
       feat2Pill2: 'Tanpa wajib login',
-      feat2Pill3: '0 SDK iklan',
+      feat2Pill3: 'Ekspor CSV',
 
-      feat3Title: 'AMOLED Pure Black & 5 Warna Aksen',
+      feat3Title: 'Material You & AMOLED Pure Black',
       feat3Desc:
-        'Nyaman dipakai malam hari dengan kanvas hitam murni #000000 yang hemat daya layar OLED, dipadukan dengan Monochrome, Sage, Indigo, Terracotta, dan Amber.',
+        'Dukungan Dynamic Color Android 12+ yang mengikuti warna wallpaper, kanvas gelap pekat #000000 untuk layar OLED, dan 5 aksen kustom pilihan.',
 
       feat4Title: 'Home Screen Widget Android',
       feat4Desc:
@@ -54,46 +54,36 @@
       feat4WidgetTask1: 'Rapat produk',
       feat4WidgetTask2: 'Bayar tagihan listrik',
 
-      feat5Title: 'Proyek, Prioritas & Statistik Produktivitas',
+      feat5Title: 'Proyek, Prioritas & Statistik Konsistensi',
       feat5Desc:
-        'Kelompokkan tugas ke dalam proyek di Board, tandai prioritas Rendah hingga Tinggi, dan pantau konsistensi mingguan lewat grafik ringkas.',
+        'Kelompokkan tugas ke dalam proyek di Board, tandai prioritas Rendah hingga Tinggi, dan pantau konsistensi penyelesaian 7 dan 30 hari lewat grafik ringkas.',
 
-      feat6Title: 'Kunci Biometrik & Ekspor CSV',
+      feat6Title: 'Ringan & Tanpa Distraksi',
       feat6Desc:
-        'Lindungi catatan dengan sidik jari atau PIN bawaan Android serta sensor layar Recent Apps. Ekspor tugas dan catatan ke berkas CSV kapan saja.',
-      feat6Pill1: 'Biometrik OS',
-      feat6Pill2: 'Privasi Recent Apps',
-      feat6Pill3: 'Ekspor CSV terbuka',
+        '100% gratis dan bebas iklan dengan animasi vektor ringan yang tetap mulus di 60fps. Dilengkapi kunci biometrik OS agar catatan pribadi tetap aman.',
+      feat6Pill1: '100% Gratis',
+      feat6Pill2: 'Bebas Iklan',
+      feat6Pill3: 'Animasi Vektor 60fps',
 
-      proKicker: '02 / PERBANDINGAN PAKET',
-      proTitle: 'Gratis untuk harian. Pro untuk kontrol penuh.',
-      proSubtitle:
-        'Versi Gratis sudah lengkap dipakai setiap hari tanpa batas waktu. Zettask Pro hadir bagi pengguna yang butuh sinkronisasi lintas perangkat dan kustomisasi lanjutan.',
+      principlesKicker: '02 / PRINSIP ZETTASK',
+      principlesTitle: 'Dibangun dengan janji yang jelas.',
+      principlesSubtitle:
+        'Alat catatan harian seharusnya tetap tenang, menghormati privasi Anda, dan langsung siap bekerja saat dibuka.',
 
-      freeName: 'Gratis',
-      freeTagline: 'Lengkap untuk rutinitas harian',
-      freeBadge: 'Rp 0',
-      freeItem1: 'Timeline harian, sub-tugas (checklist), dan tugas berulang',
-      freeItem2: 'Pengingat lokal & alarm tepat waktu',
-      freeItem3: 'Hingga 3 proyek di Board, tag warna, template, & catatan cepat',
-      freeItem4: 'Statistik produktivitas mingguan & Home Screen Widget standar',
-      freeItem5: '100% offline-first (SQLite lokal) tanpa iklan dan tanpa paksaan login',
-      freeItem6: 'Mode Terang & Gelap dengan aksen Monochrome',
+      prin1Eyebrow: '100% GRATIS · 0 IKLAN',
+      prin1Title: 'Tanpa Iklan & Distraksi',
+      prin1Desc:
+        'Tidak ada banner iklan, pop-up promosi, atau SDK pelacak lintas aplikasi. Ruang layar sepenuhnya milik jadwal dan daftar tugas Anda.',
 
-      proName: 'Zettask Pro',
-      proTagline: 'Untuk power user & multi-perangkat',
-      proBadge: 'PRO',
-      proItem1: 'Semua fitur pada paket Gratis',
-      proItem2: 'Proyek tanpa batas di Board',
-      proItem3: 'Sinkronisasi Cloud & cadangan multi-perangkat (opsional via Firebase)',
-      proItem4: 'Integrasi Kalender Perangkat (read-only) & Hari Libur Nasional',
-      proItem5: 'Kunci Aplikasi Biometrik/PIN & privasi layar Recent Apps',
-      proItem6: 'Ekspor tugas & catatan ke berkas CSV kapan saja',
-      proItem7: 'Tema AMOLED Pure Black (#000000), 4 aksen kustom, & gaya Widget AMOLED/Transparan',
+      prin2Eyebrow: 'NO DATA LOSS & NO LOCKOUT',
+      prin2Title: 'Data Milikmu',
+      prin2Desc:
+        'Seluruh tugas, proyek, dan catatan tetap tersimpan aman di perangkat dan dapat diekspor ke CSV atau dihapus permanen kapan saja tanpa penguncian data.',
 
-      guaranteeLabel: 'NO DATA LOSS & NO LOCKOUT',
-      guaranteeText:
-        'Jika langganan Zettask Pro berakhir atau dibatalkan, seluruh tugas, proyek, dan catatan yang sudah Anda buat tetap tersimpan aman di perangkat dan selalu bisa dibuka, diedit, atau dihapus. Tidak ada data yang dikunci atau dihapus.',
+      prin3Eyebrow: 'OFFLINE-FIRST · SQLITE',
+      prin3Title: 'Cepat Secara Instan',
+      prin3Desc:
+        'Membaca dan menulis langsung ke database SQLite lokal sehingga Zettask terbuka dalam sekejap dan bekerja normal tanpa sinyal internet maupun akun.',
 
       footerDesc:
         'Aplikasi daftar tugas timeline harian offline-first untuk Android. Dibangun oleh Zetheron dengan fokus pada kecepatan, kejelasan, dan privasi.',
@@ -106,17 +96,17 @@
       footerBottomRight: 'Dibangun untuk Android · Offline-First'
     },
     en: {
-      heroKicker: 'ANDROID · OFFLINE-FIRST · SQLITE',
+      heroBadge: 'Android Beta • 100% Free & Ad-Free',
       heroTitle: 'Plan your day. Finish without noise.',
       heroLead:
-        'A daily timeline to-do list for Android. Stored locally in SQLite, quick to open, no forced account, and built to work reliably even offline.',
+        'A minimalist daily timeline to-do list for Android. Built offline-first on your device, quick to open, no forced account, with Material You and AMOLED Pure Black support.',
       ctaDownload: 'Download Beta APK (Android)',
       ctaGithub: 'View on GitHub',
       specAdsLabel: 'Ads & cross-app trackers',
       specLangLabel: 'Interface languages included',
       specDbLabel: 'Local offline-first storage',
 
-      phoneDateEyebrow: 'SAT, NOV 21',
+      phoneDateEyebrow: 'SUN, NOV 22',
       phoneDayTitle: 'Today',
       phoneAccentLabel: 'MOCKUP ACCENT',
       phoneHint: 'Tap tasks to check them off · Tap a dot to switch accents',
@@ -138,14 +128,14 @@
 
       feat2Title: 'Offline-First & Private by Default',
       feat2Desc:
-        'Every task, project, and note lives locally in SQLite on your phone. No mandatory sign-in, zero ads, and cloud backup stays strictly optional.',
+        'Fast local SQLite storage right on your phone. No forced login, full functionality without internet, and cloud backup stays strictly optional.',
       feat2Pill1: 'Local SQLite',
       feat2Pill2: 'No forced login',
-      feat2Pill3: '0 ad SDKs',
+      feat2Pill3: 'CSV export',
 
-      feat3Title: 'AMOLED Pure Black & 5 Accent Colors',
+      feat3Title: 'Material You & AMOLED Pure Black',
       feat3Desc:
-        'Easy on the eyes at night with a true #000000 canvas for OLED displays, paired with Monochrome, Sage, Indigo, Terracotta, and Amber accents.',
+        'Android 12+ Dynamic Color that follows your wallpaper palette, true #000000 black canvas for OLED screens, and 5 curated custom accents.',
 
       feat4Title: 'Android Home Screen Widgets',
       feat4Desc:
@@ -154,46 +144,36 @@
       feat4WidgetTask1: 'Product sync',
       feat4WidgetTask2: 'Pay utility bill',
 
-      feat5Title: 'Projects, Priorities & Productivity Stats',
+      feat5Title: 'Projects, Priorities & Consistency Stats',
       feat5Desc:
-        'Group work into Board projects, set Low to High priority levels, and track weekly completion trends with clean tabular charts.',
+        'Group work into Board projects, set Low to High priority levels, and review 7-day and 30-day completion consistency with clean tabular charts.',
 
-      feat6Title: 'Biometric App Lock & CSV Export',
+      feat6Title: 'Lightweight & Distraction-Free',
       feat6Desc:
-        'Protect private lists with Android fingerprint or PIN lock and Recent Apps screen privacy. Export tasks and notes to CSV whenever you want.',
-      feat6Pill1: 'OS Biometrics',
-      feat6Pill2: 'Recent Apps shield',
-      feat6Pill3: 'Open CSV export',
+        '100% free and ad-free with crisp 60fps vector motion. Includes Android OS biometric app lock so private lists stay protected.',
+      feat6Pill1: '100% Free',
+      feat6Pill2: 'Ad-Free',
+      feat6Pill3: '60fps Vector Motion',
 
-      proKicker: '02 / PLAN COMPARISON',
-      proTitle: 'Free for daily use. Pro for power users.',
-      proSubtitle:
-        'The Free tier covers full everyday planning with no time limit. Zettask Pro adds multi-device cloud sync, calendar overlay, and deeper customization.',
+      principlesKicker: '02 / ZETTASK PRINCIPLES',
+      principlesTitle: 'Built on clear promises.',
+      principlesSubtitle:
+        'A daily task tool should stay calm, respect your privacy, and respond the moment you open it.',
 
-      freeName: 'Free',
-      freeTagline: 'Complete for daily routines',
-      freeBadge: '$0',
-      freeItem1: 'Daily timeline, subtasks (checklists), and repeating routines',
-      freeItem2: 'Local notifications & exact reminders',
-      freeItem3: 'Up to 3 Board projects, color tags, templates, & quick notes',
-      freeItem4: 'Weekly productivity stats & Standard Home Screen Widget',
-      freeItem5: '100% offline-first (local SQLite), zero ads, no forced login',
-      freeItem6: 'Light & Dark modes with Monochrome accent',
+      prin1Eyebrow: '100% FREE · 0 ADS',
+      prin1Title: 'No Ads, No Clutter',
+      prin1Desc:
+        'Zero ad banners, promo pop-ups, or cross-app tracking SDKs. Your screen stays dedicated exclusively to your schedule and tasks.',
 
-      proName: 'Zettask Pro',
-      proTagline: 'For power users & multi-device sync',
-      proBadge: 'PRO',
-      proItem1: 'Everything included in Free',
-      proItem2: 'Unlimited Board projects',
-      proItem3: 'Optional Cloud Sync & multi-device backup via Firebase',
-      proItem4: 'Device Calendar integration (read-only) & National Holidays',
-      proItem5: 'Biometric/PIN App Lock & Recent Apps privacy shield',
-      proItem6: 'Export tasks & notes to CSV files anytime',
-      proItem7: 'AMOLED Pure Black (#000000), 4 custom accents, & AMOLED/Translucent widgets',
+      prin2Eyebrow: 'NO DATA LOSS & NO LOCKOUT',
+      prin2Title: 'Your Data Stays Yours',
+      prin2Desc:
+        'Every task, project, and note stays safe on your device and can be exported to CSV or permanently deleted anytime without data lock-in.',
 
-      guaranteeLabel: 'NO DATA LOSS & NO LOCKOUT',
-      guaranteeText:
-        'If a Zettask Pro subscription ends or is cancelled, every task, project, and note you created remains safely on your device and stays readable, editable, and exportable. Your data is never locked away.',
+      prin3Eyebrow: 'OFFLINE-FIRST · SQLITE',
+      prin3Title: 'Instant by Default',
+      prin3Desc:
+        'Reads and writes directly to a local SQLite database so Zettask launches in an instant and works reliably with no internet or account required.',
 
       footerDesc:
         'Minimalist offline-first daily timeline to-do list for Android. Built by Zetheron with a focus on speed, clarity, and privacy.',
@@ -230,8 +210,8 @@
       id: 't2',
       time: '09:00',
       done: true,
-      idTitle: 'Finalisasi catatan rilis v1.4',
-      enTitle: 'Finalize v1.4 release notes',
+      idTitle: 'Finalisasi catatan rilis Beta',
+      enTitle: 'Finalize Beta release notes',
       idTag: 'Kerja',
       enTag: 'Work',
       sub: '3/3'
@@ -240,8 +220,8 @@
       id: 't3',
       time: '11:30',
       done: false,
-      idTitle: 'Uji notifikasi alarm tepat waktu',
-      enTitle: 'Verify exact alarm reminders',
+      idTitle: 'Uji tema Material You & AMOLED',
+      enTitle: 'Test Material You & AMOLED theme',
       idTag: 'Zettask',
       enTag: 'Zettask',
       sub: '1/3'
@@ -250,8 +230,8 @@
       id: 't4',
       time: '14:00',
       done: false,
-      idTitle: 'Review arsitektur sinkronisasi lokal',
-      enTitle: 'Review local sync schema',
+      idTitle: 'Review arsitektur SQLite lokal',
+      enTitle: 'Review local SQLite schema',
       idTag: 'Kerja',
       enTag: 'Work',
       sub: null

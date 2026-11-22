@@ -484,5 +484,7 @@
   "onboardingSlide3Title": "Cepat, offline, dan privat",
   "onboardingSlide3Body": "Semua data tersimpan lokal di perangkat Anda. Tanpa wajib akun dan tetap cepat tanpa internet.",
   "appGuideTitle": "Panduan Aplikasi",
-  "appGuideSubtitle": "Putar ulang panduan singkat Zettask"
+  "appGuideSubtitle": "Putar ulang panduan singkat Zettask",
+  "dynamicColorTitle": "Material You (Warna Wallpaper)",
+  "dynamicColorSubtitle": "Sesuaikan warna aksen dengan wallpaper perangkat (Android 12+)"
 }

@@ -1,7 +1,30 @@
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:google_fonts/google_fonts.dart';
 import 'package:material_ui/material_ui.dart';
 
 import '../../models/task_model.dart';
+
+class DynamicColorScope extends InheritedWidget {
+  const DynamicColorScope({
+    super.key,
+    required this.lightDynamic,
+    required this.darkDynamic,
+    required super.child,
+  });
+
+  final ColorScheme? lightDynamic;
+  final ColorScheme? darkDynamic;
+
+  static DynamicColorScope? maybeOf(BuildContext context) {
+    return context.dependOnInheritedWidgetOfExactType<DynamicColorScope>();
+  }
+
+  @override
+  bool updateShouldNotify(DynamicColorScope oldWidget) {
+    return lightDynamic != oldWidget.lightDynamic ||
+        darkDynamic != oldWidget.darkDynamic;
+  }
+}
 
 class TaskTagColor {
   const TaskTagColor({
@@ -503,67 +526,86 @@ class AppTheme {
   static ThemeData lightThemeFor(
     AppThemePreset preset, {
     ProAccentColor accentColor = ProAccentColor.monochrome,
+    ColorScheme? dynamicColorScheme,
   }) {
     final t = accentColor == ProAccentColor.monochrome
         ? preset.tokens
         : accentColor.tokens;
-    final colorScheme = ColorScheme.light(
-      primary: t.primaryLight,
-      onPrimary: t.onPrimaryLight,
-      primaryContainer: t.primaryContainerLight,
-      onPrimaryContainer: t.onPrimaryContainerLight,
-      secondary: t.secondaryLight,
-      onSecondary: t.onSecondaryLight,
-      secondaryContainer: t.secondaryContainerLight,
-      onSecondaryContainer: t.onSecondaryContainerLight,
-      surface: lightSurface,
-      onSurface: lightTextPrimary,
-      onSurfaceVariant: lightTextSecondary,
-      surfaceContainerHighest: lightSurfaceVariant,
-      outline: lightBorder,
-      outlineVariant: lightBorder,
-      error: errorLight,
-      onError: Colors.white,
-    );
+    final useDynamic = dynamicColorScheme != null;
+    final ColorScheme colorScheme;
+    if (useDynamic) {
+      final harmonized = dynamicColorScheme.harmonized();
+      // Keep hairline 1px borders subtle when Material You colors are active.
+      colorScheme = harmonized.copyWith(outline: harmonized.outlineVariant);
+    } else {
+      colorScheme = ColorScheme.light(
+        primary: t.primaryLight,
+        onPrimary: t.onPrimaryLight,
+        primaryContainer: t.primaryContainerLight,
+        onPrimaryContainer: t.onPrimaryContainerLight,
+        secondary: t.secondaryLight,
+        onSecondary: t.onSecondaryLight,
+        secondaryContainer: t.secondaryContainerLight,
+        onSecondaryContainer: t.onSecondaryContainerLight,
+        surface: lightSurface,
+        onSurface: lightTextPrimary,
+        onSurfaceVariant: lightTextSecondary,
+        surfaceContainerHighest: lightSurfaceVariant,
+        outline: lightBorder,
+        outlineVariant: lightBorder,
+        error: errorLight,
+        onError: Colors.white,
+      );
+    }
+
+    final resolvedBackground = useDynamic ? colorScheme.surface : lightBackground;
+    final resolvedCardSurface =
+        useDynamic ? colorScheme.surfaceContainerLowest : lightSurface;
+    final resolvedInputFill = useDynamic
+        ? colorScheme.surfaceContainerHighest
+        : lightSurfaceVariant;
+    final resolvedBorder = colorScheme.outline;
+    final resolvedTextPrimary = colorScheme.onSurface;
+    final resolvedTextSecondary = colorScheme.onSurfaceVariant;
 
     final baseTextTheme = GoogleFonts.plusJakartaSansTextTheme(
       ThemeData.light().textTheme,
     ).apply(
-      bodyColor: lightTextPrimary,
-      displayColor: lightTextPrimary,
+      bodyColor: resolvedTextPrimary,
+      displayColor: resolvedTextPrimary,
     );
 
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
       colorScheme: colorScheme,
-      scaffoldBackgroundColor: lightBackground,
-      textTheme: _buildTextTheme(baseTextTheme, lightTextSecondary),
+      scaffoldBackgroundColor: resolvedBackground,
+      textTheme: _buildTextTheme(baseTextTheme, resolvedTextSecondary),
       appBarTheme: AppBarTheme(
-        backgroundColor: lightBackground,
-        foregroundColor: lightTextPrimary,
+        backgroundColor: resolvedBackground,
+        foregroundColor: resolvedTextPrimary,
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: false,
         titleTextStyle: GoogleFonts.plusJakartaSans(
           fontSize: 20,
           fontWeight: FontWeight.w700,
-          color: lightTextPrimary,
+          color: resolvedTextPrimary,
           letterSpacing: -0.4,
         ),
       ),
       cardTheme: CardThemeData(
-        color: lightSurface,
+        color: resolvedCardSurface,
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(14),
-          side: const BorderSide(color: lightBorder, width: 1),
+          side: BorderSide(color: resolvedBorder, width: 1),
         ),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: t.primaryLight,
-        foregroundColor: t.onPrimaryLight,
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
         elevation: 0,
         focusElevation: 0,
         hoverElevation: 0,
@@ -573,75 +615,77 @@ class AppTheme {
         ),
       ),
       chipTheme: ChipThemeData(
-        backgroundColor: lightSurface,
+        backgroundColor: resolvedCardSurface,
         selectedColor: colorScheme.primaryContainer,
-        side: const BorderSide(color: lightBorder, width: 1),
+        side: BorderSide(color: resolvedBorder, width: 1),
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(10),
         ),
         labelStyle: GoogleFonts.plusJakartaSans(
           fontSize: 13,
           fontWeight: FontWeight.w500,
-          color: lightTextPrimary,
+          color: resolvedTextPrimary,
         ),
       ),
       checkboxTheme: CheckboxThemeData(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(6),
         ),
-        side: const BorderSide(color: lightTextSecondary, width: 1.5),
+        side: BorderSide(color: resolvedTextSecondary, width: 1.5),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: lightSurfaceVariant,
+        fillColor: resolvedInputFill,
         contentPadding: const EdgeInsets.symmetric(
           horizontal: 14,
           vertical: 14,
         ),
         border: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: lightBorder, width: 1),
+          borderSide: BorderSide(color: resolvedBorder, width: 1),
         ),
         enabledBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: lightBorder, width: 1),
+          borderSide: BorderSide(color: resolvedBorder, width: 1),
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: t.primaryLight, width: 1.5),
+          borderSide: BorderSide(color: colorScheme.primary, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: errorLight, width: 1),
+          borderSide: BorderSide(color: colorScheme.error, width: 1),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: errorLight, width: 1.5),
+          borderSide: BorderSide(color: colorScheme.error, width: 1.5),
         ),
       ),
-      bottomSheetTheme: const BottomSheetThemeData(
-        backgroundColor: lightSurface,
+      bottomSheetTheme: BottomSheetThemeData(
+        backgroundColor: resolvedCardSurface,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
-        shape: RoundedRectangleBorder(
+        shape: const RoundedRectangleBorder(
           borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
         ),
       ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
-        backgroundColor: lightTextPrimary,
+        backgroundColor:
+            useDynamic ? colorScheme.inverseSurface : lightTextPrimary,
         contentTextStyle: GoogleFonts.plusJakartaSans(
-          color: lightBackground,
+          color: useDynamic ? colorScheme.onInverseSurface : lightBackground,
           fontSize: 14,
           fontWeight: FontWeight.w500,
         ),
-        actionTextColor: t.primaryDark,
+        actionTextColor:
+            useDynamic ? colorScheme.inversePrimary : t.primaryDark,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
         ),
       ),
-      dividerTheme: const DividerThemeData(
-        color: lightBorder,
+      dividerTheme: DividerThemeData(
+        color: resolvedBorder,
         thickness: 1,
         space: 1,
       ),
@@ -652,40 +696,85 @@ class AppTheme {
     AppThemePreset preset, {
     bool amoled = false,
     ProAccentColor accentColor = ProAccentColor.monochrome,
+    ColorScheme? dynamicColorScheme,
   }) {
     final t = accentColor == ProAccentColor.monochrome
         ? preset.tokens
         : accentColor.tokens;
-    final resolvedBackground = amoled ? amoledBackground : darkBackground;
-    final resolvedSurface = amoled ? amoledSurface : darkSurface;
-    final resolvedSurfaceVariant =
-        amoled ? amoledSurfaceVariant : darkSurfaceVariant;
-    final resolvedBorder = amoled ? amoledBorder : darkBorder;
+    final useDynamic = dynamicColorScheme != null;
+    final ColorScheme colorScheme;
+    final Color resolvedBackground;
+    final Color resolvedSurface;
+    final Color resolvedSurfaceVariant;
+    final Color resolvedBorder;
 
-    final colorScheme = ColorScheme.dark(
-      primary: t.primaryDark,
-      onPrimary: t.onPrimaryDark,
-      primaryContainer: t.primaryContainerDark,
-      onPrimaryContainer: t.onPrimaryContainerDark,
-      secondary: t.secondaryDark,
-      onSecondary: t.onSecondaryDark,
-      secondaryContainer: t.secondaryContainerDark,
-      onSecondaryContainer: t.onSecondaryContainerDark,
-      surface: resolvedSurface,
-      onSurface: darkTextPrimary,
-      onSurfaceVariant: darkTextSecondary,
-      surfaceContainerHighest: resolvedSurfaceVariant,
-      outline: resolvedBorder,
-      outlineVariant: resolvedBorder,
-      error: errorDark,
-      onError: const Color(0xFF450A0A),
-    );
+    if (useDynamic && amoled) {
+      final harmonized = dynamicColorScheme.harmonized();
+      resolvedBackground = amoledBackground;
+      resolvedSurface = amoledSurface;
+      resolvedSurfaceVariant = amoledSurfaceVariant;
+      resolvedBorder = amoledBorder;
+      // Preserve true #000000 AMOLED canvas & #0A0A0A cards while applying wallpaper accents.
+      colorScheme = ColorScheme.dark(
+        primary: harmonized.primary,
+        onPrimary: harmonized.onPrimary,
+        primaryContainer: harmonized.primaryContainer,
+        onPrimaryContainer: harmonized.onPrimaryContainer,
+        secondary: harmonized.secondary,
+        onSecondary: harmonized.onSecondary,
+        secondaryContainer: harmonized.secondaryContainer,
+        onSecondaryContainer: harmonized.onSecondaryContainer,
+        surface: resolvedSurface,
+        onSurface: darkTextPrimary,
+        onSurfaceVariant: darkTextSecondary,
+        surfaceContainerHighest: resolvedSurfaceVariant,
+        outline: resolvedBorder,
+        outlineVariant: resolvedBorder,
+        error: errorDark,
+        onError: const Color(0xFF450A0A),
+      );
+    } else if (useDynamic) {
+      final harmonized = dynamicColorScheme.harmonized();
+      colorScheme = harmonized.copyWith(outline: harmonized.outlineVariant);
+      resolvedBackground = colorScheme.surface;
+      resolvedSurface = colorScheme.surfaceContainerLow;
+      resolvedSurfaceVariant = colorScheme.surfaceContainerHighest;
+      resolvedBorder = colorScheme.outline;
+    } else {
+      resolvedBackground = amoled ? amoledBackground : darkBackground;
+      resolvedSurface = amoled ? amoledSurface : darkSurface;
+      resolvedSurfaceVariant =
+          amoled ? amoledSurfaceVariant : darkSurfaceVariant;
+      resolvedBorder = amoled ? amoledBorder : darkBorder;
+
+      colorScheme = ColorScheme.dark(
+        primary: t.primaryDark,
+        onPrimary: t.onPrimaryDark,
+        primaryContainer: t.primaryContainerDark,
+        onPrimaryContainer: t.onPrimaryContainerDark,
+        secondary: t.secondaryDark,
+        onSecondary: t.onSecondaryDark,
+        secondaryContainer: t.secondaryContainerDark,
+        onSecondaryContainer: t.onSecondaryContainerDark,
+        surface: resolvedSurface,
+        onSurface: darkTextPrimary,
+        onSurfaceVariant: darkTextSecondary,
+        surfaceContainerHighest: resolvedSurfaceVariant,
+        outline: resolvedBorder,
+        outlineVariant: resolvedBorder,
+        error: errorDark,
+        onError: const Color(0xFF450A0A),
+      );
+    }
+
+    final resolvedTextPrimary = colorScheme.onSurface;
+    final resolvedTextSecondary = colorScheme.onSurfaceVariant;
 
     final baseTextTheme = GoogleFonts.plusJakartaSansTextTheme(
       ThemeData.dark().textTheme,
     ).apply(
-      bodyColor: darkTextPrimary,
-      displayColor: darkTextPrimary,
+      bodyColor: resolvedTextPrimary,
+      displayColor: resolvedTextPrimary,
     );
 
     return ThemeData(
@@ -693,17 +782,17 @@ class AppTheme {
       brightness: Brightness.dark,
       colorScheme: colorScheme,
       scaffoldBackgroundColor: resolvedBackground,
-      textTheme: _buildTextTheme(baseTextTheme, darkTextSecondary),
+      textTheme: _buildTextTheme(baseTextTheme, resolvedTextSecondary),
       appBarTheme: AppBarTheme(
         backgroundColor: resolvedBackground,
-        foregroundColor: darkTextPrimary,
+        foregroundColor: resolvedTextPrimary,
         elevation: 0,
         scrolledUnderElevation: 0,
         centerTitle: false,
         titleTextStyle: GoogleFonts.plusJakartaSans(
           fontSize: 20,
           fontWeight: FontWeight.w700,
-          color: darkTextPrimary,
+          color: resolvedTextPrimary,
           letterSpacing: -0.4,
         ),
       ),
@@ -717,8 +806,8 @@ class AppTheme {
         ),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: t.primaryDark,
-        foregroundColor: t.onPrimaryDark,
+        backgroundColor: colorScheme.primary,
+        foregroundColor: colorScheme.onPrimary,
         elevation: 0,
         focusElevation: 0,
         hoverElevation: 0,
@@ -737,14 +826,14 @@ class AppTheme {
         labelStyle: GoogleFonts.plusJakartaSans(
           fontSize: 13,
           fontWeight: FontWeight.w500,
-          color: darkTextPrimary,
+          color: resolvedTextPrimary,
         ),
       ),
       checkboxTheme: CheckboxThemeData(
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(6),
         ),
-        side: const BorderSide(color: darkTextSecondary, width: 1.5),
+        side: BorderSide(color: resolvedTextSecondary, width: 1.5),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
@@ -763,15 +852,15 @@ class AppTheme {
         ),
         focusedBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: t.primaryDark, width: 1.5),
+          borderSide: BorderSide(color: colorScheme.primary, width: 1.5),
         ),
         errorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: errorDark, width: 1),
+          borderSide: BorderSide(color: colorScheme.error, width: 1),
         ),
         focusedErrorBorder: OutlineInputBorder(
           borderRadius: BorderRadius.circular(12),
-          borderSide: const BorderSide(color: errorDark, width: 1.5),
+          borderSide: BorderSide(color: colorScheme.error, width: 1.5),
         ),
       ),
       bottomSheetTheme: BottomSheetThemeData(
@@ -786,11 +875,11 @@ class AppTheme {
         behavior: SnackBarBehavior.floating,
         backgroundColor: resolvedSurfaceVariant,
         contentTextStyle: GoogleFonts.plusJakartaSans(
-          color: darkTextPrimary,
+          color: resolvedTextPrimary,
           fontSize: 14,
           fontWeight: FontWeight.w500,
         ),
-        actionTextColor: t.primaryDark,
+        actionTextColor: colorScheme.primary,
         shape: RoundedRectangleBorder(
           borderRadius: BorderRadius.circular(12),
           side: BorderSide(color: resolvedBorder, width: 1),

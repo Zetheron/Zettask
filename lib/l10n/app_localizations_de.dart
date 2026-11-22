@@ -1611,4 +1611,11 @@ class AppLocalizationsDe extends AppLocalizations {
 
   @override
   String get appGuideSubtitle => 'Kurze Zettask-Einführung erneut ansehen';
+
+  @override
+  String get dynamicColorTitle => 'Material You (Hintergrundfarbe)';
+
+  @override
+  String get dynamicColorSubtitle =>
+      'Akzentfarben an dein Geräte-Hintergrundbild anpassen (Android 12+)';
 }

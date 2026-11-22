@@ -24,7 +24,14 @@ class ThemeSettingsScreen extends StatelessWidget {
       ThemeMode.light => false,
       ThemeMode.system => platformBrightness == Brightness.dark,
     };
-    return isDark ? themeProvider.darkTheme : themeProvider.lightTheme;
+    final dynamicScope = DynamicColorScope.maybeOf(context);
+    return isDark
+        ? themeProvider.buildDarkTheme(
+            dynamicColorScheme: dynamicScope?.darkDynamic,
+          )
+        : themeProvider.buildLightTheme(
+            dynamicColorScheme: dynamicScope?.lightDynamic,
+          );
   }
 
   (String, String) _presetCopy(AppThemePreset preset, AppLocalizations l10n) {
@@ -122,8 +129,9 @@ class ThemeSettingsScreen extends StatelessWidget {
     final subscriptionProvider = context.watch<SubscriptionProvider?>();
     final isPro = subscriptionProvider?.isPro ?? false;
     final previewTheme = _resolvePreviewTheme(context, themeProvider);
-    final activeBadgeName =
-        themeProvider.accentColor == ProAccentColor.monochrome
+    final activeBadgeName = themeProvider.useDynamicColor
+        ? 'Material You'
+        : themeProvider.accentColor == ProAccentColor.monochrome
             ? _presetCopy(themeProvider.preset, l10n).$1
             : _accentLabel(themeProvider.accentColor, l10n);
 
@@ -192,7 +200,8 @@ class ThemeSettingsScreen extends StatelessWidget {
               ),
               itemBuilder: (context, index) {
                 final preset = AppThemePreset.values[index];
-                final isSelected = themeProvider.preset == preset;
+                final isSelected =
+                    !themeProvider.useDynamicColor && themeProvider.preset == preset;
                 final (label, desc) = _presetCopy(preset, l10n);
                 return _PresetCard(
                   preset: preset,
@@ -254,6 +263,42 @@ class ThemeSettingsScreen extends StatelessWidget {
                 ),
               ),
             ),
+            const SizedBox(height: 10),
+            Material(
+              color: colorScheme.surface,
+              elevation: 0,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(14),
+                side: BorderSide(color: colorScheme.outline, width: 1),
+              ),
+              clipBehavior: Clip.antiAlias,
+              child: SwitchListTile(
+                key: const ValueKey('dynamic_color_switch'),
+                value: themeProvider.useDynamicColor,
+                onChanged: themeProvider.setUseDynamicColor,
+                contentPadding: const EdgeInsets.symmetric(
+                  horizontal: 14,
+                  vertical: 4,
+                ),
+                secondary: Icon(
+                  Icons.wallpaper_outlined,
+                  size: 20,
+                  color: themeProvider.useDynamicColor
+                      ? colorScheme.primary
+                      : colorScheme.onSurfaceVariant,
+                ),
+                title: Text(
+                  l10n.dynamicColorTitle,
+                  style: theme.textTheme.titleMedium?.copyWith(
+                    fontSize: 14.5,
+                  ),
+                ),
+                subtitle: Text(
+                  l10n.dynamicColorSubtitle,
+                  style: theme.textTheme.bodySmall,
+                ),
+              ),
+            ),
             const SizedBox(height: 22),
             _SectionHeader(title: l10n.customAccentSection),
             const SizedBox(height: 8),
@@ -266,7 +311,8 @@ class ThemeSettingsScreen extends StatelessWidget {
                     key: ValueKey('accent_chip_${accent.key}'),
                     accent: accent,
                     label: _accentLabel(accent, l10n),
-                    isSelected: themeProvider.accentColor == accent,
+                    isSelected: !themeProvider.useDynamicColor &&
+                        themeProvider.accentColor == accent,
                     showProBadge: accent.isPro && !isPro,
                     onTap: () => _handleSelectAccent(
                       context,

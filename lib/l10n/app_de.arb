@@ -484,5 +484,7 @@
   "onboardingSlide3Title": "Schnell, offline und privat",
   "onboardingSlide3Body": "Alle Daten bleiben zuerst lokal auf deinem Gerät. Kein Konto nötig und sofort ohne Internet bereit.",
   "appGuideTitle": "App-Einführung",
-  "appGuideSubtitle": "Kurze Zettask-Einführung erneut ansehen"
+  "appGuideSubtitle": "Kurze Zettask-Einführung erneut ansehen",
+  "dynamicColorTitle": "Material You (Hintergrundfarbe)",
+  "dynamicColorSubtitle": "Akzentfarben an dein Geräte-Hintergrundbild anpassen (Android 12+)"
 }

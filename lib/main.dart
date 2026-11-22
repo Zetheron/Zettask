@@ -1,3 +1,4 @@
+import 'package:dynamic_color/dynamic_color.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:material_ui/material_ui.dart';
@@ -38,18 +39,20 @@ export 'providers/theme_provider.dart'
         prefThemeAmoledKey,
         prefThemeAccentKey,
         prefWidgetStyleKey,
+        prefUseDynamicColorKey,
         parseThemeMode,
         serializeThemeMode;
 
-Future<(ThemeMode, AppThemePreset)> _loadSavedThemeConfig() async {
+Future<(ThemeMode, AppThemePreset, bool)> _loadSavedThemeConfig() async {
   try {
     final prefs = await SharedPreferences.getInstance();
     final mode = parseThemeMode(prefs.getString(prefThemeModeKey));
     final preset =
         AppThemePreset.fromStorage(prefs.getString(prefThemePresetKey));
-    return (mode, preset);
+    final useDynamicColor = prefs.getBool(prefUseDynamicColorKey) ?? false;
+    return (mode, preset, useDynamicColor);
   } catch (_) {
-    return (ThemeMode.system, AppThemePreset.defaultIndigo);
+    return (ThemeMode.system, AppThemePreset.defaultIndigo, false);
   }
 }
 
@@ -69,7 +72,8 @@ Future<void> main() async {
   await initializeDateFormatting();
   await _initFirebaseSafely();
   await NotificationService.instance.init();
-  final (initialThemeMode, initialPreset) = await _loadSavedThemeConfig();
+  final (initialThemeMode, initialPreset, initialUseDynamicColor) =
+      await _loadSavedThemeConfig();
   final initialLocale = await LocaleProvider.loadStoredLocale();
   final initialHasSeenOnboarding =
       await OnboardingService.instance.hasSeenOnboarding();
@@ -77,6 +81,7 @@ Future<void> main() async {
     ZettaskApp(
       initialThemeMode: initialThemeMode,
       initialThemePreset: initialPreset,
+      initialUseDynamicColor: initialUseDynamicColor,
       initialLocale: initialLocale,
       initialHasSeenOnboarding: initialHasSeenOnboarding,
     ),
@@ -101,6 +106,7 @@ class ZettaskApp extends StatefulWidget {
     this.initialDate,
     this.initialThemeMode,
     this.initialThemePreset,
+    this.initialUseDynamicColor,
     this.initialLocale,
     this.initialHasSeenOnboarding = true,
     this.nowProvider,
@@ -121,6 +127,7 @@ class ZettaskApp extends StatefulWidget {
   final DateTime? initialDate;
   final ThemeMode? initialThemeMode;
   final AppThemePreset? initialThemePreset;
+  final bool? initialUseDynamicColor;
   final Locale? initialLocale;
   final bool initialHasSeenOnboarding;
   final DateTime Function()? nowProvider;
@@ -152,6 +159,7 @@ class _ZettaskAppState extends State<ZettaskApp> {
     _themeProvider = ThemeProvider(
       initialThemeMode: widget.initialThemeMode ?? ThemeMode.system,
       initialPreset: widget.initialThemePreset ?? AppThemePreset.defaultIndigo,
+      initialUseDynamicColor: widget.initialUseDynamicColor ?? false,
       homeWidgetStyleService: styleService,
     );
 
@@ -223,6 +231,7 @@ class _ZettaskAppState extends State<ZettaskApp> {
     await _themeProvider.loadSavedPreferences(
       restoreMode: widget.initialThemeMode == null,
       restorePreset: widget.initialThemePreset == null,
+      restoreDynamicColor: widget.initialUseDynamicColor == null,
       restoreProOptions: true,
       isPro: isPro,
     );
@@ -283,46 +292,58 @@ class _ZettaskAppState extends State<ZettaskApp> {
       ],
       child: Consumer2<ThemeProvider, LocaleProvider>(
         builder: (context, themeProvider, localeProvider, _) {
-          return MaterialApp(
-            title: 'Zettask',
-            debugShowCheckedModeBanner: false,
-            theme: themeProvider.lightTheme,
-            darkTheme: themeProvider.darkTheme,
-            themeMode: themeProvider.themeMode,
-            locale: localeProvider.currentLocale,
-            supportedLocales: AppLocalizations.supportedLocales,
-            localizationsDelegates: zettaskLocalizationsDelegates,
-            localeResolutionCallback: (deviceLocale, supportedLocales) {
-              return LocaleProvider.resolveEffectiveLocale(
-                localeProvider.currentLocale,
-                deviceLocale,
+          return DynamicColorBuilder(
+            builder: (ColorScheme? lightDynamic, ColorScheme? darkDynamic) {
+              return DynamicColorScope(
+                lightDynamic: lightDynamic,
+                darkDynamic: darkDynamic,
+                child: MaterialApp(
+                  title: 'Zettask',
+                  debugShowCheckedModeBanner: false,
+                  theme: themeProvider.buildLightTheme(
+                    dynamicColorScheme: lightDynamic,
+                  ),
+                  darkTheme: themeProvider.buildDarkTheme(
+                    dynamicColorScheme: darkDynamic,
+                  ),
+                  themeMode: themeProvider.themeMode,
+                  locale: localeProvider.currentLocale,
+                  supportedLocales: AppLocalizations.supportedLocales,
+                  localizationsDelegates: zettaskLocalizationsDelegates,
+                  localeResolutionCallback: (deviceLocale, supportedLocales) {
+                    return LocaleProvider.resolveEffectiveLocale(
+                      localeProvider.currentLocale,
+                      deviceLocale,
+                    );
+                  },
+                  home: AppLockGate(
+                    child: AnimatedSwitcher(
+                      duration: const Duration(milliseconds: 240),
+                      switchInCurve: Curves.easeOutCubic,
+                      switchOutCurve: Curves.easeIn,
+                      child: _hasSeenOnboarding
+                          ? MainShell(
+                              key: const ValueKey('zettask_main_shell'),
+                              themeMode: themeProvider.themeMode,
+                              onToggleTheme: themeProvider.toggleThemeMode,
+                              onSelectThemeMode: themeProvider.setThemeMode,
+                              autoLoad: widget.autoLoadTasks,
+                              homeWidgetService: widget.homeWidgetService,
+                            )
+                          : OnboardingScreen(
+                              key: const ValueKey('zettask_onboarding_screen'),
+                              onboardingService: widget.onboardingService,
+                              onCompleted: () {
+                                if (mounted) {
+                                  setState(() => _hasSeenOnboarding = true);
+                                }
+                              },
+                            ),
+                    ),
+                  ),
+                ),
               );
             },
-            home: AppLockGate(
-              child: AnimatedSwitcher(
-                duration: const Duration(milliseconds: 240),
-                switchInCurve: Curves.easeOutCubic,
-                switchOutCurve: Curves.easeIn,
-                child: _hasSeenOnboarding
-                    ? MainShell(
-                        key: const ValueKey('zettask_main_shell'),
-                        themeMode: themeProvider.themeMode,
-                        onToggleTheme: themeProvider.toggleThemeMode,
-                        onSelectThemeMode: themeProvider.setThemeMode,
-                        autoLoad: widget.autoLoadTasks,
-                        homeWidgetService: widget.homeWidgetService,
-                      )
-                    : OnboardingScreen(
-                        key: const ValueKey('zettask_onboarding_screen'),
-                        onboardingService: widget.onboardingService,
-                        onCompleted: () {
-                          if (mounted) {
-                            setState(() => _hasSeenOnboarding = true);
-                          }
-                        },
-                      ),
-              ),
-            ),
           );
         },
       ),

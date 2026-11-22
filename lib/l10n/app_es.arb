@@ -484,5 +484,7 @@
   "onboardingSlide3Title": "Rápido, sin conexión y privado",
   "onboardingSlide3Body": "Tus datos se guardan primero en tu dispositivo. Sin cuenta obligatoria y listo sin internet.",
   "appGuideTitle": "Guía de la app",
-  "appGuideSubtitle": "Volver a ver la guía rápida de Zettask"
+  "appGuideSubtitle": "Volver a ver la guía rápida de Zettask",
+  "dynamicColorTitle": "Material You (Color del fondo)",
+  "dynamicColorSubtitle": "Ajusta los colores de acento al fondo de pantalla (Android 12+)"
 }

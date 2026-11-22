@@ -484,5 +484,7 @@
   "onboardingSlide3Title": "Швидко, офлайн і приватно",
   "onboardingSlide3Body": "Усі дані зберігаються локально на вашому пристрої. Без обов'язкового акаунта та без інтернету.",
   "appGuideTitle": "Посібник додатку",
-  "appGuideSubtitle": "Переглянути короткий вступ Zettask ще раз"
+  "appGuideSubtitle": "Переглянути короткий вступ Zettask ще раз",
+  "dynamicColorTitle": "Material You (Колір шпалер)",
+  "dynamicColorSubtitle": "Підлаштовувати акцентні кольори під шпалери пристрою (Android 12+)"
 }

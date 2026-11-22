@@ -484,5 +484,7 @@
   "onboardingSlide3Title": "מהיר, אופליין ופרטי",
   "onboardingSlide3Body": "הנתונים נשמרים קודם כל מקומית במכשיר שלך. בלי צורך בחשבון ומוכן גם ללא אינטרנט.",
   "appGuideTitle": "מדריך האפליקציה",
-  "appGuideSubtitle": "הפעל מחדש את ההיכרות הקצרה עם Zettask"
+  "appGuideSubtitle": "הפעל מחדש את ההיכרות הקצרה עם Zettask",
+  "dynamicColorTitle": "Material You (צבע טפט)",
+  "dynamicColorSubtitle": "התאמת צבעי הדגשה לטפט המכשיר שלך (Android 12+)"
 }

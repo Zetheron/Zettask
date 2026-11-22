@@ -1556,4 +1556,11 @@ class AppLocalizationsKo extends AppLocalizations {
 
   @override
   String get appGuideSubtitle => 'Zettask 간단 안내 다시 보기';
+
+  @override
+  String get dynamicColorTitle => 'Material You(배경화면 색상)';
+
+  @override
+  String get dynamicColorSubtitle =>
+      '기기 배경화면에 맞춰 강조 색상을 자동 조정합니다 (Android 12+)';
 }

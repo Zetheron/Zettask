@@ -3034,6 +3034,18 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Replay the quick Zettask walkthrough'**
   String get appGuideSubtitle;
+
+  /// No description provided for @dynamicColorTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Material You (Wallpaper Color)'**
+  String get dynamicColorTitle;
+
+  /// No description provided for @dynamicColorSubtitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Match accent colors with your device wallpaper (Android 12+)'**
+  String get dynamicColorSubtitle;
 }
 
 class _AppLocalizationsDelegate

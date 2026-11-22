@@ -9,6 +9,7 @@ const String prefThemePresetKey = 'zettask_theme_preset';
 const String prefThemeAmoledKey = 'zettask_theme_amoled';
 const String prefThemeAccentKey = 'zettask_theme_accent';
 const String prefWidgetStyleKey = 'zettask_widget_style';
+const String prefUseDynamicColorKey = 'use_dynamic_color';
 
 ThemeMode parseThemeMode(String? rawValue) {
   return switch (rawValue) {
@@ -33,12 +34,14 @@ class ThemeProvider extends ChangeNotifier {
     bool initialAmoledBlack = false,
     ProAccentColor initialAccentColor = ProAccentColor.monochrome,
     WidgetStyle initialWidgetStyle = WidgetStyle.standard,
+    bool initialUseDynamicColor = false,
     this.homeWidgetStyleService,
   })  : _themeMode = initialThemeMode,
         _preset = initialPreset,
         _isAmoledBlack = initialAmoledBlack,
         _accentColor = initialAccentColor,
-        _widgetStyle = initialWidgetStyle;
+        _widgetStyle = initialWidgetStyle,
+        _useDynamicColor = initialUseDynamicColor;
 
   final HomeWidgetStyleService? homeWidgetStyleService;
 
@@ -47,23 +50,35 @@ class ThemeProvider extends ChangeNotifier {
   bool _isAmoledBlack;
   ProAccentColor _accentColor;
   WidgetStyle _widgetStyle;
+  bool _useDynamicColor;
 
   ThemeMode get themeMode => _themeMode;
   AppThemePreset get preset => _preset;
   bool get isAmoledBlack => _isAmoledBlack;
   ProAccentColor get accentColor => _accentColor;
   WidgetStyle get widgetStyle => _widgetStyle;
+  bool get useDynamicColor => _useDynamicColor;
 
-  ThemeData get lightTheme => AppTheme.lightThemeFor(
-        _preset,
-        accentColor: _accentColor,
-      );
+  ThemeData get lightTheme => buildLightTheme();
 
-  ThemeData get darkTheme => AppTheme.darkThemeFor(
-        _preset,
-        amoled: _isAmoledBlack,
-        accentColor: _accentColor,
-      );
+  ThemeData get darkTheme => buildDarkTheme();
+
+  ThemeData buildLightTheme({ColorScheme? dynamicColorScheme}) {
+    return AppTheme.lightThemeFor(
+      _preset,
+      accentColor: _accentColor,
+      dynamicColorScheme: _useDynamicColor ? dynamicColorScheme : null,
+    );
+  }
+
+  ThemeData buildDarkTheme({ColorScheme? dynamicColorScheme}) {
+    return AppTheme.darkThemeFor(
+      _preset,
+      amoled: _isAmoledBlack,
+      accentColor: _accentColor,
+      dynamicColorScheme: _useDynamicColor ? dynamicColorScheme : null,
+    );
+  }
 
   String themeModeLabel(Brightness platformBrightness) {
     return switch (_themeMode) {
@@ -80,6 +95,7 @@ class ThemeProvider extends ChangeNotifier {
     bool restoreMode = true,
     bool restorePreset = true,
     bool restoreProOptions = true,
+    bool restoreDynamicColor = true,
     bool isPro = true,
   }) async {
     try {
@@ -97,6 +113,13 @@ class ThemeProvider extends ChangeNotifier {
             AppThemePreset.fromStorage(prefs.getString(prefThemePresetKey));
         if (savedPreset != _preset) {
           _preset = savedPreset;
+          changed = true;
+        }
+      }
+      if (restoreDynamicColor) {
+        final savedDynamic = prefs.getBool(prefUseDynamicColorKey) ?? false;
+        if (savedDynamic != _useDynamicColor) {
+          _useDynamicColor = savedDynamic;
           changed = true;
         }
       }
@@ -144,12 +167,17 @@ class ThemeProvider extends ChangeNotifier {
   }
 
   Future<void> setPreset(AppThemePreset preset) async {
-    if (_preset == preset) return;
+    if (_preset == preset && !_useDynamicColor) return;
+    final disabledDynamic = _useDynamicColor;
     _preset = preset;
+    _useDynamicColor = false;
     notifyListeners();
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(prefThemePresetKey, preset.key);
+      if (disabledDynamic) {
+        await prefs.setBool(prefUseDynamicColorKey, false);
+      }
     } catch (_) {
       // Ignore storage write failures.
     }
@@ -167,13 +195,30 @@ class ThemeProvider extends ChangeNotifier {
     }
   }
 
+  Future<void> setUseDynamicColor(bool value) async {
+    if (_useDynamicColor == value) return;
+    _useDynamicColor = value;
+    notifyListeners();
+    try {
+      final prefs = await SharedPreferences.getInstance();
+      await prefs.setBool(prefUseDynamicColorKey, value);
+    } catch (_) {
+      // Ignore storage write failures.
+    }
+  }
+
   Future<void> setAccentColor(ProAccentColor accent) async {
-    if (_accentColor == accent) return;
+    if (_accentColor == accent && !_useDynamicColor) return;
+    final disabledDynamic = _useDynamicColor;
     _accentColor = accent;
+    _useDynamicColor = false;
     notifyListeners();
     try {
       final prefs = await SharedPreferences.getInstance();
       await prefs.setString(prefThemeAccentKey, accent.key);
+      if (disabledDynamic) {
+        await prefs.setBool(prefUseDynamicColorKey, false);
+      }
     } catch (_) {
       // Ignore storage write failures.
     }

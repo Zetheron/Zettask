@@ -643,8 +643,9 @@ class WorkspaceScreen extends StatelessWidget {
                       icon: Icons.palette_outlined,
                       iconColor: colorScheme.primary,
                       title: l10n.themeTitle,
-                      subtitle:
-                          '${_themeModeLabel(context, l10n)} · ${themeProvider.preset.label}',
+                      subtitle: themeProvider.useDynamicColor
+                          ? '${_themeModeLabel(context, l10n)} · Material You'
+                          : '${_themeModeLabel(context, l10n)} · ${themeProvider.preset.label}',
                       onTap: () => _openThemeSettings(context),
                     ),
                   ],

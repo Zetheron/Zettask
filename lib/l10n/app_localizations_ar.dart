@@ -1593,4 +1593,11 @@ class AppLocalizationsAr extends AppLocalizations {
 
   @override
   String get appGuideSubtitle => 'إعادة عرض الجولة السريعة لتطبيق Zettask';
+
+  @override
+  String get dynamicColorTitle => 'Material You (لون الخلفية)';
+
+  @override
+  String get dynamicColorSubtitle =>
+      'مطابقة ألوان التمييز مع خلفية جهازك (Android 12+)';
 }

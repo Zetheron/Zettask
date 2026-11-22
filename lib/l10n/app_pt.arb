@@ -484,5 +484,7 @@
   "onboardingSlide3Title": "Rápido, offline e privado",
   "onboardingSlide3Body": "Os seus dados ficam primeiro no dispositivo. Sem conta obrigatória e pronto mesmo sem internet.",
   "appGuideTitle": "Guia da aplicação",
-  "appGuideSubtitle": "Rever o guia rápido do Zettask"
+  "appGuideSubtitle": "Rever o guia rápido do Zettask",
+  "dynamicColorTitle": "Material You (Cor do papel de parede)",
+  "dynamicColorSubtitle": "Adapte as cores de destaque ao papel de parede do dispositivo (Android 12+)"
 }

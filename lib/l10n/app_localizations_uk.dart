@@ -1599,4 +1599,11 @@ class AppLocalizationsUk extends AppLocalizations {
 
   @override
   String get appGuideSubtitle => 'Переглянути короткий вступ Zettask ще раз';
+
+  @override
+  String get dynamicColorTitle => 'Material You (Колір шпалер)';
+
+  @override
+  String get dynamicColorSubtitle =>
+      'Підлаштовувати акцентні кольори під шпалери пристрою (Android 12+)';
 }

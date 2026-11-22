@@ -484,5 +484,7 @@
   "onboardingSlide3Title": "快速、离线且注重隐私",
   "onboardingSlide3Body": "所有数据优先保存在本地设备。无需账号，没有网络也能流畅使用。",
   "appGuideTitle": "应用指南",
-  "appGuideSubtitle": "重新查看 Zettask 快速引导"
+  "appGuideSubtitle": "重新查看 Zettask 快速引导",
+  "dynamicColorTitle": "Material You（壁纸取色）",
+  "dynamicColorSubtitle": "根据设备壁纸自动调整强调色（Android 12+）"
 }

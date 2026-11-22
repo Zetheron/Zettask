@@ -1597,4 +1597,11 @@ class AppLocalizationsRu extends AppLocalizations {
 
   @override
   String get appGuideSubtitle => 'Повторить краткое знакомство с Zettask';
+
+  @override
+  String get dynamicColorTitle => 'Material You (Цвет обоев)';
+
+  @override
+  String get dynamicColorSubtitle =>
+      'Подбирать акцентные цвета под обои устройства (Android 12+)';
 }

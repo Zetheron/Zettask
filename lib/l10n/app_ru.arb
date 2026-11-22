@@ -484,5 +484,7 @@
   "onboardingSlide3Title": "Быстро, офлайн и приватно",
   "onboardingSlide3Body": "Все данные хранятся локально на вашем устройстве. Аккаунт не требуется, работает без интернета.",
   "appGuideTitle": "Гид по приложению",
-  "appGuideSubtitle": "Повторить краткое знакомство с Zettask"
+  "appGuideSubtitle": "Повторить краткое знакомство с Zettask",
+  "dynamicColorTitle": "Material You (Цвет обоев)",
+  "dynamicColorSubtitle": "Подбирать акцентные цвета под обои устройства (Android 12+)"
 }

@@ -484,5 +484,7 @@
   "onboardingSlide3Title": "Nhanh, ngoại tuyến và riêng tư",
   "onboardingSlide3Body": "Mọi dữ liệu được lưu cục bộ trên thiết bị của bạn trước. Không cần tài khoản và dùng ngay không cần mạng.",
   "appGuideTitle": "Hướng dẫn ứng dụng",
-  "appGuideSubtitle": "Xem lại giới thiệu ngắn về Zettask"
+  "appGuideSubtitle": "Xem lại giới thiệu ngắn về Zettask",
+  "dynamicColorTitle": "Material You (Màu hình nền)",
+  "dynamicColorSubtitle": "Đồng bộ màu nhấn theo hình nền thiết bị (Android 12+)"
 }

@@ -484,5 +484,7 @@
   "onboardingSlide3Title": "高速・オフライン・安心のプライバシー",
   "onboardingSlide3Body": "データは端末内にローカル保存されます。アカウント登録不要でオフラインでも軽快に動作します。",
   "appGuideTitle": "アプリガイド",
-  "appGuideSubtitle": "Zettaskの簡単なガイドをもう一度見る"
+  "appGuideSubtitle": "Zettaskの簡単なガイドをもう一度見る",
+  "dynamicColorTitle": "Material You（壁紙カラー）",
+  "dynamicColorSubtitle": "端末の壁紙に合わせてアクセントカラーを調整（Android 12+）"
 }

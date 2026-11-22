@@ -1600,4 +1600,11 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get appGuideSubtitle => 'Replay the quick Zettask walkthrough';
+
+  @override
+  String get dynamicColorTitle => 'Material You (Wallpaper Color)';
+
+  @override
+  String get dynamicColorSubtitle =>
+      'Match accent colors with your device wallpaper (Android 12+)';
 }

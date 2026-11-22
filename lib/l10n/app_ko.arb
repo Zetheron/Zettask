@@ -484,5 +484,7 @@
   "onboardingSlide3Title": "빠르고 안전한 오프라인 우선",
   "onboardingSlide3Body": "모든 데이터는 기기에 먼저 저장됩니다. 계정 없이도 인터넷 없이 빠르게 사용할 수 있습니다.",
   "appGuideTitle": "앱 가이드",
-  "appGuideSubtitle": "Zettask 간단 안내 다시 보기"
+  "appGuideSubtitle": "Zettask 간단 안내 다시 보기",
+  "dynamicColorTitle": "Material You(배경화면 색상)",
+  "dynamicColorSubtitle": "기기 배경화면에 맞춰 강조 색상을 자동 조정합니다 (Android 12+)"
 }

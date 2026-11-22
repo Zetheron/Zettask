@@ -1597,4 +1597,11 @@ class AppLocalizationsVi extends AppLocalizations {
 
   @override
   String get appGuideSubtitle => 'Xem lại giới thiệu ngắn về Zettask';
+
+  @override
+  String get dynamicColorTitle => 'Material You (Màu hình nền)';
+
+  @override
+  String get dynamicColorSubtitle =>
+      'Đồng bộ màu nhấn theo hình nền thiết bị (Android 12+)';
 }

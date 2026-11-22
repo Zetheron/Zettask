@@ -484,5 +484,7 @@
   "onboardingSlide3Title": "سريع، دون إنترنت، وخاص",
   "onboardingSlide3Body": "تُحفظ بياناتك محليًا على جهازك أولًا. لا حاجة لحساب ويعمل بسرعة حتى دون اتصال.",
   "appGuideTitle": "دليل التطبيق",
-  "appGuideSubtitle": "إعادة عرض الجولة السريعة لتطبيق Zettask"
+  "appGuideSubtitle": "إعادة عرض الجولة السريعة لتطبيق Zettask",
+  "dynamicColorTitle": "Material You (لون الخلفية)",
+  "dynamicColorSubtitle": "مطابقة ألوان التمييز مع خلفية جهازك (Android 12+)"
 }

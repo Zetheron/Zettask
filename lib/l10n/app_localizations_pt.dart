@@ -1605,6 +1605,13 @@ class AppLocalizationsPt extends AppLocalizations {
 
   @override
   String get appGuideSubtitle => 'Rever o guia rápido do Zettask';
+
+  @override
+  String get dynamicColorTitle => 'Material You (Cor do papel de parede)';
+
+  @override
+  String get dynamicColorSubtitle =>
+      'Adapte as cores de destaque ao papel de parede do dispositivo (Android 12+)';
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -3206,4 +3213,11 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
 
   @override
   String get appGuideSubtitle => 'Rever a apresentação rápida do Zettask';
+
+  @override
+  String get dynamicColorTitle => 'Material You (Cor do papel de parede)';
+
+  @override
+  String get dynamicColorSubtitle =>
+      'Adapte as cores de destaque ao papel de parede do dispositivo (Android 12+)';
 }

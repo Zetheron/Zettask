@@ -1605,4 +1605,11 @@ class AppLocalizationsEs extends AppLocalizations {
 
   @override
   String get appGuideSubtitle => 'Volver a ver la guía rápida de Zettask';
+
+  @override
+  String get dynamicColorTitle => 'Material You (Color del fondo)';
+
+  @override
+  String get dynamicColorSubtitle =>
+      'Ajusta los colores de acento al fondo de pantalla (Android 12+)';
 }

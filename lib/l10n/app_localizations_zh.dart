@@ -1538,4 +1538,10 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get appGuideSubtitle => '重新查看 Zettask 快速引导';
+
+  @override
+  String get dynamicColorTitle => 'Material You（壁纸取色）';
+
+  @override
+  String get dynamicColorSubtitle => '根据设备壁纸自动调整强调色（Android 12+）';
 }

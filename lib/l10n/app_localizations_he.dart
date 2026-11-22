@@ -1582,4 +1582,11 @@ class AppLocalizationsHe extends AppLocalizations {
 
   @override
   String get appGuideSubtitle => 'הפעל מחדש את ההיכרות הקצרה עם Zettask';
+
+  @override
+  String get dynamicColorTitle => 'Material You (צבע טפט)';
+
+  @override
+  String get dynamicColorSubtitle =>
+      'התאמת צבעי הדגשה לטפט המכשיר שלך (Android 12+)';
 }
