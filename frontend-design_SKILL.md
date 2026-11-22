@@ -1,46 +1,46 @@
 ---
 name: frontend-design
-description: Craft refined, production-grade Flutter mobile UI for Zettask (and clean static web pages in docs/) with flagship minimalist precision, avoiding generic Material boilerplate and "AI slop" aesthetics.
+description: Craft expressive, tactile, production-grade Material 3 Expressive Flutter UI for Zettask (and clean editorial static web pages in docs/) while preserving daily speed, readability, and 16-language stability.
 ---
 
-This skill guides the design and refinement of **Zettask**—a fast, calm, offline-first productivity app. Every visual decision must serve clarity, speed, and daily comfort while avoiding both generic default Material UI and loud, distracting web-style gimmicks.
+This skill guides the design and evolution of **Zettask**—a fast, calm, offline-first Android productivity app built with **Material 3 Expressive**. Every visual decision must feel alive, tactile, and unmistakably modern Android without sacrificing task-capture speed or causing visual clutter.
 
 Always respect the project architecture and constraints in `GEMINI.md`.
 
 ## Design Thinking (Locked Aesthetic Direction)
 
-Before writing UI code, align every component with Zettask's core identity:
-- **Purpose**: Help users capture, organize, and complete daily tasks in seconds without visual fatigue.
-- **Tone**: **Refined Swiss Minimalism** (think Things 3, Linear, or iA Writer)—calm, tactile, disciplined, and razor-sharp. Restraint and precision beat decoration.
-- **Consistency**: All screens (Timeline/Home, Board, Stats, Paywall, Settings) must feel like one cohesive instrument, never a patchwork of different styles.
-- **Constraints**: Flutter Android mobile ergonomics, 60fps performance, 16-language localization (`.arb`), system font scaling, and lean APK size.
+Align every screen and component with Zettask's updated visual identity:
+- **Purpose**: Make capturing, organizing, and completing daily tasks feel rewarding, effortless, and tactile.
+- **Tone**: **Material 3 Expressive**—confident typography, soft tonal surfaces (`surfaceContainer*`), generous rounded/pill geometry, and lively spring-based micro-interactions, balanced with calm breathing room for daily productivity.
+- **Consistency**: Every screen (Timeline/Home, Board, Stats, Settings, Theme Settings, Onboarding) must share the same shape language, tonal surface hierarchy, and spring motion system.
+- **Constraints**: Flutter Android mobile ergonomics, 60fps performance, 16-language localization (`.arb`), system font scaling (`MediaQuery.textScalerOf`), and lean APK size.
 
-## Mobile Aesthetics Guidelines
+## Material 3 Expressive Guidelines
 
 - **Typography & Hierarchy**:
-  - Prioritize crisp hierarchy using weight, letter-spacing, opacity, and scale rather than cluttering the screen with boxes or extra icons.
-  - Use tabular figures (`FontFeature.tabularFigures()`) for timestamps, task counts, progress percentages, and statistics so numbers never jitter.
-  - Keep typography legible across all 16 supported languages and large system font settings (`MediaQuery.textScalerOf`). Do NOT add heavy decorative font files that bloat the APK or lack multilingual glyphs.
-- **Color, Surface & Theme**:
-  - Design natively for **Light**, **Dark**, and **AMOLED Pure Black** (`#000000` canvas, `#0A0A0A` elevated surface, `#1E1E1E` subtle borders).
-  - Respect the active `Theme.of(context).colorScheme` and Zettask's 5 custom accents (`Monochrome`, `Sage`, `Indigo`, `Terracotta`, `Amber`). Use the accent color sparingly for high-intent focal points (primary CTA, active state, completion check).
-  - Prefer crisp `1px` hairline borders and subtle tonal surface shifts over heavy, muddy drop shadows.
-  - Guarantee WCAG AA text contrast on every surface and accent button.
-- **Spatial Composition & Ergonomics**:
-  - Follow a strict `4dp / 8dp` spacing rhythm with generous breathing room around primary content.
-  - Keep interactive touch targets thumb-friendly (minimum `48x48dp`) and reachable for one-handed use.
-  - Never use grid-breaking overlaps, diagonal flows, or experimental asymmetry that obscure task titles, checkboxes, or swipe gestures.
-- **Motion & Micro-Interactions**:
-  - Keep transitions crisp and snappy (`180ms–300ms`, `Curves.easeOutCubic`) so power users never feel slowed down.
-  - Reuse Zettask's existing custom components (`lib/widgets/zettask_loaders.dart` and `lib/widgets/zettask_motion.dart`) instead of default `CircularProgressIndicator` or inconsistent ad-hoc animations.
+  - Use bold, expressive display/headline weights (`Plus Jakarta Sans` bold/extra-bold with tight negative tracking `-0.5` to `-0.8`) for screen titles, dates, and hero stats.
+  - Pair expressive headers with clean, highly legible body text and `FontFeature.tabularFigures()` for timestamps, task counters, streaks, and progress percentages.
+  - Always guard expressive headings against text overflow (`maxLines`, `TextOverflow.ellipsis`, `Flexible`/`Expanded`) across all 16 `.arb` languages and large system text scales.
+- **Tonal Surfaces, Color & Theme**:
+  - Prioritize **tonal surface layering** (`surfaceContainerLowest`, `surfaceContainerLow`, `surfaceContainer`, `surfaceContainerHigh`, `surfaceContainerHighest`) over heavy drop shadows or rigid `1px` wireframe borders.
+  - Design natively for **Light**, **Dark**, **AMOLED Pure Black**, **Material You (Dynamic Color)**, and Zettask's 5 custom accents (`Monochrome`, `Sage`, `Indigo`, `Terracotta`, `Amber`).
+  - **AMOLED Pure Black Rule**: Keep scaffold canvas strictly `#000000`, primary cards `#0A0A0A` to `#121212`, and subtle hairline borders `#1E1E1E` only where tonal contrast needs gentle separation—never wash out AMOLED black into muddy gray.
+  - Use high-contrast `primaryContainer` / `secondaryContainer` fills for active tabs, selected chips, and primary actions while maintaining WCAG AA readability.
+- **Expressive Shape Language & Ergonomics**:
+  - Use generous corner radii: cards & sheets (`20dp–28dp`), interactive tiles (`16dp–20dp`), chips, segmented controls, and primary buttons (`StadiumBorder` / full pill).
+  - Emphasize primary actions with expressive FABs (`16dp–20dp` squircle or pill `ExtendedFloatingActionButton`) and clear `48x48dp` minimum thumb targets.
+  - Keep layouts structured and scannable—never use chaotic overlaps or diagonal grids that obscure checkboxes, task titles, or swipe actions.
+- **Spring Physics & Micro-Interactions**:
+  - Replace rigid linear/standard curves on tactile controls (task checkboxes, FAB press, pill tab selection, bottom sheets, completion celebration) with responsive **spring physics** (`SpringSimulation` / expressive overshoot curves) inside `lib/widgets/zettask_motion.dart`.
+  - Reuse Zettask's custom motion & loader components (`zettask_loaders.dart`, `zettask_motion.dart`).
   - Always respect `MediaQuery.disableAnimationsOf(context)` and dispose every `AnimationController` cleanly.
 
 ## Strict Anti-Patterns (NEVER DO)
 
-- **No Generic AI Slop**: Never use cliched purple-on-white gradients, loud neon glows, gratuitous glassmorphism on dense lists, or unstyled default Material cards with thick elevation shadows.
-- **No Unnecessary Dependencies**: Do not add new `pub.dev` UI/animation packages when Flutter's built-in widgets, `CustomPainter`, and `Sliver` APIs can achieve a cleaner, lighter result.
-- **No Widget Regressions**: When touching Android Home Screen Widgets, stick strictly to `@RemoteView`-compatible XML layouts and drawable resources listed in `keep.xml`.
+- **No Generic Boilerplate or AI Slop**: Never use muddy default elevation shadows, unstyled Material 2 boxes, neon glows, or distracting gradients behind dense task lists.
+- **No Unnecessary Dependencies**: Build expressive shapes and spring physics using Flutter's built-in `Material 3`, `SpringSimulation`, `AnimatedContainer`, and `CustomPainter`—do not bloat `pubspec.yaml` with heavy UI/animation packages.
+- **No Widget Regressions**: Keep Android Home Screen Widgets strictly `@RemoteView`-compatible XML and preserve all resources in `keep.xml`.
 
 ## Web Exception (`docs/` Only)
 
-When explicitly editing static web pages inside `docs/` (landing page, Privacy Policy, Delete Account), you may apply more expressive editorial typography, subtle atmospheric backgrounds, and CSS variables—while still staying faithful to Zettask's calm, high-contrast minimalist brand.
+Static web pages in `docs/` may use clean editorial typography and subtle expressive accents while remaining fast, zero-build HTML/CSS/JS aligned with Zettask's brand.
