@@ -127,7 +127,8 @@ class ThemeSettingsScreen extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
     final themeProvider = context.watch<ThemeProvider>();
     final subscriptionProvider = context.watch<SubscriptionProvider?>();
-    final isPro = subscriptionProvider?.isPro ?? false;
+    final isPro = subscriptionProvider?.isPro ??
+        !SubscriptionProvider.enableProPaywall;
     final previewTheme = _resolvePreviewTheme(context, themeProvider);
     final activeBadgeName = themeProvider.useDynamicColor
         ? 'Material You'
@@ -157,11 +158,13 @@ class ThemeSettingsScreen extends StatelessWidget {
             _SectionHeader(title: l10n.appearanceModeSection),
             const SizedBox(height: 8),
             Container(
-              padding: const EdgeInsets.all(4),
+              padding: const EdgeInsets.all(5),
               decoration: BoxDecoration(
-                color: colorScheme.surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(14),
-                border: Border.all(color: colorScheme.outline, width: 1),
+                color: colorScheme.surfaceContainerHigh,
+                borderRadius: BorderRadius.circular(20),
+                border: AppTheme.isAmoled(theme)
+                    ? Border.all(color: colorScheme.outline, width: 1)
+                    : null,
               ),
               child: Row(
                 children: [
@@ -214,11 +217,11 @@ class ThemeSettingsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 22),
             Material(
-              color: colorScheme.surface,
+              color: colorScheme.surfaceContainerLow,
               elevation: 0,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14),
-                side: BorderSide(color: colorScheme.outline, width: 1),
+                borderRadius: BorderRadius.circular(20),
+                side: AppTheme.cardBorderSide(theme),
               ),
               clipBehavior: Clip.antiAlias,
               child: SwitchListTile(
@@ -231,8 +234,8 @@ class ThemeSettingsScreen extends StatelessWidget {
                   value,
                 ),
                 contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 14,
-                  vertical: 4,
+                  horizontal: 16,
+                  vertical: 6,
                 ),
                 secondary: Icon(
                   Icons.contrast_rounded,
@@ -265,11 +268,11 @@ class ThemeSettingsScreen extends StatelessWidget {
             ),
             const SizedBox(height: 10),
             Material(
-              color: colorScheme.surface,
+              color: colorScheme.surfaceContainerLow,
               elevation: 0,
               shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14),
-                side: BorderSide(color: colorScheme.outline, width: 1),
+                borderRadius: BorderRadius.circular(20),
+                side: AppTheme.cardBorderSide(theme),
               ),
               clipBehavior: Clip.antiAlias,
               child: SwitchListTile(
@@ -277,8 +280,8 @@ class ThemeSettingsScreen extends StatelessWidget {
                 value: themeProvider.useDynamicColor,
                 onChanged: themeProvider.setUseDynamicColor,
                 contentPadding: const EdgeInsets.symmetric(
-                  horizontal: 14,
-                  vertical: 4,
+                  horizontal: 16,
+                  vertical: 6,
                 ),
                 secondary: Icon(
                   Icons.wallpaper_outlined,
@@ -389,54 +392,58 @@ class _AccentColorChip extends StatelessWidget {
         ? accent.tokens.onPrimaryDark
         : accent.tokens.onPrimaryLight;
 
-    return Material(
-      color: colorScheme.surface,
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(
-          color: isSelected ? swatch : colorScheme.outline,
-          width: isSelected ? 1.5 : 1,
+    final isAmoled = AppTheme.isAmoled(theme);
+    final containerSwatch = theme.brightness == Brightness.dark
+        ? accent.tokens.primaryContainerDark
+        : accent.tokens.primaryContainerLight;
+
+    return ZettaskSpringTap(
+      pressedScale: 0.94,
+      child: Material(
+        color: isSelected
+            ? (isAmoled ? colorScheme.surfaceContainerHigh : containerSwatch)
+            : colorScheme.surfaceContainerLow,
+        elevation: 0,
+        shape: StadiumBorder(
+          side: isSelected
+              ? BorderSide(color: swatch, width: 1.75)
+              : AppTheme.cardBorderSide(theme),
         ),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(minHeight: 48),
-          child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              children: [
-                Container(
-                  width: 20,
-                  height: 20,
-                  decoration: BoxDecoration(
-                    color: swatch,
-                    shape: BoxShape.circle,
-                    border: Border.all(
-                      color: colorScheme.outline,
-                      width: 1,
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: 48),
+            child: Padding(
+              padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Container(
+                    width: 22,
+                    height: 22,
+                    decoration: BoxDecoration(
+                      color: swatch,
+                      shape: BoxShape.circle,
+                    ),
+                    child: isSelected
+                        ? Icon(Icons.check_rounded, size: 14, color: onSwatch)
+                        : null,
+                  ),
+                  const SizedBox(width: 8),
+                  Text(
+                    label,
+                    style: theme.textTheme.labelMedium?.copyWith(
+                      fontSize: 13,
+                      fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
                     ),
                   ),
-                  child: isSelected
-                      ? Icon(Icons.check_rounded, size: 13, color: onSwatch)
-                      : null,
-                ),
-                const SizedBox(width: 8),
-                Text(
-                  label,
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    fontSize: 13,
-                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w600,
-                  ),
-                ),
-                if (showProBadge) ...[
-                  const SizedBox(width: 6),
-                  const ProBadge(),
+                  if (showProBadge) ...[
+                    const SizedBox(width: 6),
+                    const ProBadge(),
+                  ],
                 ],
-              ],
+              ),
             ),
           ),
         ),
@@ -493,7 +500,7 @@ class _WidgetStyleCard extends StatelessWidget {
               padding: const EdgeInsets.all(10),
               decoration: BoxDecoration(
                 color: previewBg,
-                borderRadius: BorderRadius.circular(10),
+                borderRadius: BorderRadius.circular(14),
                 border: Border.all(color: previewBorder, width: 1),
               ),
               child: Column(
@@ -597,46 +604,59 @@ class _ModeOptionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final isAmoled = AppTheme.isAmoled(theme);
 
-    return Material(
-      color: isSelected ? colorScheme.surface : Colors.transparent,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(10),
-        side: isSelected
-            ? BorderSide(color: colorScheme.outline, width: 1)
-            : BorderSide.none,
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: ConstrainedBox(
-          constraints: const BoxConstraints(minHeight: 48),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            children: [
-              Icon(
-                icon,
-                size: 16,
-                color: isSelected
-                    ? colorScheme.primary
-                    : colorScheme.onSurfaceVariant,
-              ),
-              const SizedBox(width: 6),
-              Flexible(
-                child: Text(
-                  label,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.labelMedium?.copyWith(
-                    fontSize: 13,
-                    fontWeight: isSelected ? FontWeight.w700 : FontWeight.w500,
-                    color: isSelected
-                        ? colorScheme.primary
-                        : colorScheme.onSurfaceVariant,
+    return ZettaskSpringTap(
+      pressedScale: 0.95,
+      child: Material(
+        color: isSelected
+            ? (isAmoled
+                ? colorScheme.surfaceContainerLow
+                : colorScheme.primaryContainer)
+            : Colors.transparent,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(16),
+          side: isSelected && isAmoled
+              ? BorderSide(color: colorScheme.primary, width: 1.25)
+              : BorderSide.none,
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          child: ConstrainedBox(
+            constraints: const BoxConstraints(minHeight: 48),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                Icon(
+                  icon,
+                  size: 16,
+                  color: isSelected
+                      ? (isAmoled
+                          ? colorScheme.primary
+                          : colorScheme.onPrimaryContainer)
+                      : colorScheme.onSurfaceVariant,
+                ),
+                const SizedBox(width: 6),
+                Flexible(
+                  child: Text(
+                    label,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.labelMedium?.copyWith(
+                      fontSize: 13,
+                      fontWeight:
+                          isSelected ? FontWeight.w700 : FontWeight.w500,
+                      color: isSelected
+                          ? (isAmoled
+                              ? colorScheme.primary
+                              : colorScheme.onPrimaryContainer)
+                          : colorScheme.onSurfaceVariant,
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -663,92 +683,94 @@ class _PresetCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final isAmoled = AppTheme.isAmoled(theme);
     final primarySwatch = preset.previewPrimary(theme.brightness);
     final containerSwatch = preset.previewContainer(theme.brightness);
 
-    return Material(
-      color: colorScheme.surface,
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
-        side: BorderSide(
-          color: isSelected ? primarySwatch : colorScheme.outline,
-          width: isSelected ? 1.5 : 1,
+    return ZettaskSpringTap(
+      pressedScale: 0.96,
+      child: Material(
+        color: isSelected && !isAmoled
+            ? containerSwatch.withValues(alpha: 0.45)
+            : colorScheme.surfaceContainerLow,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(22),
+          side: isSelected
+              ? BorderSide(color: primarySwatch, width: 2)
+              : AppTheme.cardBorderSide(theme),
         ),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.all(12),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            children: [
-              Row(
-                children: [
-                  Container(
-                    width: 22,
-                    height: 22,
-                    decoration: BoxDecoration(
-                      color: primarySwatch,
-                      shape: BoxShape.circle,
-                    ),
-                  ),
-                  const SizedBox(width: 6),
-                  Container(
-                    width: 22,
-                    height: 22,
-                    decoration: BoxDecoration(
-                      color: containerSwatch,
-                      shape: BoxShape.circle,
-                      border: Border.all(
-                        color: colorScheme.outline,
-                        width: 1,
-                      ),
-                    ),
-                  ),
-                  const Spacer(),
-                  if (isSelected)
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.all(14),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              mainAxisAlignment: MainAxisAlignment.spaceBetween,
+              children: [
+                Row(
+                  children: [
                     Container(
-                      key: ValueKey('preset_check_${preset.key}'),
-                      width: 22,
-                      height: 22,
+                      width: 24,
+                      height: 24,
                       decoration: BoxDecoration(
                         color: primarySwatch,
                         shape: BoxShape.circle,
                       ),
-                      child: Icon(
-                        Icons.check_rounded,
-                        size: 14,
-                        color: theme.brightness == Brightness.dark
-                            ? preset.tokens.onPrimaryDark
-                            : preset.tokens.onPrimaryLight,
+                    ),
+                    const SizedBox(width: 6),
+                    Container(
+                      width: 24,
+                      height: 24,
+                      decoration: BoxDecoration(
+                        color: containerSwatch,
+                        shape: BoxShape.circle,
                       ),
                     ),
-                ],
-              ),
-              Column(
-                crossAxisAlignment: CrossAxisAlignment.start,
-                children: [
-                  Text(
-                    label,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.titleMedium?.copyWith(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w700,
+                    const Spacer(),
+                    if (isSelected)
+                      Container(
+                        key: ValueKey('preset_check_${preset.key}'),
+                        width: 24,
+                        height: 24,
+                        decoration: BoxDecoration(
+                          color: primarySwatch,
+                          shape: BoxShape.circle,
+                        ),
+                        child: Icon(
+                          Icons.check_rounded,
+                          size: 15,
+                          color: theme.brightness == Brightness.dark
+                              ? preset.tokens.onPrimaryDark
+                              : preset.tokens.onPrimaryLight,
+                        ),
+                      ),
+                  ],
+                ),
+                Column(
+                  crossAxisAlignment: CrossAxisAlignment.start,
+                  children: [
+                    Text(
+                      label,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style: theme.textTheme.titleMedium?.copyWith(
+                        fontSize: 14.5,
+                        fontWeight: FontWeight.w800,
+                      ),
                     ),
-                  ),
-                  Text(
-                    description,
-                    maxLines: 1,
-                    overflow: TextOverflow.ellipsis,
-                    style: theme.textTheme.bodySmall?.copyWith(fontSize: 11.5),
-                  ),
-                ],
-              ),
-            ],
+                    Text(
+                      description,
+                      maxLines: 1,
+                      overflow: TextOverflow.ellipsis,
+                      style:
+                          theme.textTheme.bodySmall?.copyWith(fontSize: 11.5),
+                    ),
+                  ],
+                ),
+              ],
+            ),
           ),
         ),
       ),
@@ -770,31 +792,43 @@ class _TimelineLivePreviewCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final isAmoled = AppTheme.isAmoled(theme);
     final priorityColor =
         AppTheme.priorityColor(TaskPriority.high, theme.brightness);
 
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(16),
       decoration: BoxDecoration(
         color: theme.scaffoldBackgroundColor,
-        borderRadius: BorderRadius.circular(16),
-        border: Border.all(color: colorScheme.outline, width: 1),
+        borderRadius: BorderRadius.circular(24),
+        border: Border.all(
+          color: isAmoled
+              ? colorScheme.outline
+              : colorScheme.outlineVariant.withValues(alpha: 0.65),
+          width: 1,
+        ),
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           Row(
             children: [
-              Text(
-                l10n.today,
-                style: theme.textTheme.titleMedium?.copyWith(
-                  fontSize: 14,
-                  fontWeight: FontWeight.w700,
+              Expanded(
+                child: Text(
+                  l10n.today,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.titleLarge?.copyWith(
+                    fontSize: 18,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -0.5,
+                  ),
                 ),
               ),
-              const Spacer(),
+              const SizedBox(width: 8),
               Container(
-                padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+                padding:
+                    const EdgeInsets.symmetric(horizontal: 10, vertical: 4),
                 decoration: BoxDecoration(
                   color: colorScheme.primaryContainer,
                   borderRadius: BorderRadius.circular(999),
@@ -812,11 +846,13 @@ class _TimelineLivePreviewCard extends StatelessWidget {
           ),
           const SizedBox(height: 12),
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
-              color: colorScheme.surface,
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: colorScheme.outline, width: 1),
+              color: colorScheme.surfaceContainerLow,
+              borderRadius: BorderRadius.circular(20),
+              border: isAmoled
+                  ? Border.all(color: colorScheme.outline, width: 1)
+                  : null,
             ),
             child: Row(
               crossAxisAlignment: CrossAxisAlignment.start,
@@ -824,13 +860,13 @@ class _TimelineLivePreviewCard extends StatelessWidget {
                 Padding(
                   padding: const EdgeInsets.only(top: 2),
                   child: Container(
-                    width: 20,
-                    height: 20,
+                    width: 22,
+                    height: 22,
                     decoration: BoxDecoration(
                       shape: BoxShape.circle,
                       border: Border.all(
                         color: colorScheme.primary,
-                        width: 1.75,
+                        width: 2,
                       ),
                     ),
                   ),
@@ -843,7 +879,7 @@ class _TimelineLivePreviewCard extends StatelessWidget {
                       Text(
                         l10n.previewActiveTask,
                         style: theme.textTheme.titleMedium?.copyWith(
-                          fontSize: 14,
+                          fontSize: 14.5,
                         ),
                       ),
                       const SizedBox(height: 6),
@@ -858,12 +894,12 @@ class _TimelineLivePreviewCard extends StatelessWidget {
                           ),
                           _PreviewChip(
                             label: l10n.priorityHigh,
-                            background: priorityColor.withValues(alpha: 0.12),
+                            background: priorityColor.withValues(alpha: 0.14),
                             foreground: priorityColor,
                           ),
                           _PreviewChip(
                             label: '#${l10n.tagLabel}',
-                            background: colorScheme.surfaceContainerHighest,
+                            background: colorScheme.surfaceContainerHigh,
                             foreground: colorScheme.onSurfaceVariant,
                           ),
                         ],
@@ -876,24 +912,26 @@ class _TimelineLivePreviewCard extends StatelessWidget {
           ),
           const SizedBox(height: 8),
           Container(
-            padding: const EdgeInsets.all(12),
+            padding: const EdgeInsets.all(14),
             decoration: BoxDecoration(
               color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.55),
-              borderRadius: BorderRadius.circular(12),
-              border: Border.all(color: colorScheme.outline, width: 1),
+              borderRadius: BorderRadius.circular(20),
+              border: isAmoled
+                  ? Border.all(color: colorScheme.outline, width: 1)
+                  : null,
             ),
             child: Row(
               children: [
                 Container(
-                  width: 20,
-                  height: 20,
+                  width: 22,
+                  height: 22,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
                     color: colorScheme.primary,
                   ),
                   child: Icon(
                     Icons.check_rounded,
-                    size: 13,
+                    size: 14,
                     color: colorScheme.onPrimary,
                   ),
                 ),
@@ -939,17 +977,18 @@ class _PreviewChip extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 9, vertical: 3),
       decoration: BoxDecoration(
         color: background,
-        borderRadius: BorderRadius.circular(6),
+        borderRadius: BorderRadius.circular(999),
       ),
       child: Text(
         label,
         style: theme.textTheme.labelSmall?.copyWith(
           color: foreground,
-          fontWeight: FontWeight.w600,
+          fontWeight: FontWeight.w700,
           fontSize: 10.5,
+          fontFeatures: const [FontFeature.tabularFigures()],
         ),
       ),
     );

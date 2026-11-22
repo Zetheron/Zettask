@@ -183,11 +183,11 @@ class _CalendarEventCard extends StatelessWidget {
         : l10n.calendarBadgeLabel;
 
     return Material(
-      color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.55),
+      color: colorScheme.surfaceContainer,
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
-        side: BorderSide(color: colorScheme.outline, width: 1),
+        borderRadius: BorderRadius.circular(20),
+        side: AppTheme.cardBorderSide(theme),
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -197,12 +197,12 @@ class _CalendarEventCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Container(
-                width: 3.5,
+                width: 4,
                 color: accentColor,
               ),
               Expanded(
                 child: Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(12, 11, 14, 11),
+                  padding: const EdgeInsetsDirectional.fromSTEB(14, 12, 14, 12),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.start,
                     children: [
@@ -234,16 +234,12 @@ class _CalendarEventCard extends StatelessWidget {
                             constraints: const BoxConstraints(maxWidth: 140),
                             child: Container(
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 7,
-                                vertical: 2,
+                                horizontal: 9,
+                                vertical: 3,
                               ),
                               decoration: BoxDecoration(
-                                color: accentColor.withValues(alpha: 0.12),
-                                borderRadius: BorderRadius.circular(6),
-                                border: Border.all(
-                                  color: accentColor.withValues(alpha: 0.35),
-                                  width: 1,
-                                ),
+                                color: accentColor.withValues(alpha: 0.14),
+                                borderRadius: BorderRadius.circular(999),
                               ),
                               child: Row(
                                 mainAxisSize: MainAxisSize.min,
@@ -256,7 +252,7 @@ class _CalendarEventCard extends StatelessWidget {
                                       shape: BoxShape.circle,
                                     ),
                                   ),
-                                  const SizedBox(width: 4),
+                                  const SizedBox(width: 5),
                                   Flexible(
                                     child: Text(
                                       badgeText,
@@ -265,7 +261,7 @@ class _CalendarEventCard extends StatelessWidget {
                                       style:
                                           theme.textTheme.labelSmall?.copyWith(
                                         color: accentColor,
-                                        fontWeight: FontWeight.w600,
+                                        fontWeight: FontWeight.w700,
                                         fontSize: 10.5,
                                       ),
                                     ),
@@ -490,14 +486,15 @@ class CalendarEventDetailSheet extends StatelessWidget {
                     const SizedBox(height: 20),
                     Container(
                       padding: const EdgeInsets.symmetric(
-                        horizontal: 12,
-                        vertical: 11,
+                        horizontal: 14,
+                        vertical: 12,
                       ),
                       decoration: BoxDecoration(
-                        color: colorScheme.surfaceContainerHighest,
-                        borderRadius: BorderRadius.circular(12),
-                        border:
-                            Border.all(color: colorScheme.outline, width: 1),
+                        color: colorScheme.surfaceContainerHigh,
+                        borderRadius: BorderRadius.circular(18),
+                        border: AppTheme.isAmoled(theme)
+                            ? Border.all(color: colorScheme.outline, width: 1)
+                            : null,
                       ),
                       child: Row(
                         crossAxisAlignment: CrossAxisAlignment.start,
@@ -527,9 +524,6 @@ class CalendarEventDetailSheet extends StatelessWidget {
                       onPressed: () => Navigator.of(context).pop(),
                       style: OutlinedButton.styleFrom(
                         minimumSize: const Size.fromHeight(48),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(12),
-                        ),
                       ),
                       child: Text(l10n.close),
                     ),

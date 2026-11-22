@@ -518,6 +518,29 @@ class AppTheme {
     return brightness == Brightness.dark ? successDark : successLight;
   }
 
+  static bool isAmoled(ThemeData theme) {
+    return theme.brightness == Brightness.dark &&
+        theme.scaffoldBackgroundColor == amoledBackground;
+  }
+
+  static BorderSide cardBorderSide(
+    ThemeData theme, {
+    Color? color,
+    double width = 1,
+  }) {
+    if (isAmoled(theme)) {
+      return BorderSide(
+        color: color ?? theme.colorScheme.outline,
+        width: width,
+      );
+    }
+    return BorderSide.none;
+  }
+
+  static Color _tonalBlend(Color base, Color tint, double opacity) {
+    return Color.alphaBlend(tint.withValues(alpha: opacity), base);
+  }
+
   static ThemeData get lightTheme =>
       lightThemeFor(AppThemePreset.defaultIndigo);
 
@@ -535,9 +558,30 @@ class AppTheme {
     final ColorScheme colorScheme;
     if (useDynamic) {
       final harmonized = dynamicColorScheme.harmonized();
-      // Keep hairline 1px borders subtle when Material You colors are active.
       colorScheme = harmonized.copyWith(outline: harmonized.outlineVariant);
     } else {
+      final surfaceLowest = lightSurface;
+      final surfaceLow = _tonalBlend(
+        const Color(0xFFF3F2F0),
+        t.primaryLight,
+        0.025,
+      );
+      final surfaceMid = _tonalBlend(
+        const Color(0xFFECEBE8),
+        t.primaryLight,
+        0.04,
+      );
+      final surfaceHigh = _tonalBlend(
+        const Color(0xFFE6E4E0),
+        t.primaryLight,
+        0.055,
+      );
+      final surfaceHighest = _tonalBlend(
+        const Color(0xFFDFDDD8),
+        t.primaryLight,
+        0.065,
+      );
+
       colorScheme = ColorScheme.light(
         primary: t.primaryLight,
         onPrimary: t.onPrimaryLight,
@@ -550,20 +594,26 @@ class AppTheme {
         surface: lightSurface,
         onSurface: lightTextPrimary,
         onSurfaceVariant: lightTextSecondary,
-        surfaceContainerHighest: lightSurfaceVariant,
+        surfaceContainerLowest: surfaceLowest,
+        surfaceContainerLow: surfaceLow,
+        surfaceContainer: surfaceMid,
+        surfaceContainerHigh: surfaceHigh,
+        surfaceContainerHighest: surfaceHighest,
         outline: lightBorder,
         outlineVariant: lightBorder,
         error: errorLight,
         onError: Colors.white,
+        errorContainer: const Color(0xFFFEE2E2),
+        onErrorContainer: const Color(0xFF991B1B),
       );
     }
 
     final resolvedBackground = useDynamic ? colorScheme.surface : lightBackground;
-    final resolvedCardSurface =
-        useDynamic ? colorScheme.surfaceContainerLowest : lightSurface;
-    final resolvedInputFill = useDynamic
-        ? colorScheme.surfaceContainerHighest
-        : lightSurfaceVariant;
+    final resolvedCardSurface = colorScheme.surfaceContainerLow;
+    final resolvedSheetSurface = colorScheme.surfaceContainerLow;
+    final resolvedDialogSurface = colorScheme.surfaceContainerHigh;
+    final resolvedNavSurface = colorScheme.surfaceContainer;
+    final resolvedInputFill = colorScheme.surfaceContainerHigh;
     final resolvedBorder = colorScheme.outline;
     final resolvedTextPrimary = colorScheme.onSurface;
     final resolvedTextSecondary = colorScheme.onSurfaceVariant;
@@ -588,10 +638,10 @@ class AppTheme {
         scrolledUnderElevation: 0,
         centerTitle: false,
         titleTextStyle: GoogleFonts.plusJakartaSans(
-          fontSize: 20,
-          fontWeight: FontWeight.w700,
+          fontSize: 22,
+          fontWeight: FontWeight.w800,
           color: resolvedTextPrimary,
-          letterSpacing: -0.4,
+          letterSpacing: -0.6,
         ),
       ),
       cardTheme: CardThemeData(
@@ -599,74 +649,173 @@ class AppTheme {
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
-          side: BorderSide(color: resolvedBorder, width: 1),
+          borderRadius: BorderRadius.circular(20),
         ),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: colorScheme.primary,
-        foregroundColor: colorScheme.onPrimary,
+        backgroundColor: colorScheme.primaryContainer,
+        foregroundColor: colorScheme.onPrimaryContainer,
         elevation: 0,
         focusElevation: 0,
         hoverElevation: 0,
         highlightElevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
         ),
+      ),
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          minimumSize: const Size(48, 48),
+          shape: const StadiumBorder(),
+          textStyle: GoogleFonts.plusJakartaSans(
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          elevation: 0,
+          backgroundColor: colorScheme.surfaceContainerHigh,
+          foregroundColor: colorScheme.primary,
+          minimumSize: const Size(48, 48),
+          shape: const StadiumBorder(),
+          textStyle: GoogleFonts.plusJakartaSans(
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          minimumSize: const Size(48, 48),
+          shape: const StadiumBorder(),
+          side: BorderSide(color: resolvedBorder, width: 1.2),
+          textStyle: GoogleFonts.plusJakartaSans(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          minimumSize: const Size(48, 48),
+          shape: const StadiumBorder(),
+          textStyle: GoogleFonts.plusJakartaSans(
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+      segmentedButtonTheme: SegmentedButtonThemeData(
+        style: ButtonStyle(
+          minimumSize: const WidgetStatePropertyAll(Size(0, 48)),
+          shape: const WidgetStatePropertyAll(StadiumBorder()),
+          side: const WidgetStatePropertyAll(BorderSide.none),
+          backgroundColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.selected)) {
+              return colorScheme.primaryContainer;
+            }
+            return colorScheme.surfaceContainerLow;
+          }),
+          foregroundColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.selected)) {
+              return colorScheme.onPrimaryContainer;
+            }
+            return colorScheme.onSurfaceVariant;
+          }),
+        ),
+      ),
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: resolvedNavSurface,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        height: 68,
+        indicatorColor: colorScheme.primaryContainer,
+        indicatorShape: const StadiumBorder(),
+        iconTheme: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return IconThemeData(
+              color: colorScheme.onPrimaryContainer,
+              size: 24,
+            );
+          }
+          return IconThemeData(
+            color: resolvedTextSecondary,
+            size: 23,
+          );
+        }),
+        labelTextStyle: WidgetStateProperty.resolveWith((states) {
+          return GoogleFonts.plusJakartaSans(
+            fontSize: 12,
+            fontWeight: states.contains(WidgetState.selected)
+                ? FontWeight.w700
+                : FontWeight.w500,
+            color: states.contains(WidgetState.selected)
+                ? resolvedTextPrimary
+                : resolvedTextSecondary,
+          );
+        }),
       ),
       chipTheme: ChipThemeData(
         backgroundColor: resolvedCardSurface,
         selectedColor: colorScheme.primaryContainer,
-        side: BorderSide(color: resolvedBorder, width: 1),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
-        ),
+        side: BorderSide.none,
+        shape: const StadiumBorder(),
         labelStyle: GoogleFonts.plusJakartaSans(
           fontSize: 13,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w600,
           color: resolvedTextPrimary,
         ),
       ),
       checkboxTheme: CheckboxThemeData(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(6),
+          borderRadius: BorderRadius.circular(7),
         ),
-        side: BorderSide(color: resolvedTextSecondary, width: 1.5),
+        side: BorderSide(color: resolvedTextSecondary, width: 1.75),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
         fillColor: resolvedInputFill,
         contentPadding: const EdgeInsets.symmetric(
-          horizontal: 14,
-          vertical: 14,
+          horizontal: 16,
+          vertical: 15,
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: resolvedBorder, width: 1),
+          borderRadius: BorderRadius.circular(18),
+          borderSide: BorderSide.none,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: resolvedBorder, width: 1),
+          borderRadius: BorderRadius.circular(18),
+          borderSide: BorderSide.none,
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: colorScheme.primary, width: 1.5),
+          borderRadius: BorderRadius.circular(18),
+          borderSide: BorderSide(color: colorScheme.primary, width: 2),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: colorScheme.error, width: 1),
+          borderRadius: BorderRadius.circular(18),
+          borderSide: BorderSide(color: colorScheme.error, width: 1.25),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: colorScheme.error, width: 1.5),
+          borderRadius: BorderRadius.circular(18),
+          borderSide: BorderSide(color: colorScheme.error, width: 2),
+        ),
+      ),
+      dialogTheme: DialogThemeData(
+        backgroundColor: resolvedDialogSurface,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(28),
         ),
       ),
       bottomSheetTheme: BottomSheetThemeData(
-        backgroundColor: resolvedCardSurface,
+        backgroundColor: resolvedSheetSurface,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
         shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+          borderRadius: BorderRadius.vertical(top: Radius.circular(28)),
         ),
       ),
       snackBarTheme: SnackBarThemeData(
@@ -681,11 +830,11 @@ class AppTheme {
         actionTextColor:
             useDynamic ? colorScheme.inversePrimary : t.primaryDark,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
+          borderRadius: BorderRadius.circular(16),
         ),
       ),
       dividerTheme: DividerThemeData(
-        color: resolvedBorder,
+        color: resolvedBorder.withValues(alpha: 0.7),
         thickness: 1,
         space: 1,
       ),
@@ -704,17 +853,18 @@ class AppTheme {
     final useDynamic = dynamicColorScheme != null;
     final ColorScheme colorScheme;
     final Color resolvedBackground;
-    final Color resolvedSurface;
-    final Color resolvedSurfaceVariant;
+    final Color resolvedCardSurface;
+    final Color resolvedSheetSurface;
+    final Color resolvedDialogSurface;
+    final Color resolvedNavSurface;
+    final Color resolvedInputFill;
     final Color resolvedBorder;
 
     if (useDynamic && amoled) {
       final harmonized = dynamicColorScheme.harmonized();
       resolvedBackground = amoledBackground;
-      resolvedSurface = amoledSurface;
-      resolvedSurfaceVariant = amoledSurfaceVariant;
       resolvedBorder = amoledBorder;
-      // Preserve true #000000 AMOLED canvas & #0A0A0A cards while applying wallpaper accents.
+      // Preserve true #000000 AMOLED canvas & #0A0A0A–#121212 dark surfaces while applying wallpaper accents.
       colorScheme = ColorScheme.dark(
         primary: harmonized.primary,
         onPrimary: harmonized.onPrimary,
@@ -724,28 +874,39 @@ class AppTheme {
         onSecondary: harmonized.onSecondary,
         secondaryContainer: harmonized.secondaryContainer,
         onSecondaryContainer: harmonized.onSecondaryContainer,
-        surface: resolvedSurface,
+        surface: amoledSurface,
         onSurface: darkTextPrimary,
         onSurfaceVariant: darkTextSecondary,
-        surfaceContainerHighest: resolvedSurfaceVariant,
+        surfaceContainerLowest: amoledBackground,
+        surfaceContainerLow: amoledSurface,
+        surfaceContainer: const Color(0xFF0E0E0E),
+        surfaceContainerHigh: const Color(0xFF121212),
+        surfaceContainerHighest: amoledSurfaceVariant,
         outline: resolvedBorder,
         outlineVariant: resolvedBorder,
         error: errorDark,
         onError: const Color(0xFF450A0A),
+        errorContainer: const Color(0xFF3A1214),
+        onErrorContainer: const Color(0xFFFECACA),
       );
+      resolvedCardSurface = colorScheme.surfaceContainerLow;
+      resolvedSheetSurface = colorScheme.surfaceContainerLow;
+      resolvedDialogSurface = colorScheme.surfaceContainerHigh;
+      resolvedNavSurface = amoledBackground;
+      resolvedInputFill = colorScheme.surfaceContainerHigh;
     } else if (useDynamic) {
       final harmonized = dynamicColorScheme.harmonized();
       colorScheme = harmonized.copyWith(outline: harmonized.outlineVariant);
       resolvedBackground = colorScheme.surface;
-      resolvedSurface = colorScheme.surfaceContainerLow;
-      resolvedSurfaceVariant = colorScheme.surfaceContainerHighest;
+      resolvedCardSurface = colorScheme.surfaceContainerLow;
+      resolvedSheetSurface = colorScheme.surfaceContainerLow;
+      resolvedDialogSurface = colorScheme.surfaceContainerHigh;
+      resolvedNavSurface = colorScheme.surfaceContainer;
+      resolvedInputFill = colorScheme.surfaceContainerHigh;
       resolvedBorder = colorScheme.outline;
-    } else {
-      resolvedBackground = amoled ? amoledBackground : darkBackground;
-      resolvedSurface = amoled ? amoledSurface : darkSurface;
-      resolvedSurfaceVariant =
-          amoled ? amoledSurfaceVariant : darkSurfaceVariant;
-      resolvedBorder = amoled ? amoledBorder : darkBorder;
+    } else if (amoled) {
+      resolvedBackground = amoledBackground;
+      resolvedBorder = amoledBorder;
 
       colorScheme = ColorScheme.dark(
         primary: t.primaryDark,
@@ -756,19 +917,86 @@ class AppTheme {
         onSecondary: t.onSecondaryDark,
         secondaryContainer: t.secondaryContainerDark,
         onSecondaryContainer: t.onSecondaryContainerDark,
-        surface: resolvedSurface,
+        surface: amoledSurface,
         onSurface: darkTextPrimary,
         onSurfaceVariant: darkTextSecondary,
-        surfaceContainerHighest: resolvedSurfaceVariant,
+        surfaceContainerLowest: amoledBackground,
+        surfaceContainerLow: amoledSurface,
+        surfaceContainer: const Color(0xFF0E0E0E),
+        surfaceContainerHigh: const Color(0xFF121212),
+        surfaceContainerHighest: amoledSurfaceVariant,
         outline: resolvedBorder,
         outlineVariant: resolvedBorder,
         error: errorDark,
         onError: const Color(0xFF450A0A),
+        errorContainer: const Color(0xFF3A1214),
+        onErrorContainer: const Color(0xFFFECACA),
       );
+      resolvedCardSurface = colorScheme.surfaceContainerLow;
+      resolvedSheetSurface = colorScheme.surfaceContainerLow;
+      resolvedDialogSurface = colorScheme.surfaceContainerHigh;
+      resolvedNavSurface = amoledBackground;
+      resolvedInputFill = colorScheme.surfaceContainerHigh;
+    } else {
+      resolvedBackground = darkBackground;
+      resolvedBorder = darkBorder;
+
+      final surfaceLow = _tonalBlend(
+        const Color(0xFF151517),
+        t.primaryDark,
+        0.035,
+      );
+      final surfaceMid = _tonalBlend(
+        const Color(0xFF1B1B1E),
+        t.primaryDark,
+        0.05,
+      );
+      final surfaceHigh = _tonalBlend(
+        const Color(0xFF222226),
+        t.primaryDark,
+        0.065,
+      );
+      final surfaceHighest = _tonalBlend(
+        const Color(0xFF2A2A2F),
+        t.primaryDark,
+        0.08,
+      );
+
+      colorScheme = ColorScheme.dark(
+        primary: t.primaryDark,
+        onPrimary: t.onPrimaryDark,
+        primaryContainer: t.primaryContainerDark,
+        onPrimaryContainer: t.onPrimaryContainerDark,
+        secondary: t.secondaryDark,
+        onSecondary: t.onSecondaryDark,
+        secondaryContainer: t.secondaryContainerDark,
+        onSecondaryContainer: t.onSecondaryContainerDark,
+        surface: darkSurface,
+        onSurface: darkTextPrimary,
+        onSurfaceVariant: darkTextSecondary,
+        surfaceContainerLowest: darkBackground,
+        surfaceContainerLow: surfaceLow,
+        surfaceContainer: surfaceMid,
+        surfaceContainerHigh: surfaceHigh,
+        surfaceContainerHighest: surfaceHighest,
+        outline: resolvedBorder,
+        outlineVariant: resolvedBorder,
+        error: errorDark,
+        onError: const Color(0xFF450A0A),
+        errorContainer: const Color(0xFF3A1214),
+        onErrorContainer: const Color(0xFFFECACA),
+      );
+      resolvedCardSurface = colorScheme.surfaceContainerLow;
+      resolvedSheetSurface = colorScheme.surfaceContainerLow;
+      resolvedDialogSurface = colorScheme.surfaceContainerHigh;
+      resolvedNavSurface = colorScheme.surfaceContainer;
+      resolvedInputFill = colorScheme.surfaceContainerHigh;
     }
 
     final resolvedTextPrimary = colorScheme.onSurface;
     final resolvedTextSecondary = colorScheme.onSurfaceVariant;
+    final amoledBorderSide =
+        amoled ? BorderSide(color: resolvedBorder, width: 1) : BorderSide.none;
 
     final baseTextTheme = GoogleFonts.plusJakartaSansTextTheme(
       ThemeData.dark().textTheme,
@@ -790,90 +1018,193 @@ class AppTheme {
         scrolledUnderElevation: 0,
         centerTitle: false,
         titleTextStyle: GoogleFonts.plusJakartaSans(
-          fontSize: 20,
-          fontWeight: FontWeight.w700,
+          fontSize: 22,
+          fontWeight: FontWeight.w800,
           color: resolvedTextPrimary,
-          letterSpacing: -0.4,
+          letterSpacing: -0.6,
         ),
       ),
       cardTheme: CardThemeData(
-        color: resolvedSurface,
+        color: resolvedCardSurface,
         elevation: 0,
         margin: EdgeInsets.zero,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
-          side: BorderSide(color: resolvedBorder, width: 1),
+          borderRadius: BorderRadius.circular(20),
+          side: amoledBorderSide,
         ),
       ),
       floatingActionButtonTheme: FloatingActionButtonThemeData(
-        backgroundColor: colorScheme.primary,
-        foregroundColor: colorScheme.onPrimary,
+        backgroundColor: colorScheme.primaryContainer,
+        foregroundColor: colorScheme.onPrimaryContainer,
         elevation: 0,
         focusElevation: 0,
         hoverElevation: 0,
         highlightElevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(16),
+          borderRadius: BorderRadius.circular(20),
+          side: amoledBorderSide,
         ),
       ),
-      chipTheme: ChipThemeData(
-        backgroundColor: resolvedSurface,
-        selectedColor: colorScheme.primaryContainer,
-        side: BorderSide(color: resolvedBorder, width: 1),
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(10),
+      filledButtonTheme: FilledButtonThemeData(
+        style: FilledButton.styleFrom(
+          minimumSize: const Size(48, 48),
+          shape: const StadiumBorder(),
+          textStyle: GoogleFonts.plusJakartaSans(
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+          ),
         ),
+      ),
+      elevatedButtonTheme: ElevatedButtonThemeData(
+        style: ElevatedButton.styleFrom(
+          elevation: 0,
+          backgroundColor: colorScheme.surfaceContainerHigh,
+          foregroundColor: colorScheme.primary,
+          minimumSize: const Size(48, 48),
+          shape: const StadiumBorder(),
+          textStyle: GoogleFonts.plusJakartaSans(
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+      outlinedButtonTheme: OutlinedButtonThemeData(
+        style: OutlinedButton.styleFrom(
+          minimumSize: const Size(48, 48),
+          shape: const StadiumBorder(),
+          side: BorderSide(color: resolvedBorder, width: 1.2),
+          textStyle: GoogleFonts.plusJakartaSans(
+            fontSize: 14,
+            fontWeight: FontWeight.w600,
+          ),
+        ),
+      ),
+      textButtonTheme: TextButtonThemeData(
+        style: TextButton.styleFrom(
+          minimumSize: const Size(48, 48),
+          shape: const StadiumBorder(),
+          textStyle: GoogleFonts.plusJakartaSans(
+            fontSize: 14,
+            fontWeight: FontWeight.w700,
+          ),
+        ),
+      ),
+      segmentedButtonTheme: SegmentedButtonThemeData(
+        style: ButtonStyle(
+          minimumSize: const WidgetStatePropertyAll(Size(0, 48)),
+          shape: const WidgetStatePropertyAll(StadiumBorder()),
+          side: WidgetStatePropertyAll(amoledBorderSide),
+          backgroundColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.selected)) {
+              return colorScheme.primaryContainer;
+            }
+            return colorScheme.surfaceContainerLow;
+          }),
+          foregroundColor: WidgetStateProperty.resolveWith((states) {
+            if (states.contains(WidgetState.selected)) {
+              return colorScheme.onPrimaryContainer;
+            }
+            return colorScheme.onSurfaceVariant;
+          }),
+        ),
+      ),
+      navigationBarTheme: NavigationBarThemeData(
+        backgroundColor: resolvedNavSurface,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        height: 68,
+        indicatorColor: colorScheme.primaryContainer,
+        indicatorShape: const StadiumBorder(),
+        iconTheme: WidgetStateProperty.resolveWith((states) {
+          if (states.contains(WidgetState.selected)) {
+            return IconThemeData(
+              color: colorScheme.onPrimaryContainer,
+              size: 24,
+            );
+          }
+          return IconThemeData(
+            color: resolvedTextSecondary,
+            size: 23,
+          );
+        }),
+        labelTextStyle: WidgetStateProperty.resolveWith((states) {
+          return GoogleFonts.plusJakartaSans(
+            fontSize: 12,
+            fontWeight: states.contains(WidgetState.selected)
+                ? FontWeight.w700
+                : FontWeight.w500,
+            color: states.contains(WidgetState.selected)
+                ? resolvedTextPrimary
+                : resolvedTextSecondary,
+          );
+        }),
+      ),
+      chipTheme: ChipThemeData(
+        backgroundColor: resolvedCardSurface,
+        selectedColor: colorScheme.primaryContainer,
+        side: amoledBorderSide,
+        shape: const StadiumBorder(),
         labelStyle: GoogleFonts.plusJakartaSans(
           fontSize: 13,
-          fontWeight: FontWeight.w500,
+          fontWeight: FontWeight.w600,
           color: resolvedTextPrimary,
         ),
       ),
       checkboxTheme: CheckboxThemeData(
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(6),
+          borderRadius: BorderRadius.circular(7),
         ),
-        side: BorderSide(color: resolvedTextSecondary, width: 1.5),
+        side: BorderSide(color: resolvedTextSecondary, width: 1.75),
       ),
       inputDecorationTheme: InputDecorationTheme(
         filled: true,
-        fillColor: resolvedSurfaceVariant,
+        fillColor: resolvedInputFill,
         contentPadding: const EdgeInsets.symmetric(
-          horizontal: 14,
-          vertical: 14,
+          horizontal: 16,
+          vertical: 15,
         ),
         border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: resolvedBorder, width: 1),
+          borderRadius: BorderRadius.circular(18),
+          borderSide: amoledBorderSide,
         ),
         enabledBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: resolvedBorder, width: 1),
+          borderRadius: BorderRadius.circular(18),
+          borderSide: amoledBorderSide,
         ),
         focusedBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: colorScheme.primary, width: 1.5),
+          borderRadius: BorderRadius.circular(18),
+          borderSide: BorderSide(color: colorScheme.primary, width: 2),
         ),
         errorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: colorScheme.error, width: 1),
+          borderRadius: BorderRadius.circular(18),
+          borderSide: BorderSide(color: colorScheme.error, width: 1.25),
         ),
         focusedErrorBorder: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(12),
-          borderSide: BorderSide(color: colorScheme.error, width: 1.5),
+          borderRadius: BorderRadius.circular(18),
+          borderSide: BorderSide(color: colorScheme.error, width: 2),
+        ),
+      ),
+      dialogTheme: DialogThemeData(
+        backgroundColor: resolvedDialogSurface,
+        surfaceTintColor: Colors.transparent,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(28),
+          side: amoledBorderSide,
         ),
       ),
       bottomSheetTheme: BottomSheetThemeData(
-        backgroundColor: resolvedSurface,
+        backgroundColor: resolvedSheetSurface,
         surfaceTintColor: Colors.transparent,
         elevation: 0,
-        shape: const RoundedRectangleBorder(
-          borderRadius: BorderRadius.vertical(top: Radius.circular(24)),
+        shape: RoundedRectangleBorder(
+          borderRadius: const BorderRadius.vertical(top: Radius.circular(28)),
+          side: amoledBorderSide,
         ),
       ),
       snackBarTheme: SnackBarThemeData(
         behavior: SnackBarBehavior.floating,
-        backgroundColor: resolvedSurfaceVariant,
+        backgroundColor: colorScheme.surfaceContainerHighest,
         contentTextStyle: GoogleFonts.plusJakartaSans(
           color: resolvedTextPrimary,
           fontSize: 14,
@@ -881,12 +1212,12 @@ class AppTheme {
         ),
         actionTextColor: colorScheme.primary,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(12),
-          side: BorderSide(color: resolvedBorder, width: 1),
+          borderRadius: BorderRadius.circular(16),
+          side: amoledBorderSide,
         ),
       ),
       dividerTheme: DividerThemeData(
-        color: resolvedBorder,
+        color: amoled ? resolvedBorder : resolvedBorder.withValues(alpha: 0.65),
         thickness: 1,
         space: 1,
       ),
@@ -895,15 +1226,31 @@ class AppTheme {
 
   static TextTheme _buildTextTheme(TextTheme base, Color secondaryColor) {
     return base.copyWith(
+      displaySmall: base.displaySmall?.copyWith(
+        fontWeight: FontWeight.w800,
+        letterSpacing: -0.8,
+        height: 1.12,
+      ),
+      headlineMedium: base.headlineMedium?.copyWith(
+        fontWeight: FontWeight.w800,
+        letterSpacing: -0.7,
+        height: 1.16,
+      ),
       headlineSmall: base.headlineSmall?.copyWith(
-        fontWeight: FontWeight.w700,
-        letterSpacing: -0.5,
+        fontWeight: FontWeight.w800,
+        letterSpacing: -0.6,
+        height: 1.18,
       ),
       titleLarge: base.titleLarge?.copyWith(
         fontWeight: FontWeight.w700,
-        letterSpacing: -0.4,
+        letterSpacing: -0.5,
+        height: 1.24,
       ),
       titleMedium: base.titleMedium?.copyWith(
+        fontWeight: FontWeight.w700,
+        letterSpacing: -0.2,
+      ),
+      titleSmall: base.titleSmall?.copyWith(
         fontWeight: FontWeight.w600,
         letterSpacing: -0.1,
       ),
@@ -913,6 +1260,9 @@ class AppTheme {
       bodySmall: base.bodySmall?.copyWith(
         color: secondaryColor,
         height: 1.4,
+      ),
+      labelLarge: base.labelLarge?.copyWith(
+        fontWeight: FontWeight.w700,
       ),
       labelMedium: base.labelMedium?.copyWith(
         fontWeight: FontWeight.w600,

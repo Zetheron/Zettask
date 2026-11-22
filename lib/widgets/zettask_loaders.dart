@@ -444,7 +444,9 @@ class ZettaskTaskListSkeleton extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isAmoled = AppTheme.isAmoled(theme);
 
     return ListView.separated(
       padding: padding,
@@ -459,11 +461,13 @@ class ZettaskTaskListSkeleton extends StatelessWidget {
             _subtitleFractions[index % _subtitleFractions.length];
 
         return Container(
-          padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 14),
+          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 16),
           decoration: BoxDecoration(
-            color: colorScheme.surface,
-            borderRadius: BorderRadius.circular(14),
-            border: Border.all(color: colorScheme.outline, width: 1),
+            color: colorScheme.surfaceContainerLow,
+            borderRadius: BorderRadius.circular(20),
+            border: isAmoled
+                ? Border.all(color: colorScheme.outline, width: 1)
+                : null,
           ),
           child: ZettaskSkeletonShimmer(
             child: Row(

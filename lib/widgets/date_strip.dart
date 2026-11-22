@@ -1,10 +1,12 @@
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 
+import '../core/theme/app_theme.dart';
 import '../l10n/app_localizations.dart';
 import '../models/task_model.dart';
 import '../providers/locale_provider.dart';
 import '../providers/task_provider.dart';
+import 'zettask_motion.dart';
 
 class DateStrip extends StatefulWidget {
   const DateStrip({
@@ -182,51 +184,58 @@ class _DateStripState extends State<DateStrip> {
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [
         Padding(
-          padding: const EdgeInsetsDirectional.fromSTEB(16, 2, 8, 2),
+          padding: const EdgeInsetsDirectional.fromSTEB(16, 4, 8, 2),
           child: Row(
             children: [
-              InkWell(
-                onTap: widget.onPickDate,
-                borderRadius: BorderRadius.circular(10),
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(minHeight: 48),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 4,
-                      vertical: 8,
-                    ),
-                    child: Row(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(
-                          _formatMonthYear(headerDate, localeTag),
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontSize: 15,
-                            fontWeight: FontWeight.w700,
-                            letterSpacing: -0.2,
+              Flexible(
+                child: InkWell(
+                  onTap: widget.onPickDate,
+                  borderRadius: BorderRadius.circular(14),
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(minHeight: 48),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 6,
+                        vertical: 8,
+                      ),
+                      child: Row(
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Flexible(
+                            child: Text(
+                              _formatMonthYear(headerDate, localeTag),
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.titleMedium?.copyWith(
+                                fontSize: 15.5,
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: -0.3,
+                              ),
+                            ),
                           ),
-                        ),
-                        const SizedBox(width: 4),
-                        Icon(
-                          Icons.keyboard_arrow_down_rounded,
-                          size: 20,
-                          color: colorScheme.onSurfaceVariant,
-                        ),
-                      ],
+                          const SizedBox(width: 4),
+                          Icon(
+                            Icons.keyboard_arrow_down_rounded,
+                            size: 20,
+                            color: colorScheme.onSurfaceVariant,
+                          ),
+                        ],
+                      ),
                     ),
                   ),
                 ),
               ),
-              const Spacer(),
+              const SizedBox(width: 6),
               if (!isToday)
-                TextButton(
+                FilledButton.tonal(
                   onPressed: widget.onGoToToday,
-                  style: TextButton.styleFrom(
-                    minimumSize: const Size(48, 48),
-                    padding: const EdgeInsets.symmetric(horizontal: 10),
-                    foregroundColor: colorScheme.primary,
+                  style: FilledButton.styleFrom(
+                    minimumSize: const Size(48, 36),
+                    tapTargetSize: MaterialTapTargetSize.padded,
+                    padding: const EdgeInsets.symmetric(horizontal: 14),
+                    shape: const StadiumBorder(),
                     textStyle: theme.textTheme.labelMedium?.copyWith(
-                      fontSize: 13,
+                      fontSize: 12.5,
                       fontWeight: FontWeight.w700,
                     ),
                   ),
@@ -260,7 +269,7 @@ class _DateStripState extends State<DateStrip> {
           ),
         ),
         SizedBox(
-          height: 66,
+          height: 68,
           child: PageView.builder(
             controller: _pageController,
             itemCount: _totalWeekPages,
@@ -314,12 +323,17 @@ class _DateStripState extends State<DateStrip> {
       return content;
     }
 
+    final isAmoled = AppTheme.isAmoled(theme);
     return Container(
       decoration: BoxDecoration(
-        color: colorScheme.surface,
-        border: Border(
-          top: BorderSide(color: colorScheme.outline, width: 1),
-        ),
+        color: isAmoled
+            ? AppTheme.amoledBackground
+            : colorScheme.surfaceContainerLow,
+        border: isAmoled
+            ? Border(
+                top: BorderSide(color: colorScheme.outline, width: 1),
+              )
+            : null,
       ),
       child: content,
     );
@@ -348,81 +362,95 @@ class _DateStripTile extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final isAmoled = AppTheme.isAmoled(theme);
 
-    final backgroundColor =
-        isSelected ? colorScheme.primary : colorScheme.surface;
-    final borderColor = isSelected
+    final backgroundColor = isSelected
         ? colorScheme.primary
         : isToday
-            ? colorScheme.primary
-            : colorScheme.outline;
+            ? colorScheme.primaryContainer
+            : (isAmoled ? AppTheme.amoledSurface : Colors.transparent);
+    final borderSide = isSelected
+        ? BorderSide.none
+        : isToday
+            ? (isAmoled
+                ? BorderSide(color: colorScheme.primary, width: 1.2)
+                : BorderSide.none)
+            : (isAmoled
+                ? BorderSide(color: colorScheme.outline, width: 1)
+                : BorderSide.none);
     final weekdayColor = isSelected
         ? colorScheme.onPrimary.withValues(alpha: 0.85)
         : isToday
-            ? colorScheme.primary
+            ? colorScheme.onPrimaryContainer.withValues(alpha: 0.85)
             : colorScheme.onSurfaceVariant;
     final dayColor = isSelected
         ? colorScheme.onPrimary
         : isToday
-            ? colorScheme.primary
+            ? colorScheme.onPrimaryContainer
             : colorScheme.onSurface;
 
     return Semantics(
       button: true,
       selected: isSelected,
       label: '$weekdayLabel $dayNumber',
-      child: Material(
-        color: backgroundColor,
-        shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
-          side: BorderSide(color: borderColor, width: 1),
-        ),
-        clipBehavior: Clip.antiAlias,
-        child: InkWell(
-          onTap: onTap,
-          child: SizedBox(
-            height: 64,
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  weekdayLabel,
-                  maxLines: 1,
-                  overflow: TextOverflow.ellipsis,
-                  style: theme.textTheme.labelSmall?.copyWith(
-                    color: weekdayColor,
-                    fontWeight: FontWeight.w600,
-                    fontSize: 10.5,
+      child: ZettaskSpringTap(
+        pressedScale: 0.92,
+        child: Material(
+          color: backgroundColor,
+          shape: RoundedRectangleBorder(
+            borderRadius: BorderRadius.circular(18),
+            side: borderSide,
+          ),
+          clipBehavior: Clip.antiAlias,
+          child: InkWell(
+            onTap: onTap,
+            child: SizedBox(
+              height: 66,
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Text(
+                    weekdayLabel,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.labelSmall?.copyWith(
+                      color: weekdayColor,
+                      fontWeight: FontWeight.w600,
+                      fontSize: 10.5,
+                    ),
                   ),
-                ),
-                const SizedBox(height: 3),
-                Text(
-                  dayNumber,
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    color: dayColor,
-                    fontWeight: FontWeight.w700,
-                    fontSize: 15,
-                    fontFeatures: const [FontFeature.tabularFigures()],
+                  const SizedBox(height: 3),
+                  Text(
+                    dayNumber,
+                    maxLines: 1,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      color: dayColor,
+                      fontWeight: FontWeight.w800,
+                      fontSize: 15,
+                      fontFeatures: const [FontFeature.tabularFigures()],
+                    ),
                   ),
-                ),
-                const SizedBox(height: 4),
-                SizedBox(
-                  height: 4,
-                  child: hasTasks
-                      ? Container(
-                          key: ValueKey('date_dot_$dayNumber'),
-                          width: 4,
-                          height: 4,
-                          decoration: BoxDecoration(
-                            color: isSelected
-                                ? colorScheme.onPrimary
-                                : colorScheme.primary,
-                            shape: BoxShape.circle,
-                          ),
-                        )
-                      : null,
-                ),
-              ],
+                  const SizedBox(height: 4),
+                  SizedBox(
+                    height: 4,
+                    child: hasTasks
+                        ? Container(
+                            key: ValueKey('date_dot_$dayNumber'),
+                            width: 5,
+                            height: 5,
+                            decoration: BoxDecoration(
+                              color: isSelected
+                                  ? colorScheme.onPrimary
+                                  : isToday
+                                      ? colorScheme.onPrimaryContainer
+                                      : colorScheme.primary,
+                              shape: BoxShape.circle,
+                            ),
+                          )
+                        : null,
+                  ),
+                ],
+              ),
             ),
           ),
         ),

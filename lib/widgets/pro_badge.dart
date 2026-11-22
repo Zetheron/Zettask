@@ -1,6 +1,8 @@
 import 'package:material_ui/material_ui.dart';
+import 'package:provider/provider.dart';
 
 import '../l10n/app_localizations.dart';
+import '../providers/subscription_provider.dart';
 
 class ProBadge extends StatelessWidget {
   const ProBadge({
@@ -14,7 +16,10 @@ class ProBadge extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    if (!visible) return const SizedBox.shrink();
+    final subscriptionProvider = context.watch<SubscriptionProvider?>();
+    final isPaywallEnabled = subscriptionProvider?.isPaywallEnabled ??
+        SubscriptionProvider.enableProPaywall;
+    if (!visible || !isPaywallEnabled) return const SizedBox.shrink();
 
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
@@ -22,12 +27,12 @@ class ProBadge extends StatelessWidget {
 
     return Container(
       padding: EdgeInsets.symmetric(
-        horizontal: filled ? 7 : 6,
-        vertical: filled ? 2 : 1.5,
+        horizontal: filled ? 8 : 7,
+        vertical: filled ? 2.5 : 2,
       ),
       decoration: BoxDecoration(
         color: filled ? colorScheme.primary : colorScheme.primaryContainer,
-        borderRadius: BorderRadius.circular(5),
+        borderRadius: BorderRadius.circular(999),
       ),
       child: Text(
         l10n.proBadge,

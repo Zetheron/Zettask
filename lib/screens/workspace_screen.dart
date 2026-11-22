@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
+import '../core/theme/app_theme.dart';
 import '../l10n/app_localizations.dart';
 import '../models/subscription_model.dart';
 import '../providers/app_lock_provider.dart';
@@ -256,15 +257,15 @@ class WorkspaceScreen extends StatelessWidget {
                           child: Material(
                             color: taskProvider.firstDayOfWeek == option.$1
                                 ? colorScheme.primaryContainer
-                                : colorScheme.surface,
+                                : colorScheme.surfaceContainerLow,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(12),
-                              side: BorderSide(
-                                color: taskProvider.firstDayOfWeek == option.$1
-                                    ? colorScheme.primary
-                                    : colorScheme.outline,
-                                width: 1,
-                              ),
+                              borderRadius: BorderRadius.circular(18),
+                              side: taskProvider.firstDayOfWeek == option.$1
+                                  ? BorderSide(
+                                      color: colorScheme.primary,
+                                      width: 1.5,
+                                    )
+                                  : AppTheme.cardBorderSide(theme),
                             ),
                             clipBehavior: Clip.antiAlias,
                             child: InkWell(
@@ -488,7 +489,8 @@ class WorkspaceScreen extends StatelessWidget {
                   child: ListView(
                     padding: const EdgeInsets.fromLTRB(16, 10, 16, 32),
                     children: [
-                if (subscriptionProvider != null) ...[
+                if (subscriptionProvider != null &&
+                    subscriptionProvider.isPaywallEnabled) ...[
                   _ProBannerCard(
                     key: const ValueKey('workspace_pro_banner'),
                     subscriptionProvider: subscriptionProvider,
@@ -767,7 +769,9 @@ class WorkspaceScreen extends StatelessWidget {
                     ),
                   ],
                 ),
-                if (kDebugMode && subscriptionProvider != null) ...[
+                if (kDebugMode &&
+                    subscriptionProvider != null &&
+                    subscriptionProvider.isPaywallEnabled) ...[
                   const SizedBox(height: 16),
                   _DebugProSimulationRow(
                     subscriptionProvider: subscriptionProvider,
@@ -804,10 +808,10 @@ class _ExportOptionTile extends StatelessWidget {
     final colorScheme = theme.colorScheme;
 
     return Material(
-      color: colorScheme.surface,
+      color: colorScheme.surfaceContainerLow,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
-        side: BorderSide(color: colorScheme.outline, width: 1),
+        borderRadius: BorderRadius.circular(18),
+        side: AppTheme.cardBorderSide(theme),
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -877,13 +881,14 @@ class _SettingsCard extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     return Material(
-      color: colorScheme.surface,
+      color: colorScheme.surfaceContainerLow,
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
-        side: BorderSide(color: colorScheme.outline, width: 1),
+        borderRadius: BorderRadius.circular(22),
+        side: AppTheme.cardBorderSide(theme),
       ),
       clipBehavior: Clip.antiAlias,
       child: Column(
@@ -995,11 +1000,11 @@ class _AccountSummaryCard extends StatelessWidget {
     final subtitle = user != null ? syncStatusLabel : l10n.accountBannerSubtitle;
 
     return Material(
-      color: colorScheme.surface,
+      color: colorScheme.surfaceContainerLow,
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
-        side: BorderSide(color: colorScheme.outline, width: 1),
+        borderRadius: BorderRadius.circular(22),
+        side: AppTheme.cardBorderSide(theme),
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -1007,34 +1012,33 @@ class _AccountSummaryCard extends StatelessWidget {
         child: ConstrainedBox(
           constraints: const BoxConstraints(minHeight: 60),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 12),
             child: Row(
               children: [
                 if (user != null)
                   CircleAvatar(
-                    radius: 18,
+                    radius: 19,
                     backgroundColor: colorScheme.primaryContainer,
-                    foregroundColor: colorScheme.primary,
+                    foregroundColor: colorScheme.onPrimaryContainer,
                     child: Text(
                       user.initials,
                       style: theme.textTheme.labelMedium?.copyWith(
                         fontWeight: FontWeight.w700,
-                        color: colorScheme.primary,
+                        color: colorScheme.onPrimaryContainer,
                       ),
                     ),
                   )
                 else
                   Container(
-                    width: 36,
-                    height: 36,
+                    width: 38,
+                    height: 38,
                     decoration: BoxDecoration(
-                      color: colorScheme.surfaceContainerHighest,
+                      color: colorScheme.surfaceContainerHigh,
                       shape: BoxShape.circle,
-                      border: Border.all(color: colorScheme.outline, width: 1),
                     ),
                     child: Icon(
                       Icons.cloud_outlined,
-                      size: 18,
+                      size: 19,
                       color: colorScheme.onSurfaceVariant,
                     ),
                   ),
@@ -1124,15 +1128,18 @@ class _ProBannerCard extends StatelessWidget {
         ? l10n.proActiveBannerTitle(localizedProPlanName(activePlan, l10n))
         : l10n.proUpgradeBannerSubtitle;
 
+    final isAmoled = AppTheme.isAmoled(theme);
+
     return Material(
-      color: colorScheme.surface,
+      color: isAmoled
+          ? colorScheme.surfaceContainerLow
+          : colorScheme.primaryContainer.withValues(alpha: isPro ? 0.55 : 0.38),
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
-        side: BorderSide(
-          color: isPro ? colorScheme.primary : colorScheme.outline,
-          width: isPro ? 1.25 : 1,
-        ),
+        borderRadius: BorderRadius.circular(22),
+        side: isPro
+            ? BorderSide(color: colorScheme.primary, width: 1.5)
+            : AppTheme.cardBorderSide(theme),
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -1140,15 +1147,15 @@ class _ProBannerCard extends StatelessWidget {
         child: ConstrainedBox(
           constraints: const BoxConstraints(minHeight: 58),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 10),
             child: Row(
               children: [
                 Container(
-                  width: 34,
-                  height: 34,
+                  width: 38,
+                  height: 38,
                   decoration: BoxDecoration(
                     color: colorScheme.primaryContainer,
-                    borderRadius: BorderRadius.circular(10),
+                    borderRadius: BorderRadius.circular(14),
                   ),
                   child: Icon(
                     isPro
@@ -1224,11 +1231,11 @@ class _DebugProSimulationRow extends StatelessWidget {
     final l10n = AppLocalizations.of(context);
 
     return Material(
-      color: colorScheme.surfaceContainerHighest.withValues(alpha: 0.5),
+      color: colorScheme.surfaceContainerHigh,
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(12),
-        side: BorderSide(color: colorScheme.outline, width: 1),
+        borderRadius: BorderRadius.circular(18),
+        side: AppTheme.cardBorderSide(theme),
       ),
       clipBehavior: Clip.antiAlias,
       child: SwitchListTile(

@@ -109,6 +109,15 @@ class _StatsScreenState extends State<StatsScreen> {
           (prev, count) => math.max(prev, count),
         );
 
+        final isAmoled = AppTheme.isAmoled(theme);
+        final cardDecoration = BoxDecoration(
+          color: colorScheme.surfaceContainerLow,
+          borderRadius: BorderRadius.circular(24),
+          border: isAmoled
+              ? Border.all(color: colorScheme.outline, width: 1)
+              : null,
+        );
+
         return Scaffold(
           appBar: AppBar(
             title: Text(l10n.statsTitle),
@@ -138,19 +147,8 @@ class _StatsScreenState extends State<StatsScreen> {
                       _switchRange(selection.first);
                     }
                   },
-                  style: ButtonStyle(
-                    minimumSize: const WidgetStatePropertyAll(Size(0, 48)),
-                    side: WidgetStatePropertyAll(
-                      BorderSide(color: colorScheme.outline, width: 1),
-                    ),
-                    shape: WidgetStatePropertyAll(
-                      RoundedRectangleBorder(
-                        borderRadius: BorderRadius.circular(12),
-                      ),
-                    ),
-                  ),
                 ),
-                const SizedBox(height: 14),
+                const SizedBox(height: 16),
                 ZettaskStackingCard(
                   scrollController: _scrollController,
                   child: Column(
@@ -161,7 +159,16 @@ class _StatsScreenState extends State<StatsScreen> {
                             child: _MetricCard(
                               label: l10n.completedToday,
                               value: '${stats.completedToday}',
-                              accentColor: colorScheme.primary,
+                              accentColor: isAmoled
+                                  ? colorScheme.primary
+                                  : colorScheme.onPrimaryContainer,
+                              surfaceColor: isAmoled
+                                  ? colorScheme.surfaceContainerLow
+                                  : colorScheme.primaryContainer,
+                              labelColor: isAmoled
+                                  ? colorScheme.onSurfaceVariant
+                                  : colorScheme.onPrimaryContainer
+                                      .withValues(alpha: 0.8),
                             ),
                           ),
                           const SizedBox(width: 10),
@@ -171,7 +178,16 @@ class _StatsScreenState extends State<StatsScreen> {
                                   ? l10n.last30DaysLabel
                                   : l10n.last7DaysLabel,
                               value: '$rangeTasks',
-                              accentColor: colorScheme.secondary,
+                              accentColor: isAmoled
+                                  ? colorScheme.secondary
+                                  : colorScheme.onSecondaryContainer,
+                              surfaceColor: isAmoled
+                                  ? colorScheme.surfaceContainerLow
+                                  : colorScheme.secondaryContainer,
+                              labelColor: isAmoled
+                                  ? colorScheme.onSurfaceVariant
+                                  : colorScheme.onSecondaryContainer
+                                      .withValues(alpha: 0.8),
                             ),
                           ),
                         ],
@@ -184,6 +200,7 @@ class _StatsScreenState extends State<StatsScreen> {
                               label: l10n.allTimeLabel,
                               value: '${stats.allTimeCompletedTasks}',
                               accentColor: colorScheme.onSurface,
+                              surfaceColor: colorScheme.surfaceContainerLow,
                             ),
                           ),
                           const SizedBox(width: 10),
@@ -192,6 +209,7 @@ class _StatsScreenState extends State<StatsScreen> {
                               label: l10n.completionRateLabel,
                               value: '${stats.completionPercentage}%',
                               accentColor: colorScheme.primary,
+                              surfaceColor: colorScheme.surfaceContainerLow,
                             ),
                           ),
                         ],
@@ -199,7 +217,7 @@ class _StatsScreenState extends State<StatsScreen> {
                     ],
                   ),
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 20),
                 _SectionLabel(
                   title: is30Days ? l10n.activity30Days : l10n.activity7Days,
                 ),
@@ -207,12 +225,8 @@ class _StatsScreenState extends State<StatsScreen> {
                 ZettaskStackingCard(
                   scrollController: _scrollController,
                   child: Container(
-                    padding: const EdgeInsets.fromLTRB(12, 16, 12, 14),
-                    decoration: BoxDecoration(
-                      color: colorScheme.surface,
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: colorScheme.outline, width: 1),
-                    ),
+                    padding: const EdgeInsets.fromLTRB(14, 18, 14, 16),
+                    decoration: cardDecoration,
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.stretch,
                       children: [
@@ -236,42 +250,52 @@ class _StatsScreenState extends State<StatsScreen> {
                                 setState(() => _selectedDayIndex = index),
                           ),
                         if (selectedDay != null) ...[
-                          const SizedBox(height: 12),
+                          const SizedBox(height: 14),
                           Container(
                             padding: const EdgeInsets.symmetric(
-                              horizontal: 12,
-                              vertical: 10,
+                              horizontal: 14,
+                              vertical: 11,
                             ),
                             decoration: BoxDecoration(
-                              color: colorScheme.surfaceContainerHighest,
-                              borderRadius: BorderRadius.circular(10),
-                              border: Border.all(
-                                color: colorScheme.outline,
-                                width: 1,
-                              ),
+                              color: colorScheme.surfaceContainerHigh,
+                              borderRadius: BorderRadius.circular(16),
+                              border: isAmoled
+                                  ? Border.all(
+                                      color: colorScheme.outline,
+                                      width: 1,
+                                    )
+                                  : null,
                             ),
                             child: Row(
                               children: [
                                 Expanded(
                                   child: Text(
                                     _formatFullDay(selectedDay.date, localeTag),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
                                     style:
                                         theme.textTheme.labelMedium?.copyWith(
                                       fontSize: 12.5,
                                     ),
                                   ),
                                 ),
-                                Text(
-                                  l10n.dayDetailSummary(
-                                    selectedDay.completedTasks,
-                                    selectedDay.completedChecklists,
-                                  ),
-                                  style: theme.textTheme.bodySmall?.copyWith(
-                                    fontWeight: FontWeight.w600,
-                                    color: colorScheme.onSurface,
-                                    fontFeatures: const [
-                                      FontFeature.tabularFigures(),
-                                    ],
+                                const SizedBox(width: 8),
+                                Flexible(
+                                  child: Text(
+                                    l10n.dayDetailSummary(
+                                      selectedDay.completedTasks,
+                                      selectedDay.completedChecklists,
+                                    ),
+                                    maxLines: 1,
+                                    overflow: TextOverflow.ellipsis,
+                                    textAlign: TextAlign.end,
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      fontWeight: FontWeight.w700,
+                                      color: colorScheme.onSurface,
+                                      fontFeatures: const [
+                                        FontFeature.tabularFigures(),
+                                      ],
+                                    ),
                                   ),
                                 ),
                               ],
@@ -293,18 +317,14 @@ class _StatsScreenState extends State<StatsScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 20),
                 _SectionLabel(title: l10n.completedByPriority),
                 const SizedBox(height: 8),
                 ZettaskStackingCard(
                   scrollController: _scrollController,
                   child: Container(
-                    padding: const EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      color: colorScheme.surface,
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: colorScheme.outline, width: 1),
-                    ),
+                    padding: const EdgeInsets.all(16),
+                    decoration: cardDecoration,
                     child: Column(
                       children: [
                         for (final priority in const [
@@ -334,18 +354,14 @@ class _StatsScreenState extends State<StatsScreen> {
                     ),
                   ),
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 20),
                 _SectionLabel(title: l10n.progressByProject),
                 const SizedBox(height: 8),
                 ZettaskStackingCard(
                   scrollController: _scrollController,
                   child: Container(
-                    padding: const EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      color: colorScheme.surface,
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: colorScheme.outline, width: 1),
-                    ),
+                    padding: const EdgeInsets.all(16),
+                    decoration: cardDecoration,
                     child: stats.breakdownByProject.isEmpty
                         ? Text(
                             l10n.noProjectsCreated,
@@ -379,18 +395,14 @@ class _StatsScreenState extends State<StatsScreen> {
                           ),
                   ),
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 20),
                 _SectionLabel(title: l10n.breakdownByTag),
                 const SizedBox(height: 8),
                 ZettaskStackingCard(
                   scrollController: _scrollController,
                   child: Container(
-                    padding: const EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      color: colorScheme.surface,
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: colorScheme.outline, width: 1),
-                    ),
+                    padding: const EdgeInsets.all(16),
+                    decoration: cardDecoration,
                     child: stats.breakdownByTag.isEmpty
                         ? Text(
                             l10n.noTagsCreated,
@@ -426,18 +438,14 @@ class _StatsScreenState extends State<StatsScreen> {
                           ),
                   ),
                 ),
-                const SizedBox(height: 18),
+                const SizedBox(height: 20),
                 _SectionLabel(title: l10n.habits30Days),
                 const SizedBox(height: 8),
                 ZettaskStackingCard(
                   scrollController: _scrollController,
                   child: Container(
-                    padding: const EdgeInsets.all(14),
-                    decoration: BoxDecoration(
-                      color: colorScheme.surface,
-                      borderRadius: BorderRadius.circular(14),
-                      border: Border.all(color: colorScheme.outline, width: 1),
-                    ),
+                    padding: const EdgeInsets.all(16),
+                    decoration: cardDecoration,
                     child: stats.habitStats.isEmpty
                         ? Text(
                             l10n.noActiveHabits,
@@ -532,14 +540,15 @@ class _SevenDayBarChart extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     AnimatedContainer(
-                      duration: const Duration(milliseconds: 200),
-                      width: 20,
+                      duration: const Duration(milliseconds: 260),
+                      curve: ZettaskSpringCurve.snappy,
+                      width: 22,
                       height: barHeight,
                       decoration: BoxDecoration(
                         color: barColor,
                         borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(6),
-                          bottom: Radius.circular(2),
+                          top: Radius.circular(10),
+                          bottom: Radius.circular(4),
                         ),
                       ),
                     ),
@@ -639,14 +648,15 @@ class _ThirtyDayBarChart extends StatelessWidget {
                     ),
                     const SizedBox(height: 4),
                     AnimatedContainer(
-                      duration: const Duration(milliseconds: 180),
-                      width: isSelected ? 12 : 9,
+                      duration: const Duration(milliseconds: 240),
+                      curve: ZettaskSpringCurve.snappy,
+                      width: isSelected ? 13 : 9,
                       height: barHeight,
                       decoration: BoxDecoration(
                         color: barColor,
                         borderRadius: const BorderRadius.vertical(
-                          top: Radius.circular(4),
-                          bottom: Radius.circular(2),
+                          top: Radius.circular(6),
+                          bottom: Radius.circular(3),
                         ),
                       ),
                     ),
@@ -794,32 +804,42 @@ class _MetricCard extends StatelessWidget {
     required this.label,
     required this.value,
     required this.accentColor,
+    required this.surfaceColor,
+    this.labelColor,
   });
 
   final String label;
   final String value;
   final Color accentColor;
+  final Color surfaceColor;
+  final Color? labelColor;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final isAmoled = AppTheme.isAmoled(theme);
 
     return Container(
-      padding: const EdgeInsets.all(14),
+      padding: const EdgeInsets.all(18),
       decoration: BoxDecoration(
-        color: colorScheme.surface,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: colorScheme.outline, width: 1),
+        color: surfaceColor,
+        borderRadius: BorderRadius.circular(24),
+        border: isAmoled
+            ? Border.all(color: colorScheme.outline, width: 1)
+            : null,
       ),
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
           Text(
             value,
-            style: theme.textTheme.headlineSmall?.copyWith(
-              fontSize: 24,
-              fontWeight: FontWeight.w700,
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
+            style: theme.textTheme.headlineMedium?.copyWith(
+              fontSize: 30,
+              fontWeight: FontWeight.w800,
+              letterSpacing: -0.8,
               color: accentColor,
               fontFeatures: const [FontFeature.tabularFigures()],
             ),
@@ -829,7 +849,10 @@ class _MetricCard extends StatelessWidget {
             label,
             maxLines: 1,
             overflow: TextOverflow.ellipsis,
-            style: theme.textTheme.bodySmall,
+            style: theme.textTheme.bodySmall?.copyWith(
+              color: labelColor ?? colorScheme.onSurfaceVariant,
+              fontWeight: FontWeight.w600,
+            ),
           ),
         ],
       ),
@@ -861,8 +884,8 @@ class _BreakdownRow extends StatelessWidget {
         Row(
           children: [
             Container(
-              width: 8,
-              height: 8,
+              width: 9,
+              height: 9,
               decoration: BoxDecoration(
                 color: accentColor,
                 shape: BoxShape.circle,
@@ -883,19 +906,19 @@ class _BreakdownRow extends StatelessWidget {
             Text(
               trailing,
               style: theme.textTheme.bodySmall?.copyWith(
-                fontWeight: FontWeight.w600,
+                fontWeight: FontWeight.w700,
                 fontFeatures: const [FontFeature.tabularFigures()],
               ),
             ),
           ],
         ),
-        const SizedBox(height: 6),
+        const SizedBox(height: 8),
         ClipRRect(
           borderRadius: BorderRadius.circular(999),
           child: LinearProgressIndicator(
             value: ratio.clamp(0.0, 1.0),
-            minHeight: 5,
-            backgroundColor: colorScheme.outline,
+            minHeight: 7,
+            backgroundColor: colorScheme.surfaceContainerHighest,
             valueColor: AlwaysStoppedAnimation<Color>(accentColor),
           ),
         ),

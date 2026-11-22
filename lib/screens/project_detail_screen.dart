@@ -13,6 +13,7 @@ import '../providers/task_provider.dart';
 import '../providers/workspace_provider.dart';
 import '../widgets/task_editor_sheet.dart';
 import '../widgets/zettask_loaders.dart';
+import '../widgets/zettask_motion.dart';
 
 class ProjectDetailScreen extends StatefulWidget {
   const ProjectDetailScreen({
@@ -242,46 +243,66 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
             Padding(
               padding: const EdgeInsets.fromLTRB(16, 8, 16, 12),
               child: Container(
-                padding: const EdgeInsets.all(14),
+                padding: const EdgeInsets.all(16),
                 decoration: BoxDecoration(
-                  color: colorScheme.surface,
-                  borderRadius: BorderRadius.circular(14),
-                  border: Border.all(color: colorScheme.outline, width: 1),
+                  color: colorScheme.surfaceContainerLow,
+                  borderRadius: BorderRadius.circular(24),
+                  border: AppTheme.isAmoled(theme)
+                      ? Border.all(color: colorScheme.outline, width: 1)
+                      : null,
                 ),
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
                     Row(
                       children: [
-                        Text(
-                          l10n.projectTasksCompletedRatio(
-                            progress.completedCount,
-                            progress.totalCount,
-                          ),
-                          style: theme.textTheme.labelMedium?.copyWith(
-                            color: colorScheme.onSurfaceVariant,
-                            fontFeatures: const [FontFeature.tabularFigures()],
+                        Expanded(
+                          child: Text(
+                            l10n.projectTasksCompletedRatio(
+                              progress.completedCount,
+                              progress.totalCount,
+                            ),
+                            maxLines: 1,
+                            overflow: TextOverflow.ellipsis,
+                            style: theme.textTheme.labelMedium?.copyWith(
+                              color: colorScheme.onSurfaceVariant,
+                              fontFeatures: const [
+                                FontFeature.tabularFigures(),
+                              ],
+                            ),
                           ),
                         ),
-                        const Spacer(),
-                        Text(
-                          '${progress.percentage}%',
-                          style: theme.textTheme.titleMedium?.copyWith(
-                            fontSize: 14,
-                            fontWeight: FontWeight.w700,
-                            color: accentColor,
-                            fontFeatures: const [FontFeature.tabularFigures()],
+                        const SizedBox(width: 8),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 10,
+                            vertical: 3,
+                          ),
+                          decoration: BoxDecoration(
+                            color: accentColor.withValues(alpha: 0.14),
+                            borderRadius: BorderRadius.circular(999),
+                          ),
+                          child: Text(
+                            '${progress.percentage}%',
+                            style: theme.textTheme.titleMedium?.copyWith(
+                              fontSize: 14,
+                              fontWeight: FontWeight.w800,
+                              color: accentColor,
+                              fontFeatures: const [
+                                FontFeature.tabularFigures(),
+                              ],
+                            ),
                           ),
                         ),
                       ],
                     ),
-                    const SizedBox(height: 8),
+                    const SizedBox(height: 10),
                     ClipRRect(
                       borderRadius: BorderRadius.circular(999),
                       child: LinearProgressIndicator(
                         value: progress.ratio,
-                        minHeight: 5,
-                        backgroundColor: colorScheme.outline,
+                        minHeight: 7,
+                        backgroundColor: colorScheme.surfaceContainerHighest,
                         valueColor: AlwaysStoppedAnimation<Color>(accentColor),
                       ),
                     ),
@@ -349,11 +370,13 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
           ],
         ),
       ),
-      floatingActionButton: FloatingActionButton(
-        heroTag: 'project_detail_fab',
-        onPressed: () => _openTaskEditor(),
-        tooltip: l10n.addTaskToProjectTooltip,
-        child: const Icon(Icons.add_rounded),
+      floatingActionButton: ZettaskSpringTap(
+        child: FloatingActionButton(
+          heroTag: 'project_detail_fab',
+          onPressed: () => _openTaskEditor(),
+          tooltip: l10n.addTaskToProjectTooltip,
+          child: const Icon(Icons.add_rounded),
+        ),
       ),
     );
   }
@@ -420,11 +443,13 @@ class _ProjectTaskCard extends StatelessWidget {
         alignment: AlignmentDirectional.centerStart,
         decoration: BoxDecoration(
           color: successColor.withValues(alpha: 0.14),
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: successColor.withValues(alpha: 0.4),
-            width: 1,
-          ),
+          borderRadius: BorderRadius.circular(20),
+          border: AppTheme.isAmoled(theme)
+              ? Border.all(
+                  color: successColor.withValues(alpha: 0.4),
+                  width: 1,
+                )
+              : null,
         ),
         child: Icon(
           isMuted ? Icons.undo_rounded : Icons.check_circle_outline_rounded,
@@ -436,24 +461,26 @@ class _ProjectTaskCard extends StatelessWidget {
         alignment: AlignmentDirectional.centerEnd,
         decoration: BoxDecoration(
           color: colorScheme.error.withValues(alpha: 0.14),
-          borderRadius: BorderRadius.circular(14),
-          border: Border.all(
-            color: colorScheme.error.withValues(alpha: 0.4),
-            width: 1,
-          ),
+          borderRadius: BorderRadius.circular(20),
+          border: AppTheme.isAmoled(theme)
+              ? Border.all(
+                  color: colorScheme.error.withValues(alpha: 0.4),
+                  width: 1,
+                )
+              : null,
         ),
         child: Icon(Icons.delete_outline_rounded, color: colorScheme.error),
       ),
       child: Material(
         color: isCancelled
-            ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.65)
+            ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.7)
             : task.isCompleted
-                ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.5)
-                : colorScheme.surface,
+                ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.55)
+                : colorScheme.surfaceContainerLow,
         elevation: 0,
         shape: RoundedRectangleBorder(
-          borderRadius: BorderRadius.circular(14),
-          side: BorderSide(color: colorScheme.outline, width: 1),
+          borderRadius: BorderRadius.circular(20),
+          side: AppTheme.cardBorderSide(theme),
         ),
         clipBehavior: Clip.antiAlias,
         child: InkWell(
@@ -462,7 +489,7 @@ class _ProjectTaskCard extends StatelessWidget {
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
               Padding(
-                padding: const EdgeInsetsDirectional.fromSTEB(4, 4, 14, 10),
+                padding: const EdgeInsetsDirectional.fromSTEB(4, 6, 14, 12),
                 child: Row(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
@@ -477,34 +504,39 @@ class _ProjectTaskCard extends StatelessWidget {
                         },
                         customBorder: const CircleBorder(),
                         child: Center(
-                          child: Container(
-                            width: 22,
-                            height: 22,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: isCancelled
-                                  ? cancelledFill
-                                  : (task.isCompleted
-                                      ? taskColor
-                                      : Colors.transparent),
-                              border: Border.all(
-                                color: isCancelled ? cancelledFill : taskColor,
-                                width: 1.75,
+                          child: ZettaskSpringCheckBounce(
+                            stateKey: (task.isCompleted, isCancelled),
+                            child: AnimatedContainer(
+                              duration: const Duration(milliseconds: 240),
+                              curve: ZettaskSpringCurve.snappy,
+                              width: 24,
+                              height: 24,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: isCancelled
+                                    ? cancelledFill
+                                    : (task.isCompleted
+                                        ? taskColor
+                                        : Colors.transparent),
+                                border: Border.all(
+                                  color: isCancelled ? cancelledFill : taskColor,
+                                  width: 2,
+                                ),
                               ),
+                              child: isCancelled
+                                  ? Icon(
+                                      Icons.close_rounded,
+                                      size: 15,
+                                      color: cancelledIconColor,
+                                    )
+                                  : task.isCompleted
+                                      ? Icon(
+                                          Icons.check_rounded,
+                                          size: 15,
+                                          color: checkColor,
+                                        )
+                                      : null,
                             ),
-                            child: isCancelled
-                                ? Icon(
-                                    Icons.close_rounded,
-                                    size: 14,
-                                    color: cancelledIconColor,
-                                  )
-                                : task.isCompleted
-                                    ? Icon(
-                                        Icons.check_rounded,
-                                        size: 14,
-                                        color: checkColor,
-                                      )
-                                    : null,
                           ),
                         ),
                       ),
@@ -518,7 +550,7 @@ class _ProjectTaskCard extends StatelessWidget {
                             Text(
                               task.title,
                               style: theme.textTheme.titleMedium?.copyWith(
-                                fontSize: 15,
+                                fontSize: 15.5,
                                 decoration:
                                     isMuted ? TextDecoration.lineThrough : null,
                                 color: isCancelled
@@ -540,13 +572,16 @@ class _ProjectTaskCard extends StatelessWidget {
                                       : dateLabel,
                                   style: theme.textTheme.bodySmall?.copyWith(
                                     color: isCancelled ? mutedNeutral : null,
+                                    fontFeatures: const [
+                                      FontFeature.tabularFigures(),
+                                    ],
                                   ),
                                 ),
                                 if (tagName != null)
                                   Container(
                                     padding: const EdgeInsets.symmetric(
-                                      horizontal: 7,
-                                      vertical: 2,
+                                      horizontal: 10,
+                                      vertical: 3,
                                     ),
                                     decoration: BoxDecoration(
                                       color: (isCancelled
@@ -556,9 +591,9 @@ class _ProjectTaskCard extends StatelessWidget {
                                                   brightness,
                                                 ))
                                           .withValues(
-                                        alpha: isCancelled ? 0.08 : 0.12,
+                                        alpha: isCancelled ? 0.08 : 0.15,
                                       ),
-                                      borderRadius: BorderRadius.circular(6),
+                                      borderRadius: BorderRadius.circular(999),
                                     ),
                                     child: Text(
                                       tagName!,
@@ -570,8 +605,8 @@ class _ProjectTaskCard extends StatelessWidget {
                                                 tagColorHex ?? '#2563EB',
                                                 brightness,
                                               ),
-                                        fontWeight: FontWeight.w600,
-                                        fontSize: 10.5,
+                                        fontWeight: FontWeight.w700,
+                                        fontSize: 11,
                                       ),
                                     ),
                                   ),

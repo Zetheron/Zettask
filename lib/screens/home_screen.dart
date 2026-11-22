@@ -2,6 +2,7 @@ import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
+import '../core/theme/app_theme.dart';
 import '../l10n/app_localizations.dart';
 import '../models/repeating_task_model.dart';
 import '../models/task_model.dart';
@@ -437,20 +438,26 @@ class _HomeScreenState extends State<HomeScreen> {
             title: Row(
               children: [
                 Container(
-                  width: 30,
-                  height: 30,
+                  width: 32,
+                  height: 32,
                   decoration: BoxDecoration(
                     color: colorScheme.primaryContainer,
-                    borderRadius: BorderRadius.circular(9),
+                    borderRadius: BorderRadius.circular(11),
                   ),
                   child: Icon(
                     Icons.check_rounded,
-                    size: 17,
-                    color: colorScheme.primary,
+                    size: 18,
+                    color: colorScheme.onPrimaryContainer,
                   ),
                 ),
                 const SizedBox(width: 10),
-                Text(l10n.appName),
+                Flexible(
+                  child: Text(
+                    l10n.appName,
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                  ),
+                ),
               ],
             ),
             actions: [
@@ -490,14 +497,16 @@ class _HomeScreenState extends State<HomeScreen> {
                     PositionedDirectional(
                       end: 16,
                       bottom: 16,
-                      child: FloatingActionButton(
-                        heroTag: 'timeline_fab',
-                        onPressed: () => _openTaskEditor(
-                          context,
-                          defaultDate: taskProvider.selectedDate,
+                      child: ZettaskSpringTap(
+                        child: FloatingActionButton(
+                          heroTag: 'timeline_fab',
+                          onPressed: () => _openTaskEditor(
+                            context,
+                            defaultDate: taskProvider.selectedDate,
+                          ),
+                          tooltip: l10n.addTaskTooltip,
+                          child: const Icon(Icons.add_rounded),
                         ),
-                        tooltip: l10n.addTaskTooltip,
-                        child: const Icon(Icons.add_rounded),
                       ),
                     ),
                   ],
@@ -689,6 +698,9 @@ class _HomeScreenState extends State<HomeScreen> {
       }
     }
 
+    final textScaler = MediaQuery.textScalerOf(context);
+    final headerHeight = (textScaler.scale(48) + 26).clamp(72.0, 140.0);
+
     return CustomScrollView(
       slivers: [
         SliverMainAxisGroup(
@@ -696,7 +708,7 @@ class _HomeScreenState extends State<HomeScreen> {
             SliverPersistentHeader(
               pinned: true,
               delegate: ZettaskPinnedHeaderDelegate(
-                height: 66,
+                height: headerHeight,
                 padding: const EdgeInsetsDirectional.fromSTEB(16, 6, 16, 6),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.center,
@@ -707,8 +719,9 @@ class _HomeScreenState extends State<HomeScreen> {
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
                       style: theme.textTheme.labelMedium?.copyWith(
-                        color: colorScheme.onSurfaceVariant,
+                        color: colorScheme.primary,
                         fontSize: 13,
+                        fontWeight: FontWeight.w700,
                       ),
                     ),
                     const SizedBox(height: 1),
@@ -720,11 +733,11 @@ class _HomeScreenState extends State<HomeScreen> {
                       ),
                       maxLines: 1,
                       overflow: TextOverflow.ellipsis,
-                      style: theme.textTheme.headlineSmall?.copyWith(
-                        fontSize: 25,
-                        height: 1.15,
-                        fontWeight: FontWeight.w700,
-                        letterSpacing: -0.6,
+                      style: theme.textTheme.headlineMedium?.copyWith(
+                        fontSize: 28,
+                        height: 1.12,
+                        fontWeight: FontWeight.w800,
+                        letterSpacing: -0.8,
                       ),
                     ),
                   ],
@@ -774,25 +787,37 @@ class _HomeScreenState extends State<HomeScreen> {
     final intlLocale =
         LocaleProvider.intlLocaleTag(Localizations.localeOf(context));
 
+    final upcomingHeaderHeight =
+        (MediaQuery.textScalerOf(context).scale(22) + 22).clamp(42.0, 88.0);
+
     return SliverMainAxisGroup(
       slivers: [
         SliverPersistentHeader(
           pinned: true,
           delegate: ZettaskPinnedHeaderDelegate(
-            height: 40,
+            height: upcomingHeaderHeight,
             padding: const EdgeInsetsDirectional.fromSTEB(16, 0, 16, 0),
             child: Row(
               children: [
-                Text(
-                  '${_formatDayHeading(date, l10n, intlLocale)} · ${_formatShortDate(date, intlLocale)}',
-                  style: theme.textTheme.titleMedium?.copyWith(
-                    fontSize: 14.5,
-                    fontWeight: FontWeight.w700,
+                Flexible(
+                  child: Text(
+                    '${_formatDayHeading(date, l10n, intlLocale)} · ${_formatShortDate(date, intlLocale)}',
+                    maxLines: 1,
+                    overflow: TextOverflow.ellipsis,
+                    style: theme.textTheme.titleMedium?.copyWith(
+                      fontSize: 15,
+                      fontWeight: FontWeight.w800,
+                      letterSpacing: -0.3,
+                    ),
                   ),
                 ),
-                const SizedBox(width: 8),
+                const SizedBox(width: 10),
                 Expanded(
-                  child: Divider(color: colorScheme.outline),
+                  child: Divider(
+                    color: AppTheme.isAmoled(theme)
+                        ? colorScheme.outline
+                        : colorScheme.outlineVariant.withValues(alpha: 0.45),
+                  ),
                 ),
               ],
             ),
@@ -882,36 +907,49 @@ class _SummaryCardsRow extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
     final l10n = AppLocalizations.of(context);
+
+    final isAmoled = AppTheme.isAmoled(theme);
+    final uniformSurface =
+        isAmoled ? colorScheme.surfaceContainerLow : colorScheme.surfaceContainer;
+    final hasOverdue = overdueCount > 0;
 
     return Row(
       children: [
         Expanded(
           child: _SummaryCard(
+            key: const ValueKey('home_summary_todo'),
             label: l10n.toDo,
             count: todoCount,
             accentColor: colorScheme.primary,
+            surfaceColor: uniformSurface,
           ),
         ),
         const SizedBox(width: 8),
         Expanded(
           child: _SummaryCard(
+            key: const ValueKey('home_summary_overdue'),
             label: l10n.overdue,
             count: overdueCount,
-            accentColor: overdueCount > 0
-                ? colorScheme.error
+            accentColor: hasOverdue
+                ? (isAmoled ? colorScheme.error : colorScheme.onErrorContainer)
                 : colorScheme.onSurfaceVariant,
-            isHighlighted: overdueCount > 0,
+            surfaceColor:
+                hasOverdue ? colorScheme.errorContainer : uniformSurface,
+            isHighlighted: hasOverdue,
             onTap: onTapOverdue,
           ),
         ),
         const SizedBox(width: 8),
         Expanded(
           child: _SummaryCard(
+            key: const ValueKey('home_summary_unplanned'),
             label: l10n.unplanned,
             count: unplannedCount,
             accentColor: colorScheme.secondary,
+            surfaceColor: uniformSurface,
             onTap: onTapUnplanned,
           ),
         ),
@@ -922,9 +960,11 @@ class _SummaryCardsRow extends StatelessWidget {
 
 class _SummaryCard extends StatelessWidget {
   const _SummaryCard({
+    super.key,
     required this.label,
     required this.count,
     required this.accentColor,
+    required this.surfaceColor,
     this.isHighlighted = false,
     this.onTap,
   });
@@ -932,6 +972,7 @@ class _SummaryCard extends StatelessWidget {
   final String label;
   final int count;
   final Color accentColor;
+  final Color surfaceColor;
   final bool isHighlighted;
   final VoidCallback? onTap;
 
@@ -939,37 +980,41 @@ class _SummaryCard extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final isAmoled = AppTheme.isAmoled(theme);
 
-    return Material(
-      color: isHighlighted
-          ? accentColor.withValues(alpha: 0.08)
-          : colorScheme.surface,
+    final card = Material(
+      color: surfaceColor,
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
-        side: BorderSide(
-          color: isHighlighted
-              ? accentColor.withValues(alpha: 0.45)
-              : colorScheme.outline,
-          width: 1,
-        ),
+        borderRadius: BorderRadius.circular(20),
+        side: isHighlighted
+            ? (isAmoled
+                ? BorderSide(
+                    color: colorScheme.error.withValues(alpha: 0.55),
+                    width: 1,
+                  )
+                : BorderSide.none)
+            : AppTheme.cardBorderSide(theme),
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
         onTap: onTap,
         child: ConstrainedBox(
-          constraints: const BoxConstraints(minHeight: 68),
+          constraints: const BoxConstraints(minHeight: 74),
           child: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: 12, vertical: 10),
+            padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 12),
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               mainAxisAlignment: MainAxisAlignment.center,
               children: [
                 Text(
                   '$count',
-                  style: theme.textTheme.titleLarge?.copyWith(
-                    fontSize: 20,
-                    fontWeight: FontWeight.w700,
+                  maxLines: 1,
+                  overflow: TextOverflow.ellipsis,
+                  style: theme.textTheme.headlineSmall?.copyWith(
+                    fontSize: 23,
+                    fontWeight: FontWeight.w800,
+                    letterSpacing: -0.5,
                     color: isHighlighted ? accentColor : colorScheme.onSurface,
                     fontFeatures: const [FontFeature.tabularFigures()],
                   ),
@@ -983,7 +1028,7 @@ class _SummaryCard extends StatelessWidget {
                     color: isHighlighted
                         ? accentColor
                         : colorScheme.onSurfaceVariant,
-                    fontWeight: FontWeight.w600,
+                    fontWeight: FontWeight.w700,
                     fontSize: 11.5,
                   ),
                 ),
@@ -993,6 +1038,9 @@ class _SummaryCard extends StatelessWidget {
         ),
       ),
     );
+
+    if (onTap == null) return card;
+    return ZettaskSpringTap(child: card);
   }
 }
 
@@ -1011,6 +1059,7 @@ class _TimelineQuickAddRow extends StatelessWidget {
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
+    final isAmoled = AppTheme.isAmoled(theme);
 
     return IntrinsicHeight(
       child: Row(
@@ -1031,10 +1080,10 @@ class _TimelineQuickAddRow extends StatelessWidget {
                   height: 10,
                   decoration: BoxDecoration(
                     shape: BoxShape.circle,
-                    color: colorScheme.surface,
+                    color: theme.scaffoldBackgroundColor,
                     border: Border.all(
                       color: colorScheme.primary,
-                      width: 1.75,
+                      width: 2,
                     ),
                   ),
                 ),
@@ -1043,44 +1092,47 @@ class _TimelineQuickAddRow extends StatelessWidget {
           ),
           const SizedBox(width: 8),
           Expanded(
-            child: Material(
-              color: Colors.transparent,
-              shape: RoundedRectangleBorder(
-                borderRadius: BorderRadius.circular(14),
-                side: BorderSide(
-                  color: colorScheme.outline,
-                  width: 1,
+            child: ZettaskSpringTap(
+              child: Material(
+                color: isAmoled
+                    ? colorScheme.surfaceContainerLow
+                    : colorScheme.primaryContainer.withValues(alpha: 0.36),
+                shape: RoundedRectangleBorder(
+                  borderRadius: BorderRadius.circular(20),
+                  side: AppTheme.cardBorderSide(theme),
                 ),
-              ),
-              clipBehavior: Clip.antiAlias,
-              child: InkWell(
-                onTap: onTap,
-                child: ConstrainedBox(
-                  constraints: const BoxConstraints(minHeight: 48),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 12,
-                    ),
-                    child: Row(
-                      children: [
-                        Icon(
-                          Icons.add_rounded,
-                          size: 18,
-                          color: colorScheme.primary,
-                        ),
-                        const SizedBox(width: 8),
-                        Expanded(
-                          child: Text(
-                            label,
-                            style: theme.textTheme.labelMedium?.copyWith(
-                              color: colorScheme.primary,
-                              fontSize: 13.5,
-                              fontWeight: FontWeight.w600,
+                clipBehavior: Clip.antiAlias,
+                child: InkWell(
+                  onTap: onTap,
+                  child: ConstrainedBox(
+                    constraints: const BoxConstraints(minHeight: 50),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(
+                        horizontal: 16,
+                        vertical: 12,
+                      ),
+                      child: Row(
+                        children: [
+                          Icon(
+                            Icons.add_rounded,
+                            size: 19,
+                            color: colorScheme.primary,
+                          ),
+                          const SizedBox(width: 8),
+                          Expanded(
+                            child: Text(
+                              label,
+                              maxLines: 1,
+                              overflow: TextOverflow.ellipsis,
+                              style: theme.textTheme.labelMedium?.copyWith(
+                                color: colorScheme.primary,
+                                fontSize: 13.5,
+                                fontWeight: FontWeight.w700,
+                              ),
                             ),
                           ),
-                        ),
-                      ],
+                        ],
+                      ),
                     ),
                   ),
                 ),

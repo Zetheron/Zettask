@@ -74,6 +74,7 @@ void main() {
   });
 
   setUp(() {
+    SubscriptionProvider.debugEnableProPaywallOverride = true;
     SharedPreferences.setMockInitialValues({});
     final dispatcher = TestWidgetsFlutterBinding.instance.platformDispatcher;
     dispatcher.localeTestValue = const Locale('id', 'ID');
@@ -81,6 +82,7 @@ void main() {
   });
 
   tearDown(() {
+    SubscriptionProvider.resetEnableProPaywallOverride();
     final dispatcher = TestWidgetsFlutterBinding.instance.platformDispatcher;
     dispatcher.clearLocaleTestValue();
     dispatcher.clearLocalesTestValue();

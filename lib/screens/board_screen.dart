@@ -179,16 +179,18 @@ class _BoardScreenState extends State<BoardScreen> {
                                 'board_project_limit_indicator',
                               ),
                               padding: const EdgeInsets.symmetric(
-                                horizontal: 6,
-                                vertical: 1,
+                                horizontal: 8,
+                                vertical: 2,
                               ),
                               decoration: BoxDecoration(
-                                color: colorScheme.surfaceContainerHighest,
-                                borderRadius: BorderRadius.circular(5),
-                                border: Border.all(
-                                  color: colorScheme.outline,
-                                  width: 1,
-                                ),
+                                color: colorScheme.surfaceContainerHigh,
+                                borderRadius: BorderRadius.circular(999),
+                                border: AppTheme.isAmoled(theme)
+                                    ? Border.all(
+                                        color: colorScheme.outline,
+                                        width: 1,
+                                      )
+                                    : null,
                               ),
                               child: Text(
                                 '${allProjects.length}/${SubscriptionProvider.freeProjectLimit}',
@@ -280,14 +282,11 @@ class _BoardScreenState extends State<BoardScreen> {
                               label: Text(project.name),
                               selected: isSelected,
                               showCheckmark: false,
-                              side: BorderSide(
-                                color: isSelected
-                                    ? projectColor
-                                    : projectColor.withValues(alpha: 0.55),
-                                width: 1,
-                              ),
+                              side: isSelected
+                                  ? BorderSide(color: projectColor, width: 1.5)
+                                  : AppTheme.cardBorderSide(theme),
                               selectedColor:
-                                  projectColor.withValues(alpha: 0.14),
+                                  projectColor.withValues(alpha: 0.16),
                               materialTapTargetSize:
                                   MaterialTapTargetSize.padded,
                               onSelected: (_) => setState(
@@ -347,11 +346,13 @@ class _BoardScreenState extends State<BoardScreen> {
               ],
             ),
           ),
-          floatingActionButton: FloatingActionButton(
-            heroTag: 'board_fab',
-            onPressed: () => _openProjectEditor(),
-            tooltip: l10n.createProject,
-            child: const Icon(Icons.create_new_folder_outlined),
+          floatingActionButton: ZettaskSpringTap(
+            child: FloatingActionButton(
+              heroTag: 'board_fab',
+              onPressed: () => _openProjectEditor(),
+              tooltip: l10n.createProject,
+              child: const Icon(Icons.create_new_folder_outlined),
+            ),
           ),
         );
       },
@@ -384,114 +385,138 @@ class _ProjectCard extends StatelessWidget {
       theme.brightness,
     );
 
-    return Material(
-      color: colorScheme.surface,
-      elevation: 0,
-      shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
-        side: BorderSide(color: colorScheme.outline, width: 1),
-      ),
-      clipBehavior: Clip.antiAlias,
-      child: InkWell(
-        onTap: onTap,
-        child: IntrinsicHeight(
-          child: Row(
-            crossAxisAlignment: CrossAxisAlignment.stretch,
-            children: [
-              Container(
-                width: 4,
-                color: accentColor,
-              ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsetsDirectional.fromSTEB(14, 12, 6, 14),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Row(
-                        children: [
-                          Expanded(
-                            child: Text(
-                              project.name,
-                              maxLines: 1,
-                              overflow: TextOverflow.ellipsis,
-                              style: theme.textTheme.titleMedium?.copyWith(
-                                fontSize: 15.5,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            ),
-                          ),
-                          PopupMenuButton<String>(
-                            tooltip: l10n.projectOptionsTooltip,
-                            onSelected: (value) {
-                              if (value == 'edit') {
-                                onEdit();
-                              } else if (value == 'delete') {
-                                onDelete();
-                              }
-                            },
-                            itemBuilder: (_) => [
-                              PopupMenuItem(
-                                value: 'edit',
-                                child: Text(l10n.editProject),
-                              ),
-                              PopupMenuItem(
-                                value: 'delete',
-                                child: Text(l10n.deleteProject),
-                              ),
-                            ],
-                          ),
-                        ],
-                      ),
-                      const SizedBox(height: 6),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.only(end: 10),
-                        child: ClipRRect(
-                          borderRadius: BorderRadius.circular(999),
-                          child: LinearProgressIndicator(
-                            value: progress.ratio,
-                            minHeight: 5,
-                            backgroundColor: colorScheme.outline,
-                            valueColor:
-                                AlwaysStoppedAnimation<Color>(accentColor),
-                          ),
-                        ),
-                      ),
-                      const SizedBox(height: 8),
-                      Padding(
-                        padding: const EdgeInsetsDirectional.only(end: 10),
-                        child: Row(
+    return ZettaskSpringTap(
+      pressedScale: 0.98,
+      child: Material(
+        color: colorScheme.surfaceContainerLow,
+        elevation: 0,
+        shape: RoundedRectangleBorder(
+          borderRadius: BorderRadius.circular(24),
+          side: AppTheme.cardBorderSide(theme),
+        ),
+        clipBehavior: Clip.antiAlias,
+        child: InkWell(
+          onTap: onTap,
+          child: IntrinsicHeight(
+            child: Row(
+              crossAxisAlignment: CrossAxisAlignment.stretch,
+              children: [
+                Container(
+                  width: 5,
+                  color: accentColor,
+                ),
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsetsDirectional.fromSTEB(
+                      16,
+                      14,
+                      6,
+                      16,
+                    ),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.stretch,
+                      children: [
+                        Row(
                           children: [
-                            Text(
-                              l10n.projectsCompletedRatio(
-                                progress.completedCount,
-                                progress.totalCount,
-                              ),
-                              style: theme.textTheme.bodySmall?.copyWith(
-                                fontFeatures: const [
-                                  FontFeature.tabularFigures(),
-                                ],
+                            Expanded(
+                              child: Text(
+                                project.name,
+                                maxLines: 1,
+                                overflow: TextOverflow.ellipsis,
+                                style: theme.textTheme.titleMedium?.copyWith(
+                                  fontSize: 16.5,
+                                  fontWeight: FontWeight.w800,
+                                  letterSpacing: -0.3,
+                                ),
                               ),
                             ),
-                            const Spacer(),
-                            Text(
-                              '${progress.percentage}%',
-                              style: theme.textTheme.labelMedium?.copyWith(
-                                color: accentColor,
-                                fontWeight: FontWeight.w700,
-                                fontFeatures: const [
-                                  FontFeature.tabularFigures(),
-                                ],
-                              ),
+                            PopupMenuButton<String>(
+                              tooltip: l10n.projectOptionsTooltip,
+                              onSelected: (value) {
+                                if (value == 'edit') {
+                                  onEdit();
+                                } else if (value == 'delete') {
+                                  onDelete();
+                                }
+                              },
+                              itemBuilder: (_) => [
+                                PopupMenuItem(
+                                  value: 'edit',
+                                  child: Text(l10n.editProject),
+                                ),
+                                PopupMenuItem(
+                                  value: 'delete',
+                                  child: Text(l10n.deleteProject),
+                                ),
+                              ],
                             ),
                           ],
                         ),
-                      ),
-                    ],
+                        const SizedBox(height: 8),
+                        Padding(
+                          padding: const EdgeInsetsDirectional.only(end: 10),
+                          child: ClipRRect(
+                            borderRadius: BorderRadius.circular(999),
+                            child: LinearProgressIndicator(
+                              value: progress.ratio,
+                              minHeight: 7,
+                              backgroundColor:
+                                  colorScheme.surfaceContainerHighest,
+                              valueColor:
+                                  AlwaysStoppedAnimation<Color>(accentColor),
+                            ),
+                          ),
+                        ),
+                        const SizedBox(height: 10),
+                        Padding(
+                          padding: const EdgeInsetsDirectional.only(end: 10),
+                          child: Row(
+                            children: [
+                              Expanded(
+                                child: Text(
+                                  l10n.projectsCompletedRatio(
+                                    progress.completedCount,
+                                    progress.totalCount,
+                                  ),
+                                  maxLines: 1,
+                                  overflow: TextOverflow.ellipsis,
+                                  style: theme.textTheme.bodySmall?.copyWith(
+                                    fontFeatures: const [
+                                      FontFeature.tabularFigures(),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                              const SizedBox(width: 8),
+                              Container(
+                                padding: const EdgeInsets.symmetric(
+                                  horizontal: 10,
+                                  vertical: 3,
+                                ),
+                                decoration: BoxDecoration(
+                                  color: accentColor.withValues(alpha: 0.14),
+                                  borderRadius: BorderRadius.circular(999),
+                                ),
+                                child: Text(
+                                  '${progress.percentage}%',
+                                  style: theme.textTheme.labelMedium?.copyWith(
+                                    color: accentColor,
+                                    fontWeight: FontWeight.w800,
+                                    fontFeatures: const [
+                                      FontFeature.tabularFigures(),
+                                    ],
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),
@@ -521,17 +546,16 @@ class _BoardEmptyState extends StatelessWidget {
           mainAxisSize: MainAxisSize.min,
           children: [
             Container(
-              width: 56,
-              height: 56,
+              width: 64,
+              height: 64,
               decoration: BoxDecoration(
-                color: colorScheme.surfaceContainerHighest,
-                borderRadius: BorderRadius.circular(16),
-                border: Border.all(color: colorScheme.outline, width: 1),
+                color: colorScheme.primaryContainer,
+                borderRadius: BorderRadius.circular(22),
               ),
               child: Icon(
                 Icons.dashboard_outlined,
-                size: 26,
-                color: colorScheme.onSurfaceVariant,
+                size: 28,
+                color: colorScheme.onPrimaryContainer,
               ),
             ),
             const SizedBox(height: 14),
@@ -734,10 +758,7 @@ class _ProjectEditorSheetState extends State<_ProjectEditorSheet> {
                     FilledButton(
                       onPressed: _submit,
                       style: FilledButton.styleFrom(
-                        minimumSize: const Size.fromHeight(50),
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
-                        ),
+                        minimumSize: const Size.fromHeight(52),
                       ),
                       child: Text(
                         _isEditing ? l10n.saveChanges : l10n.createProject,

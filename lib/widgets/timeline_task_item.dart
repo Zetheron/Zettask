@@ -7,6 +7,7 @@ import '../l10n/l10n_helpers.dart';
 import '../models/project_model.dart';
 import '../models/tag_model.dart';
 import '../models/task_model.dart';
+import 'zettask_motion.dart';
 
 class TimelineTaskItem extends StatelessWidget {
   const TimelineTaskItem({
@@ -153,6 +154,7 @@ class _SwipeActionBackground extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
+    final isAmoled = AppTheme.isAmoled(theme);
 
     return Container(
       margin: EdgeInsets.only(bottom: bottomMargin),
@@ -162,8 +164,8 @@ class _SwipeActionBackground extends StatelessWidget {
           : AlignmentDirectional.centerEnd,
       decoration: BoxDecoration(
         color: color,
-        borderRadius: BorderRadius.circular(14),
-        border: Border.all(color: borderColor, width: 1),
+        borderRadius: BorderRadius.circular(20),
+        border: isAmoled ? Border.all(color: borderColor, width: 1) : null,
       ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
@@ -326,17 +328,17 @@ class _TaskCard extends StatelessWidget {
     final mutedNeutral = colorScheme.onSurfaceVariant.withValues(alpha: 0.6);
 
     final cardColor = isCancelled
-        ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.65)
+        ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.7)
         : task.isCompleted
-            ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.5)
-            : colorScheme.surface;
+            ? colorScheme.surfaceContainerHighest.withValues(alpha: 0.55)
+            : colorScheme.surfaceContainerLow;
 
     return Material(
       color: cardColor,
       elevation: 0,
       shape: RoundedRectangleBorder(
-        borderRadius: BorderRadius.circular(14),
-        side: BorderSide(color: colorScheme.outline, width: 1),
+        borderRadius: BorderRadius.circular(20),
+        side: AppTheme.cardBorderSide(theme),
       ),
       clipBehavior: Clip.antiAlias,
       child: InkWell(
@@ -345,7 +347,7 @@ class _TaskCard extends StatelessWidget {
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: [
             Padding(
-              padding: const EdgeInsetsDirectional.fromSTEB(4, 4, 14, 10),
+              padding: const EdgeInsetsDirectional.fromSTEB(4, 6, 14, 12),
               child: Row(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
@@ -369,7 +371,7 @@ class _TaskCard extends StatelessWidget {
                                 child: Text(
                                   task.title,
                                   style: theme.textTheme.titleMedium?.copyWith(
-                                    fontSize: 15,
+                                    fontSize: 15.5,
                                     height: 1.35,
                                     decoration: isMuted
                                         ? TextDecoration.lineThrough
@@ -453,7 +455,7 @@ class _TaskCard extends StatelessWidget {
               Divider(
                 height: 1,
                 thickness: 1,
-                color: colorScheme.outline.withValues(alpha: 0.7),
+                color: colorScheme.outlineVariant.withValues(alpha: 0.5),
               ),
               Padding(
                 padding: const EdgeInsets.fromLTRB(14, 10, 14, 4),
@@ -477,6 +479,7 @@ class _TaskCard extends StatelessWidget {
                             ? mutedNeutral
                             : colorScheme.onSurfaceVariant,
                         fontWeight: FontWeight.w600,
+                        fontFeatures: const [FontFeature.tabularFigures()],
                       ),
                     ),
                     const SizedBox(width: 10),
@@ -485,8 +488,8 @@ class _TaskCard extends StatelessWidget {
                         borderRadius: BorderRadius.circular(999),
                         child: LinearProgressIndicator(
                           value: completedSubtasks / task.checklistItems.length,
-                          minHeight: 3,
-                          backgroundColor: colorScheme.outline,
+                          minHeight: 5,
+                          backgroundColor: colorScheme.surfaceContainerHighest,
                           valueColor: AlwaysStoppedAnimation<Color>(
                             isCancelled
                                 ? mutedNeutral
@@ -570,34 +573,37 @@ class _CircularTaskCheckbox extends StatelessWidget {
               : null,
           customBorder: const CircleBorder(),
           child: Center(
-            child: AnimatedContainer(
-              duration: const Duration(milliseconds: 160),
-              curve: Curves.easeOut,
-              width: 22,
-              height: 22,
-              decoration: BoxDecoration(
-                shape: BoxShape.circle,
-                color: isCancelled
-                    ? cancelledFill
-                    : (isCompleted ? activeColor : Colors.transparent),
-                border: Border.all(
-                  color: isCancelled ? cancelledFill : activeColor,
-                  width: 1.75,
+            child: ZettaskSpringCheckBounce(
+              stateKey: (isCompleted, isCancelled),
+              child: AnimatedContainer(
+                duration: const Duration(milliseconds: 240),
+                curve: ZettaskSpringCurve.snappy,
+                width: 24,
+                height: 24,
+                decoration: BoxDecoration(
+                  shape: BoxShape.circle,
+                  color: isCancelled
+                      ? cancelledFill
+                      : (isCompleted ? activeColor : Colors.transparent),
+                  border: Border.all(
+                    color: isCancelled ? cancelledFill : activeColor,
+                    width: 2,
+                  ),
                 ),
+                child: isCancelled
+                    ? Icon(
+                        Icons.close_rounded,
+                        size: 15,
+                        color: cancelledIconColor,
+                      )
+                    : isCompleted
+                        ? Icon(
+                            Icons.check_rounded,
+                            size: 15,
+                            color: checkColor,
+                          )
+                        : null,
               ),
-              child: isCancelled
-                  ? Icon(
-                      Icons.close_rounded,
-                      size: 14,
-                      color: cancelledIconColor,
-                    )
-                  : isCompleted
-                      ? Icon(
-                          Icons.check_rounded,
-                          size: 14,
-                          color: checkColor,
-                        )
-                      : null,
             ),
           ),
         ),
@@ -667,14 +673,10 @@ class _TagPill extends StatelessWidget {
     final fg = isMuted ? resolved.withValues(alpha: 0.55) : resolved;
 
     return Container(
-      padding: const EdgeInsets.symmetric(horizontal: 7, vertical: 2),
+      padding: const EdgeInsets.symmetric(horizontal: 10, vertical: 3.5),
       decoration: BoxDecoration(
-        color: resolved.withValues(alpha: isMuted ? 0.06 : 0.12),
-        borderRadius: BorderRadius.circular(6),
-        border: Border.all(
-          color: resolved.withValues(alpha: isMuted ? 0.2 : 0.35),
-          width: 1,
-        ),
+        color: resolved.withValues(alpha: isMuted ? 0.08 : 0.15),
+        borderRadius: BorderRadius.circular(999),
       ),
       child: Text(
         tag.name,
@@ -682,8 +684,8 @@ class _TagPill extends StatelessWidget {
         overflow: TextOverflow.ellipsis,
         style: theme.textTheme.labelSmall?.copyWith(
           color: fg,
-          fontWeight: FontWeight.w600,
-          fontSize: 10.5,
+          fontWeight: FontWeight.w700,
+          fontSize: 11,
         ),
       ),
     );
@@ -771,8 +773,12 @@ class _PriorityIndicator extends StatelessWidget {
     final effectiveColor = isMuted ? color.withValues(alpha: 0.5) : color;
     final l10n = AppLocalizations.of(context);
 
-    return Padding(
-      padding: const EdgeInsets.only(top: 3),
+    return Container(
+      padding: const EdgeInsets.symmetric(horizontal: 8, vertical: 3),
+      decoration: BoxDecoration(
+        color: effectiveColor.withValues(alpha: isMuted ? 0.06 : 0.12),
+        borderRadius: BorderRadius.circular(999),
+      ),
       child: Row(
         mainAxisSize: MainAxisSize.min,
         children: [
@@ -787,9 +793,11 @@ class _PriorityIndicator extends StatelessWidget {
           const SizedBox(width: 5),
           Text(
             localizedPriorityLabel(l10n, priority),
+            maxLines: 1,
+            overflow: TextOverflow.ellipsis,
             style: Theme.of(context).textTheme.labelSmall?.copyWith(
                   color: effectiveColor,
-                  fontWeight: FontWeight.w600,
+                  fontWeight: FontWeight.w700,
                   fontSize: 11,
                 ),
           ),
@@ -832,27 +840,32 @@ class _InlineChecklistRow extends StatelessWidget {
             padding: const EdgeInsets.symmetric(horizontal: 14, vertical: 8),
             child: Row(
               children: [
-                AnimatedContainer(
-                  duration: const Duration(milliseconds: 140),
-                  width: 18,
-                  height: 18,
-                  decoration: BoxDecoration(
-                    borderRadius: BorderRadius.circular(5),
-                    color: item.isDone ? accentColor : Colors.transparent,
-                    border: Border.all(
-                      color: item.isDone
-                          ? accentColor
-                          : colorScheme.onSurfaceVariant.withValues(alpha: 0.6),
-                      width: 1.5,
+                ZettaskSpringCheckBounce(
+                  stateKey: item.isDone,
+                  child: AnimatedContainer(
+                    duration: const Duration(milliseconds: 220),
+                    curve: ZettaskSpringCurve.snappy,
+                    width: 20,
+                    height: 20,
+                    decoration: BoxDecoration(
+                      borderRadius: BorderRadius.circular(7),
+                      color: item.isDone ? accentColor : Colors.transparent,
+                      border: Border.all(
+                        color: item.isDone
+                            ? accentColor
+                            : colorScheme.onSurfaceVariant
+                                .withValues(alpha: 0.6),
+                        width: 1.75,
+                      ),
                     ),
+                    child: item.isDone
+                        ? Icon(
+                            Icons.check_rounded,
+                            size: 13,
+                            color: checkColor,
+                          )
+                        : null,
                   ),
-                  child: item.isDone
-                      ? Icon(
-                          Icons.check_rounded,
-                          size: 12,
-                          color: checkColor,
-                        )
-                      : null,
                 ),
                 const SizedBox(width: 10),
                 Expanded(

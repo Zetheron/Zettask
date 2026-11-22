@@ -3,6 +3,7 @@ import 'package:material_ui/material_ui.dart';
 import '../l10n/app_localizations.dart';
 import '../services/onboarding_service.dart';
 import '../widgets/onboarding_illustrations.dart';
+import '../widgets/zettask_motion.dart';
 
 class OnboardingScreen extends StatefulWidget {
   const OnboardingScreen({
@@ -118,30 +119,42 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                       child: disableAnimations
                           ? Opacity(
                               opacity: _isLastSlide ? 0.0 : 1.0,
-                              child: TextButton(
-                                key: const ValueKey('onboarding_skip_button'),
-                                onPressed: _finishOnboarding,
-                                style: TextButton.styleFrom(
-                                  minimumSize: const Size(48, 48),
-                                  foregroundColor:
-                                      colorScheme.onSurfaceVariant,
+                              child: ZettaskSpringTap(
+                                child: TextButton(
+                                  key: const ValueKey('onboarding_skip_button'),
+                                  onPressed: _finishOnboarding,
+                                  style: TextButton.styleFrom(
+                                    minimumSize: const Size(48, 48),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                    ),
+                                    shape: const StadiumBorder(),
+                                    foregroundColor:
+                                        colorScheme.onSurfaceVariant,
+                                  ),
+                                  child: Text(l10n.onboardingSkip),
                                 ),
-                                child: Text(l10n.onboardingSkip),
                               ),
                             )
                           : AnimatedOpacity(
                               opacity: _isLastSlide ? 0.0 : 1.0,
                               duration: const Duration(milliseconds: 200),
                               curve: Curves.easeOut,
-                              child: TextButton(
-                                key: const ValueKey('onboarding_skip_button'),
-                                onPressed: _finishOnboarding,
-                                style: TextButton.styleFrom(
-                                  minimumSize: const Size(48, 48),
-                                  foregroundColor:
-                                      colorScheme.onSurfaceVariant,
+                              child: ZettaskSpringTap(
+                                child: TextButton(
+                                  key: const ValueKey('onboarding_skip_button'),
+                                  onPressed: _finishOnboarding,
+                                  style: TextButton.styleFrom(
+                                    minimumSize: const Size(48, 48),
+                                    padding: const EdgeInsets.symmetric(
+                                      horizontal: 16,
+                                    ),
+                                    shape: const StadiumBorder(),
+                                    foregroundColor:
+                                        colorScheme.onSurfaceVariant,
+                                  ),
+                                  child: Text(l10n.onboardingSkip),
                                 ),
-                                child: Text(l10n.onboardingSkip),
                               ),
                             ),
                     ),
@@ -178,10 +191,10 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                               title,
                               textAlign: TextAlign.center,
                               style: theme.textTheme.headlineSmall?.copyWith(
-                                fontSize: 24,
-                                fontWeight: FontWeight.w700,
-                                letterSpacing: -0.5,
-                                height: 1.25,
+                                fontSize: 25,
+                                fontWeight: FontWeight.w800,
+                                letterSpacing: -0.6,
+                                height: 1.2,
                               ),
                             ),
                           ),
@@ -218,24 +231,24 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                         padding: const EdgeInsets.symmetric(horizontal: 4),
                         child: disableAnimations
                             ? Container(
-                                width: isActive ? 24 : 7,
-                                height: 7,
+                                width: isActive ? 26 : 8,
+                                height: 8,
                                 decoration: BoxDecoration(
                                   color: isActive
                                       ? colorScheme.primary
-                                      : colorScheme.outline,
+                                      : colorScheme.surfaceContainerHighest,
                                   borderRadius: BorderRadius.circular(999),
                                 ),
                               )
                             : AnimatedContainer(
-                                duration: const Duration(milliseconds: 240),
-                                curve: Curves.easeOutCubic,
-                                width: isActive ? 24 : 7,
-                                height: 7,
+                                duration: const Duration(milliseconds: 280),
+                                curve: ZettaskSpringCurve.snappy,
+                                width: isActive ? 26 : 8,
+                                height: 8,
                                 decoration: BoxDecoration(
                                   color: isActive
                                       ? colorScheme.primary
-                                      : colorScheme.outline,
+                                      : colorScheme.surfaceContainerHighest,
                                   borderRadius: BorderRadius.circular(999),
                                 ),
                               ),
@@ -243,40 +256,41 @@ class _OnboardingScreenState extends State<OnboardingScreen> {
                     }),
                   ),
                   const SizedBox(height: 24),
-                  SizedBox(
-                    height: 52,
-                    child: FilledButton(
-                      key: const ValueKey('onboarding_primary_button'),
-                      onPressed: _handleNext,
-                      style: FilledButton.styleFrom(
-                        elevation: 0,
-                        shape: RoundedRectangleBorder(
-                          borderRadius: BorderRadius.circular(14),
+                  ZettaskSpringTap(
+                    child: SizedBox(
+                      height: 54,
+                      child: FilledButton(
+                        key: const ValueKey('onboarding_primary_button'),
+                        onPressed: _handleNext,
+                        style: FilledButton.styleFrom(
+                          elevation: 0,
+                          minimumSize: const Size.fromHeight(54),
+                          shape: const StadiumBorder(),
                         ),
-                      ),
-                      child: disableAnimations
-                          ? Text(
-                              _isLastSlide
-                                  ? l10n.onboardingGetStarted
-                                  : l10n.onboardingNext,
-                              style: const TextStyle(
-                                fontSize: 15,
-                                fontWeight: FontWeight.w700,
-                              ),
-                            )
-                          : AnimatedSwitcher(
-                              duration: const Duration(milliseconds: 180),
-                              child: Text(
+                        child: disableAnimations
+                            ? Text(
                                 _isLastSlide
                                     ? l10n.onboardingGetStarted
                                     : l10n.onboardingNext,
-                                key: ValueKey<bool>(_isLastSlide),
                                 style: const TextStyle(
                                   fontSize: 15,
                                   fontWeight: FontWeight.w700,
                                 ),
+                              )
+                            : AnimatedSwitcher(
+                                duration: const Duration(milliseconds: 180),
+                                child: Text(
+                                  _isLastSlide
+                                      ? l10n.onboardingGetStarted
+                                      : l10n.onboardingNext,
+                                  key: ValueKey<bool>(_isLastSlide),
+                                  style: const TextStyle(
+                                    fontSize: 15,
+                                    fontWeight: FontWeight.w700,
+                                  ),
+                                ),
                               ),
-                            ),
+                      ),
                     ),
                   ),
                 ],

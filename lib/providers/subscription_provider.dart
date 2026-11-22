@@ -8,21 +8,46 @@ class SubscriptionProvider extends ChangeNotifier {
     SubscriptionService? subscriptionService,
     DateTime Function()? nowProvider,
     this.onProStatusChanged,
+    bool? enableProPaywall,
   })  : _service = subscriptionService ?? SubscriptionService(),
-        _nowProvider = nowProvider ?? DateTime.now;
+        _nowProvider = nowProvider ?? DateTime.now,
+        _enableProPaywallInstance = enableProPaywall;
+
+  /// Centralized feature flag for Zettask Pro monetization.
+  /// Defaults to `false` for the 100% free v1.0 release while preserving all
+  /// Pro/Paywall/Billing modules for future activation.
+  static const bool defaultEnableProPaywall = false;
+
+  static bool _enableProPaywallOverride = defaultEnableProPaywall;
+
+  static bool get enableProPaywall => _enableProPaywallOverride;
+
+  @visibleForTesting
+  static set debugEnableProPaywallOverride(bool value) {
+    _enableProPaywallOverride = value;
+  }
+
+  @visibleForTesting
+  static void resetEnableProPaywallOverride() {
+    _enableProPaywallOverride = defaultEnableProPaywall;
+  }
 
   static const int freeProjectLimit = 3;
 
   final SubscriptionService _service;
   final DateTime Function() _nowProvider;
   final ValueChanged<bool>? onProStatusChanged;
+  final bool? _enableProPaywallInstance;
 
   SubscriptionState _state = const SubscriptionState.free();
   List<ProProductOffering> _offerings = PlayBillingService.defaultOfferings;
   bool _initialized = false;
 
+  bool get isPaywallEnabled =>
+      _enableProPaywallInstance ?? SubscriptionProvider.enableProPaywall;
+
   SubscriptionState get state => _state;
-  bool get isPro => _state.isPro;
+  bool get isPro => !isPaywallEnabled || _state.isPro;
   ProPlanType? get activePlan => _state.activePlan;
   DateTime? get expiresAt => _state.expiresAt;
   bool get isLoading => _state.isLoading;
@@ -31,6 +56,7 @@ class SubscriptionProvider extends ChangeNotifier {
   List<ProProductOffering> get offerings => List.unmodifiable(_offerings);
 
   bool hasAccess(ProFeature feature) {
+    if (!isPaywallEnabled) return true;
     return switch (feature) {
       ProFeature.cloudSync ||
       ProFeature.calendarSync ||
@@ -74,7 +100,7 @@ class SubscriptionProvider extends ChangeNotifier {
     );
     _initialized = true;
     notifyListeners();
-    onProStatusChanged?.call(_state.isPro);
+    onProStatusChanged?.call(isPro);
   }
 
   Future<BillingActionResult> purchasePlan(ProPlanType plan) async {
@@ -170,6 +196,7 @@ class SubscriptionProvider extends ChangeNotifier {
   }
 
   Future<bool> checkExpiration() async {
+    if (!isPaywallEnabled) return false;
     if (!_state.isPro) return false;
     if (!_state.isExpiredAt(_nowProvider())) return false;
 
@@ -180,7 +207,7 @@ class SubscriptionProvider extends ChangeNotifier {
       clearExpiresAt: true,
     );
     notifyListeners();
-    onProStatusChanged?.call(false);
+    onProStatusChanged?.call(isPro);
     return true;
   }
 
@@ -210,6 +237,6 @@ class SubscriptionProvider extends ChangeNotifier {
       isLoading: false,
     );
     notifyListeners();
-    onProStatusChanged?.call(isPro);
+    onProStatusChanged?.call(this.isPro);
   }
 }

@@ -3,6 +3,7 @@ import 'dart:async';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
+import '../core/theme/app_theme.dart';
 import '../l10n/app_localizations.dart';
 import '../models/repeating_task_model.dart';
 import '../models/subscription_model.dart';
@@ -192,10 +193,47 @@ class _MainShellState extends State<MainShell> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isAmoled = AppTheme.isAmoled(theme);
     final l10n = AppLocalizations.of(context);
     final unplannedCount = context.select<TaskProvider, int>(
       (provider) => provider.unplannedCount,
+    );
+
+    final navBar = NavigationBar(
+      selectedIndex: _currentIndex,
+      onDestinationSelected: _switchTab,
+      destinations: [
+        NavigationDestination(
+          icon: const Icon(Icons.view_day_outlined),
+          selectedIcon: const Icon(Icons.view_day_rounded),
+          label: l10n.navTimeline,
+        ),
+        NavigationDestination(
+          icon: const Icon(Icons.dashboard_outlined),
+          selectedIcon: const Icon(Icons.dashboard_rounded),
+          label: l10n.navBoard,
+        ),
+        NavigationDestination(
+          icon: Badge(
+            isLabelVisible: unplannedCount > 0,
+            label: Text('$unplannedCount'),
+            child: const Icon(Icons.inbox_outlined),
+          ),
+          selectedIcon: Badge(
+            isLabelVisible: unplannedCount > 0,
+            label: Text('$unplannedCount'),
+            child: const Icon(Icons.inbox_rounded),
+          ),
+          label: l10n.navUnplanned,
+        ),
+        NavigationDestination(
+          icon: const Icon(Icons.tune_outlined),
+          selectedIcon: const Icon(Icons.tune_rounded),
+          label: l10n.navMore,
+        ),
+      ],
     );
 
     return Scaffold(
@@ -215,52 +253,16 @@ class _MainShellState extends State<MainShell> {
           ),
         ],
       ),
-      bottomNavigationBar: Container(
-        decoration: BoxDecoration(
-          border: Border(
-            top: BorderSide(color: colorScheme.outline, width: 1),
-          ),
-        ),
-        child: NavigationBar(
-          selectedIndex: _currentIndex,
-          onDestinationSelected: _switchTab,
-          elevation: 0,
-          backgroundColor: colorScheme.surface,
-          surfaceTintColor: Colors.transparent,
-          indicatorColor: colorScheme.primaryContainer,
-          height: 68,
-          destinations: [
-            NavigationDestination(
-              icon: const Icon(Icons.view_day_outlined),
-              selectedIcon: const Icon(Icons.view_day_rounded),
-              label: l10n.navTimeline,
-            ),
-            NavigationDestination(
-              icon: const Icon(Icons.dashboard_outlined),
-              selectedIcon: const Icon(Icons.dashboard_rounded),
-              label: l10n.navBoard,
-            ),
-            NavigationDestination(
-              icon: Badge(
-                isLabelVisible: unplannedCount > 0,
-                label: Text('$unplannedCount'),
-                child: const Icon(Icons.inbox_outlined),
+      bottomNavigationBar: isAmoled
+          ? Container(
+              decoration: BoxDecoration(
+                border: Border(
+                  top: BorderSide(color: colorScheme.outline, width: 1),
+                ),
               ),
-              selectedIcon: Badge(
-                isLabelVisible: unplannedCount > 0,
-                label: Text('$unplannedCount'),
-                child: const Icon(Icons.inbox_rounded),
-              ),
-              label: l10n.navUnplanned,
-            ),
-            NavigationDestination(
-              icon: const Icon(Icons.tune_outlined),
-              selectedIcon: const Icon(Icons.tune_rounded),
-              label: l10n.navMore,
-            ),
-          ],
-        ),
-      ),
+              child: navBar,
+            )
+          : navBar,
     );
   }
 }

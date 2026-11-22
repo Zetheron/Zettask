@@ -1,7 +1,189 @@
 import 'dart:math' as math;
 import 'dart:ui' show lerpDouble;
 
+import 'package:flutter/physics.dart';
 import 'package:material_ui/material_ui.dart';
+
+import '../core/theme/app_theme.dart';
+
+class ZettaskSpringCurve extends Curve {
+  const ZettaskSpringCurve({
+    this.mass = 1.0,
+    this.stiffness = 420.0,
+    this.damping = 24.0,
+    this.simulationSeconds = 0.45,
+  });
+
+  static const ZettaskSpringCurve expressive = ZettaskSpringCurve(
+    mass: 1.0,
+    stiffness: 420.0,
+    damping: 22.0,
+    simulationSeconds: 0.46,
+  );
+
+  static const ZettaskSpringCurve snappy = ZettaskSpringCurve(
+    mass: 1.0,
+    stiffness: 520.0,
+    damping: 28.0,
+    simulationSeconds: 0.42,
+  );
+
+  final double mass;
+  final double stiffness;
+  final double damping;
+  final double simulationSeconds;
+
+  @override
+  double transformInternal(double t) {
+    if (t <= 0.0) return 0.0;
+    if (t >= 1.0) return 1.0;
+
+    final simulation = SpringSimulation(
+      SpringDescription(mass: mass, stiffness: stiffness, damping: damping),
+      0.0,
+      1.0,
+      0.0,
+    );
+    final simValue = simulation.x(t * simulationSeconds);
+    // Smoothly converge to exact 1.0 on the tail so bounded animations terminate without jump.
+    if (t > 0.85) {
+      final blend = (t - 0.85) / 0.15;
+      return simValue + (1.0 - simValue) * blend;
+    }
+    return simValue;
+  }
+}
+
+class ZettaskSpringTap extends StatefulWidget {
+  const ZettaskSpringTap({
+    super.key,
+    required this.child,
+    this.pressedScale = 0.95,
+    this.enabled = true,
+  });
+
+  final Widget child;
+  final double pressedScale;
+  final bool enabled;
+
+  @override
+  State<ZettaskSpringTap> createState() => _ZettaskSpringTapState();
+}
+
+class _ZettaskSpringTapState extends State<ZettaskSpringTap> {
+  bool _isPressed = false;
+
+  void _setPressed(bool next) {
+    if (!widget.enabled || _isPressed == next) return;
+    setState(() => _isPressed = next);
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (!widget.enabled || MediaQuery.disableAnimationsOf(context)) {
+      return widget.child;
+    }
+
+    return Listener(
+      behavior: HitTestBehavior.translucent,
+      onPointerDown: (_) => _setPressed(true),
+      onPointerUp: (_) => _setPressed(false),
+      onPointerCancel: (_) => _setPressed(false),
+      child: AnimatedScale(
+        scale: _isPressed ? widget.pressedScale : 1.0,
+        duration: _isPressed
+            ? const Duration(milliseconds: 110)
+            : const Duration(milliseconds: 280),
+        curve: _isPressed ? Curves.easeOutCubic : ZettaskSpringCurve.snappy,
+        child: widget.child,
+      ),
+    );
+  }
+}
+
+class ZettaskSpringCheckBounce extends StatefulWidget {
+  const ZettaskSpringCheckBounce({
+    super.key,
+    required this.stateKey,
+    required this.child,
+    this.minScale = 0.84,
+    this.duration = const Duration(milliseconds: 340),
+  });
+
+  final Object? stateKey;
+  final Widget child;
+  final double minScale;
+  final Duration duration;
+
+  @override
+  State<ZettaskSpringCheckBounce> createState() =>
+      _ZettaskSpringCheckBounceState();
+}
+
+class _ZettaskSpringCheckBounceState extends State<ZettaskSpringCheckBounce>
+    with SingleTickerProviderStateMixin {
+  late final AnimationController _controller;
+
+  @override
+  void initState() {
+    super.initState();
+    _controller = AnimationController(
+      vsync: this,
+      duration: widget.duration,
+      value: 1.0,
+    );
+  }
+
+  @override
+  void didUpdateWidget(covariant ZettaskSpringCheckBounce oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.duration != widget.duration) {
+      _controller.duration = widget.duration;
+    }
+    if (oldWidget.stateKey != widget.stateKey) {
+      if (MediaQuery.disableAnimationsOf(context)) {
+        _controller.value = 1.0;
+      } else {
+        _controller.forward(from: 0.0);
+      }
+    }
+  }
+
+  @override
+  void dispose() {
+    _controller.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    if (MediaQuery.disableAnimationsOf(context)) {
+      return widget.child;
+    }
+
+    return AnimatedBuilder(
+      animation: _controller,
+      child: widget.child,
+      builder: (context, child) {
+        final t = _controller.value;
+        if (t >= 1.0) return child!;
+        final double scale;
+        if (t < 0.22) {
+          final downProgress = Curves.easeOut.transform(t / 0.22);
+          scale = lerpDouble(1.0, widget.minScale, downProgress) ?? 1.0;
+        } else {
+          final upProgress = ZettaskSpringCurve.expressive
+              .transform(((t - 0.22) / 0.78).clamp(0.0, 1.0));
+          scale = lerpDouble(widget.minScale, 1.0, upProgress) ?? 1.0;
+        }
+        return Transform.scale(
+          scale: scale,
+          child: child,
+        );
+      },
+    );
+  }
+}
 
 class ZettaskPinnedHeaderDelegate extends SliverPersistentHeaderDelegate {
   ZettaskPinnedHeaderDelegate({
@@ -36,8 +218,15 @@ class ZettaskPinnedHeaderDelegate extends SliverPersistentHeaderDelegate {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
     final disableAnimations = MediaQuery.disableAnimationsOf(context);
+    final isAmoled = AppTheme.isAmoled(theme);
     final isPinned = shrinkOffset > 0.5 || overlapsContent;
-    final surfaceColor = backgroundColor ?? theme.scaffoldBackgroundColor;
+    final baseSurface = backgroundColor ?? theme.scaffoldBackgroundColor;
+    final pinnedSurface = backgroundColor ??
+        (isAmoled ? AppTheme.amoledBackground : colorScheme.surfaceContainerLow);
+    final surfaceColor = isPinned ? pinnedSurface : baseSurface;
+    final dividerColor = isAmoled
+        ? colorScheme.outline
+        : colorScheme.outlineVariant.withValues(alpha: 0.45);
     final content = builder != null ? builder!(context, isPinned) : child!;
 
     return SizedBox.expand(
@@ -61,13 +250,13 @@ class ZettaskPinnedHeaderDelegate extends SliverPersistentHeaderDelegate {
               child: disableAnimations
                   ? Opacity(
                       opacity: isPinned ? 1.0 : 0.0,
-                      child: ColoredBox(color: colorScheme.outline),
+                      child: ColoredBox(color: dividerColor),
                     )
                   : AnimatedOpacity(
                       opacity: isPinned ? 1.0 : 0.0,
                       duration: const Duration(milliseconds: 180),
                       curve: Curves.easeOut,
-                      child: ColoredBox(color: colorScheme.outline),
+                      child: ColoredBox(color: dividerColor),
                     ),
             ),
           ],
@@ -135,7 +324,7 @@ class _ZettaskLineRevealState extends State<ZettaskLineReveal>
     final startFrac = (delayMs / totalMs).clamp(0.0, 0.95);
     _progress = CurvedAnimation(
       parent: _controller,
-      curve: Interval(startFrac, 1.0, curve: Curves.easeOutCubic),
+      curve: Interval(startFrac, 1.0, curve: ZettaskSpringCurve.snappy),
     );
   }
 
@@ -401,7 +590,9 @@ class _ZettaskFocusFrameSliderState extends State<ZettaskFocusFrameSlider> {
 
   @override
   Widget build(BuildContext context) {
-    final colorScheme = Theme.of(context).colorScheme;
+    final theme = Theme.of(context);
+    final colorScheme = theme.colorScheme;
+    final isAmoled = AppTheme.isAmoled(theme);
     final disableAnimations = MediaQuery.disableAnimationsOf(context);
 
     return Column(
@@ -450,16 +641,23 @@ class _ZettaskFocusFrameSliderState extends State<ZettaskFocusFrameSlider> {
                             vertical: 4,
                           ),
                           child: Material(
-                            color: colorScheme.surface,
+                            color: isFocused
+                                ? colorScheme.surfaceContainerLow
+                                : colorScheme.surfaceContainer,
                             elevation: 0,
                             shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(14),
-                              side: BorderSide(
-                                color: isFocused
-                                    ? colorScheme.primary
-                                    : colorScheme.outline,
-                                width: isFocused ? 1.5 : 1,
-                              ),
+                              borderRadius: BorderRadius.circular(22),
+                              side: isFocused
+                                  ? BorderSide(
+                                      color: colorScheme.primary,
+                                      width: 2,
+                                    )
+                                  : isAmoled
+                                      ? BorderSide(
+                                          color: colorScheme.outline,
+                                          width: 1,
+                                        )
+                                      : BorderSide.none,
                             ),
                             clipBehavior: Clip.antiAlias,
                             child: InkWell(
@@ -481,7 +679,7 @@ class _ZettaskFocusFrameSliderState extends State<ZettaskFocusFrameSlider> {
           ),
         ),
         if (widget.itemCount > 1) ...[
-          const SizedBox(height: 8),
+          const SizedBox(height: 10),
           Row(
             mainAxisAlignment: MainAxisAlignment.center,
             children: List.generate(widget.itemCount, (index) {
@@ -490,24 +688,24 @@ class _ZettaskFocusFrameSliderState extends State<ZettaskFocusFrameSlider> {
                 padding: const EdgeInsets.symmetric(horizontal: 3),
                 child: disableAnimations
                     ? Container(
-                        width: isActive ? 18 : 6,
-                        height: 6,
+                        width: isActive ? 22 : 7,
+                        height: 7,
                         decoration: BoxDecoration(
                           color: isActive
                               ? colorScheme.primary
-                              : colorScheme.outline,
+                              : colorScheme.surfaceContainerHighest,
                           borderRadius: BorderRadius.circular(999),
                         ),
                       )
                     : AnimatedContainer(
-                        duration: const Duration(milliseconds: 220),
-                        curve: Curves.easeOutCubic,
-                        width: isActive ? 18 : 6,
-                        height: 6,
+                        duration: const Duration(milliseconds: 280),
+                        curve: ZettaskSpringCurve.snappy,
+                        width: isActive ? 22 : 7,
+                        height: 7,
                         decoration: BoxDecoration(
                           color: isActive
                               ? colorScheme.primary
-                              : colorScheme.outline,
+                              : colorScheme.surfaceContainerHighest,
                           borderRadius: BorderRadius.circular(999),
                         ),
                       ),
