@@ -486,5 +486,14 @@
   "appGuideTitle": "دليل التطبيق",
   "appGuideSubtitle": "إعادة عرض الجولة السريعة لتطبيق Zettask",
   "dynamicColorTitle": "Material You (لون الخلفية)",
-  "dynamicColorSubtitle": "مطابقة ألوان التمييز مع خلفية جهازك (Android 12+)"
+  "dynamicColorSubtitle": "مطابقة ألوان التمييز مع خلفية جهازك (Android 12+)",
+  "subtaskMarkedCancelled": "تم إلغاء المهمة الفرعية",
+  "subtaskCancelledBadge": "ملغاة",
+  "cancelSubtaskTooltip": "إلغاء المهمة الفرعية",
+  "restoreSubtaskTooltip": "استعادة المهمة الفرعية",
+  "notificationActionComplete": "إكمال",
+  "notificationActionSnooze": "تأجيل",
+  "notificationActionDismiss": "إغلاق",
+  "notificationSubtasksMore": "+{count} أخرى",
+  "notificationSubtasksSummary": "{completed}/{total} مكتملة"
 }

@@ -1,3 +1,4 @@
+import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
@@ -13,6 +14,7 @@ import '../models/task_template_model.dart';
 import '../providers/locale_provider.dart';
 import '../providers/task_provider.dart';
 import '../providers/workspace_provider.dart';
+import 'zettask_motion.dart';
 
 sealed class TaskEditorResult {
   const TaskEditorResult();
@@ -333,7 +335,19 @@ class _TaskEditorSheetState extends State<TaskEditorSheet> {
   void _toggleChecklistItem(int index) {
     setState(() {
       final current = _checklistItems[index];
-      _checklistItems[index] = current.copyWith(isDone: !current.isDone);
+      _checklistItems[index] = current.isCancelled
+          ? current.copyWith(isDone: false, isCancelled: false)
+          : current.copyWith(isDone: !current.isDone, isCancelled: false);
+    });
+  }
+
+  void _toggleCancelChecklistItem(int index) {
+    setState(() {
+      final current = _checklistItems[index];
+      _checklistItems[index] = current.copyWith(
+        isDone: false,
+        isCancelled: !current.isCancelled,
+      );
     });
   }
 
@@ -768,7 +782,11 @@ class _TaskEditorSheetState extends State<TaskEditorSheet> {
                       _SectionLabel(
                         label: _checklistItems.isEmpty
                             ? l10n.subtasksLabel
-                            : l10n.subtasksWithCount(_checklistItems.length),
+                            : l10n.subtasksWithCount(
+                                _checklistItems
+                                    .where((item) => !item.isCancelled)
+                                    .length,
+                              ),
                       ),
                       const SizedBox(height: 8),
                       _ChecklistBuilder(
@@ -780,6 +798,7 @@ class _TaskEditorSheetState extends State<TaskEditorSheet> {
                         ),
                         onAdd: _addChecklistItem,
                         onToggle: _toggleChecklistItem,
+                        onToggleCancel: _toggleCancelChecklistItem,
                         onRemove: _removeChecklistItem,
                       ),
                     ],
@@ -1459,6 +1478,7 @@ class _ChecklistBuilder extends StatelessWidget {
     required this.accentColor,
     required this.onAdd,
     required this.onToggle,
+    required this.onToggleCancel,
     required this.onRemove,
   });
 
@@ -1467,15 +1487,22 @@ class _ChecklistBuilder extends StatelessWidget {
   final Color accentColor;
   final VoidCallback onAdd;
   final ValueChanged<int> onToggle;
+  final ValueChanged<int> onToggleCancel;
   final ValueChanged<int> onRemove;
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final checkColor = theme.brightness == Brightness.dark
-        ? const Color(0xFF0A0A0A)
-        : Colors.white;
+    final brightness = theme.brightness;
+    final l10n = AppLocalizations.of(context);
+    final checkColor =
+        brightness == Brightness.dark ? const Color(0xFF0A0A0A) : Colors.white;
+    final cancelledFill = brightness == Brightness.dark
+        ? const Color(0xFF52525B)
+        : const Color(0xFF71717A);
+    final cancelledIconColor =
+        brightness == Brightness.dark ? const Color(0xFFFAFAFA) : Colors.white;
 
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
@@ -1484,81 +1511,160 @@ class _ChecklistBuilder extends StatelessWidget {
           Container(
             decoration: BoxDecoration(
               color: colorScheme.surface,
-              borderRadius: BorderRadius.circular(12),
+              borderRadius: BorderRadius.circular(16),
               border: Border.all(color: colorScheme.outline, width: 1),
             ),
+            clipBehavior: Clip.antiAlias,
             child: Column(
               children: List.generate(items.length, (index) {
                 final item = items[index];
+                final isCancelled = item.isCancelled;
+                final isMuted = item.isDone || isCancelled;
+
                 return Column(
                   children: [
                     if (index > 0) const Divider(),
-                    Row(
-                      children: [
-                        SizedBox(
-                          width: 48,
-                          height: 48,
-                          child: InkWell(
-                            onTap: () => onToggle(index),
-                            borderRadius: BorderRadius.circular(10),
+                    InkWell(
+                      key: ValueKey('editor_subtask_row_$index'),
+                      onTap: () => onToggle(index),
+                      onLongPress: () {
+                        HapticFeedback.mediumImpact();
+                        onToggleCancel(index);
+                      },
+                      child: Row(
+                        children: [
+                          SizedBox(
+                            width: 48,
+                            height: 48,
                             child: Center(
-                              child: AnimatedContainer(
-                                duration: const Duration(milliseconds: 140),
-                                width: 18,
-                                height: 18,
-                                decoration: BoxDecoration(
-                                  borderRadius: BorderRadius.circular(5),
-                                  color: item.isDone
-                                      ? accentColor
-                                      : Colors.transparent,
-                                  border: Border.all(
-                                    color: item.isDone
-                                        ? accentColor
-                                        : colorScheme.onSurfaceVariant,
-                                    width: 1.5,
+                              child: ZettaskSpringCheckBounce(
+                                stateKey: (item.isDone, isCancelled),
+                                child: AnimatedContainer(
+                                  duration: const Duration(milliseconds: 200),
+                                  curve: ZettaskSpringCurve.snappy,
+                                  width: 20,
+                                  height: 20,
+                                  decoration: BoxDecoration(
+                                    borderRadius: BorderRadius.circular(
+                                      isCancelled ? 999 : 6,
+                                    ),
+                                    color: isCancelled
+                                        ? cancelledFill
+                                        : (item.isDone
+                                            ? accentColor
+                                            : Colors.transparent),
+                                    border: Border.all(
+                                      color: isCancelled
+                                          ? cancelledFill
+                                          : (item.isDone
+                                              ? accentColor
+                                              : colorScheme.onSurfaceVariant),
+                                      width: 1.5,
+                                    ),
                                   ),
+                                  child: isCancelled
+                                      ? Icon(
+                                          Icons.close_rounded,
+                                          size: 13,
+                                          color: cancelledIconColor,
+                                        )
+                                      : item.isDone
+                                          ? Icon(
+                                              Icons.check_rounded,
+                                              size: 13,
+                                              color: checkColor,
+                                            )
+                                          : null,
                                 ),
-                                child: item.isDone
-                                    ? Icon(
-                                        Icons.check_rounded,
-                                        size: 12,
-                                        color: checkColor,
-                                      )
-                                    : null,
                               ),
                             ),
                           ),
-                        ),
-                        Expanded(
-                          child: InkWell(
-                            onTap: () => onToggle(index),
+                          Expanded(
                             child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 12),
-                              child: Text(
-                                item.title,
-                                style: theme.textTheme.bodyMedium?.copyWith(
-                                  fontSize: 14,
-                                  decoration: item.isDone
-                                      ? TextDecoration.lineThrough
-                                      : null,
-                                  color: item.isDone
-                                      ? colorScheme.onSurfaceVariant
-                                      : colorScheme.onSurface,
-                                ),
+                              padding: const EdgeInsets.symmetric(vertical: 10),
+                              child: Column(
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                mainAxisSize: MainAxisSize.min,
+                                children: [
+                                  Text(
+                                    item.title,
+                                    style: theme.textTheme.bodyMedium?.copyWith(
+                                      fontSize: 14,
+                                      decoration: isMuted
+                                          ? TextDecoration.lineThrough
+                                          : null,
+                                      decorationColor:
+                                          colorScheme.onSurfaceVariant,
+                                      color: isCancelled
+                                          ? colorScheme.onSurfaceVariant
+                                              .withValues(alpha: 0.6)
+                                          : item.isDone
+                                              ? colorScheme.onSurfaceVariant
+                                              : colorScheme.onSurface,
+                                    ),
+                                  ),
+                                  if (isCancelled) ...[
+                                    const SizedBox(height: 3),
+                                    Container(
+                                      padding: const EdgeInsets.symmetric(
+                                        horizontal: 8,
+                                        vertical: 2,
+                                      ),
+                                      decoration: BoxDecoration(
+                                        color: colorScheme
+                                            .surfaceContainerHighest,
+                                        borderRadius:
+                                            BorderRadius.circular(999),
+                                      ),
+                                      child: Text(
+                                        l10n.subtaskCancelledBadge,
+                                        style: theme.textTheme.labelSmall
+                                            ?.copyWith(
+                                          fontSize: 10.5,
+                                          fontWeight: FontWeight.w600,
+                                          color: colorScheme.onSurfaceVariant,
+                                        ),
+                                      ),
+                                    ),
+                                  ],
+                                ],
                               ),
                             ),
                           ),
-                        ),
-                        IconButton(
-                          tooltip: AppLocalizations.of(context).removeSubtaskTooltip,
-                          onPressed: () => onRemove(index),
-                          style: IconButton.styleFrom(
-                            minimumSize: const Size(48, 48),
-                            foregroundColor: colorScheme.onSurfaceVariant,
+                          IconButton(
+                            key: ValueKey('editor_subtask_cancel_toggle_$index'),
+                            tooltip: isCancelled
+                                ? l10n.restoreSubtaskTooltip
+                                : l10n.cancelSubtaskTooltip,
+                            onPressed: () {
+                              HapticFeedback.selectionClick();
+                              onToggleCancel(index);
+                            },
+                            style: IconButton.styleFrom(
+                              minimumSize: const Size(48, 48),
+                              foregroundColor: isCancelled
+                                  ? colorScheme.primary
+                                  : colorScheme.onSurfaceVariant,
+                            ),
+                            icon: Icon(
+                              isCancelled
+                                  ? Icons.undo_rounded
+                                  : Icons.block_rounded,
+                              size: 18,
+                            ),
                           ),
-                          icon: const Icon(Icons.close_rounded, size: 18),
-                        ),
-                      ],
+                          IconButton(
+                            key: ValueKey('editor_subtask_remove_$index'),
+                            tooltip: l10n.removeSubtaskTooltip,
+                            onPressed: () => onRemove(index),
+                            style: IconButton.styleFrom(
+                              minimumSize: const Size(48, 48),
+                              foregroundColor: colorScheme.onSurfaceVariant,
+                            ),
+                            icon: const Icon(Icons.close_rounded, size: 18),
+                          ),
+                        ],
+                      ),
                     ),
                   ],
                 );
@@ -1576,13 +1682,13 @@ class _ChecklistBuilder extends StatelessWidget {
                 textInputAction: TextInputAction.done,
                 onSubmitted: (_) => onAdd(),
                 decoration: InputDecoration(
-                  hintText: AppLocalizations.of(context).addChecklistHint,
+                  hintText: l10n.addChecklistHint,
                 ),
               ),
             ),
             const SizedBox(width: 8),
             IconButton.filledTonal(
-              tooltip: AppLocalizations.of(context).addSubtaskTooltip,
+              tooltip: l10n.addSubtaskTooltip,
               onPressed: onAdd,
               style: IconButton.styleFrom(
                 minimumSize: const Size(48, 48),

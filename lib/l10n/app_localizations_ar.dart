@@ -1600,4 +1600,35 @@ class AppLocalizationsAr extends AppLocalizations {
   @override
   String get dynamicColorSubtitle =>
       'مطابقة ألوان التمييز مع خلفية جهازك (Android 12+)';
+
+  @override
+  String get subtaskMarkedCancelled => 'تم إلغاء المهمة الفرعية';
+
+  @override
+  String get subtaskCancelledBadge => 'ملغاة';
+
+  @override
+  String get cancelSubtaskTooltip => 'إلغاء المهمة الفرعية';
+
+  @override
+  String get restoreSubtaskTooltip => 'استعادة المهمة الفرعية';
+
+  @override
+  String get notificationActionComplete => 'إكمال';
+
+  @override
+  String get notificationActionSnooze => 'تأجيل';
+
+  @override
+  String get notificationActionDismiss => 'إغلاق';
+
+  @override
+  String notificationSubtasksMore(int count) {
+    return '+$count أخرى';
+  }
+
+  @override
+  String notificationSubtasksSummary(int completed, int total) {
+    return '$completed/$total مكتملة';
+  }
 }

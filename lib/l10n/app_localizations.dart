@@ -3046,6 +3046,60 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Match accent colors with your device wallpaper (Android 12+)'**
   String get dynamicColorSubtitle;
+
+  /// No description provided for @subtaskMarkedCancelled.
+  ///
+  /// In en, this message translates to:
+  /// **'Subtask cancelled'**
+  String get subtaskMarkedCancelled;
+
+  /// No description provided for @subtaskCancelledBadge.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancelled'**
+  String get subtaskCancelledBadge;
+
+  /// No description provided for @cancelSubtaskTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel subtask'**
+  String get cancelSubtaskTooltip;
+
+  /// No description provided for @restoreSubtaskTooltip.
+  ///
+  /// In en, this message translates to:
+  /// **'Restore subtask'**
+  String get restoreSubtaskTooltip;
+
+  /// No description provided for @notificationActionComplete.
+  ///
+  /// In en, this message translates to:
+  /// **'Complete'**
+  String get notificationActionComplete;
+
+  /// No description provided for @notificationActionSnooze.
+  ///
+  /// In en, this message translates to:
+  /// **'Snooze'**
+  String get notificationActionSnooze;
+
+  /// No description provided for @notificationActionDismiss.
+  ///
+  /// In en, this message translates to:
+  /// **'Dismiss'**
+  String get notificationActionDismiss;
+
+  /// No description provided for @notificationSubtasksMore.
+  ///
+  /// In en, this message translates to:
+  /// **'+{count} more'**
+  String notificationSubtasksMore(int count);
+
+  /// No description provided for @notificationSubtasksSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{completed}/{total} completed'**
+  String notificationSubtasksSummary(int completed, int total);
 }
 
 class _AppLocalizationsDelegate

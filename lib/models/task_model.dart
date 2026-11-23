@@ -18,22 +18,61 @@ enum TaskPriority {
   }
 }
 
+enum SubtaskStatus {
+  pending('pending'),
+  completed('completed'),
+  cancelled('cancelled');
+
+  const SubtaskStatus(this.value);
+
+  final String value;
+
+  static SubtaskStatus fromStorage(
+    Object? raw, {
+    bool fallbackDone = false,
+    bool fallbackCancelled = false,
+  }) {
+    if (raw is String) {
+      for (final status in SubtaskStatus.values) {
+        if (status.value == raw) return status;
+      }
+    }
+    if (fallbackCancelled) return SubtaskStatus.cancelled;
+    if (fallbackDone) return SubtaskStatus.completed;
+    return SubtaskStatus.pending;
+  }
+}
+
 class ChecklistItem {
   const ChecklistItem({
     required this.title,
     this.isDone = false,
+    this.isCancelled = false,
   });
 
   final String title;
   final bool isDone;
+  final bool isCancelled;
+
+  SubtaskStatus get status {
+    if (isCancelled) return SubtaskStatus.cancelled;
+    if (isDone) return SubtaskStatus.completed;
+    return SubtaskStatus.pending;
+  }
+
+  bool get isPending => !isDone && !isCancelled;
 
   ChecklistItem copyWith({
     String? title,
     bool? isDone,
+    bool? isCancelled,
   }) {
+    final nextCancelled = isCancelled ?? (isDone == true ? false : this.isCancelled);
+    final nextDone = nextCancelled ? false : (isDone ?? this.isDone);
     return ChecklistItem(
       title: title ?? this.title,
-      isDone: isDone ?? this.isDone,
+      isDone: nextDone,
+      isCancelled: nextCancelled,
     );
   }
 
@@ -41,13 +80,25 @@ class ChecklistItem {
     return {
       'title': title,
       'isDone': isDone,
+      'isCancelled': isCancelled,
+      'status': status.value,
     };
   }
 
   factory ChecklistItem.fromMap(Map<String, dynamic> map) {
+    final rawDone = map['isDone'] ?? map['is_done'];
+    final rawCancelled = map['isCancelled'] ?? map['is_cancelled'];
+    final parsedDone = rawDone == true || rawDone == 1;
+    final parsedCancelled = rawCancelled == true || rawCancelled == 1;
+    final resolvedStatus = SubtaskStatus.fromStorage(
+      map['status'],
+      fallbackDone: parsedDone,
+      fallbackCancelled: parsedCancelled,
+    );
     return ChecklistItem(
       title: (map['title'] as String?) ?? '',
-      isDone: (map['isDone'] as bool?) ?? false,
+      isDone: resolvedStatus == SubtaskStatus.completed,
+      isCancelled: resolvedStatus == SubtaskStatus.cancelled,
     );
   }
 
@@ -56,11 +107,12 @@ class ChecklistItem {
     if (identical(this, other)) return true;
     return other is ChecklistItem &&
         other.title == title &&
-        other.isDone == isDone;
+        other.isDone == isDone &&
+        other.isCancelled == isCancelled;
   }
 
   @override
-  int get hashCode => Object.hash(title, isDone);
+  int get hashCode => Object.hash(title, isDone, isCancelled);
 }
 
 class TaskModel {
@@ -103,6 +155,22 @@ class TaskModel {
   bool get isUnplanned => date == null;
 
   bool get isRepeating => repeatingRuleId != null;
+
+  List<ChecklistItem> get activeChecklistItems =>
+      checklistItems.where((item) => !item.isCancelled).toList();
+
+  int get totalActiveSubtasksCount =>
+      checklistItems.where((item) => !item.isCancelled).length;
+
+  int get completedSubtasksCount =>
+      checklistItems.where((item) => item.isDone && !item.isCancelled).length;
+
+  int get cancelledSubtasksCount =>
+      checklistItems.where((item) => item.isCancelled).length;
+
+  bool get allActiveSubtasksCompleted =>
+      totalActiveSubtasksCount > 0 &&
+      completedSubtasksCount == totalActiveSubtasksCount;
 
   DateTime? get effectiveCompletionDate {
     final source = completedAt ?? date;

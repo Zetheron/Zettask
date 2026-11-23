@@ -486,5 +486,14 @@
   "appGuideTitle": "应用指南",
   "appGuideSubtitle": "重新查看 Zettask 快速引导",
   "dynamicColorTitle": "Material You（壁纸取色）",
-  "dynamicColorSubtitle": "根据设备壁纸自动调整强调色（Android 12+）"
+  "dynamicColorSubtitle": "根据设备壁纸自动调整强调色（Android 12+）",
+  "subtaskMarkedCancelled": "已取消子任务",
+  "subtaskCancelledBadge": "已取消",
+  "cancelSubtaskTooltip": "取消子任务",
+  "restoreSubtaskTooltip": "恢复子任务",
+  "notificationActionComplete": "完成",
+  "notificationActionSnooze": "稍后提醒",
+  "notificationActionDismiss": "关闭",
+  "notificationSubtasksMore": "+{count} 项更多",
+  "notificationSubtasksSummary": "已完成 {completed}/{total}"
 }

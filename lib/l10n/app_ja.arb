@@ -486,5 +486,14 @@
   "appGuideTitle": "アプリガイド",
   "appGuideSubtitle": "Zettaskの簡単なガイドをもう一度見る",
   "dynamicColorTitle": "Material You（壁紙カラー）",
-  "dynamicColorSubtitle": "端末の壁紙に合わせてアクセントカラーを調整（Android 12+）"
+  "dynamicColorSubtitle": "端末の壁紙に合わせてアクセントカラーを調整（Android 12+）",
+  "subtaskMarkedCancelled": "サブタスクをキャンセルしました",
+  "subtaskCancelledBadge": "キャンセル済み",
+  "cancelSubtaskTooltip": "サブタスクをキャンセル",
+  "restoreSubtaskTooltip": "サブタスクを復元",
+  "notificationActionComplete": "完了",
+  "notificationActionSnooze": "スヌーズ",
+  "notificationActionDismiss": "閉じる",
+  "notificationSubtasksMore": "他 +{count} 件",
+  "notificationSubtasksSummary": "{completed}/{total} 完了"
 }

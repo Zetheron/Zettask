@@ -1589,4 +1589,35 @@ class AppLocalizationsHe extends AppLocalizations {
   @override
   String get dynamicColorSubtitle =>
       'התאמת צבעי הדגשה לטפט המכשיר שלך (Android 12+)';
+
+  @override
+  String get subtaskMarkedCancelled => 'משימת המשנה בוטלה';
+
+  @override
+  String get subtaskCancelledBadge => 'בוטלה';
+
+  @override
+  String get cancelSubtaskTooltip => 'בטל משימת משנה';
+
+  @override
+  String get restoreSubtaskTooltip => 'שחזר משימת משנה';
+
+  @override
+  String get notificationActionComplete => 'הושלם';
+
+  @override
+  String get notificationActionSnooze => 'נודניק';
+
+  @override
+  String get notificationActionDismiss => 'סגור';
+
+  @override
+  String notificationSubtasksMore(int count) {
+    return '+$count נוספות';
+  }
+
+  @override
+  String notificationSubtasksSummary(int completed, int total) {
+    return '$completed/$total הושלמו';
+  }
 }

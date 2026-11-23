@@ -1607,4 +1607,35 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String get dynamicColorSubtitle =>
       'Match accent colors with your device wallpaper (Android 12+)';
+
+  @override
+  String get subtaskMarkedCancelled => 'Subtask cancelled';
+
+  @override
+  String get subtaskCancelledBadge => 'Cancelled';
+
+  @override
+  String get cancelSubtaskTooltip => 'Cancel subtask';
+
+  @override
+  String get restoreSubtaskTooltip => 'Restore subtask';
+
+  @override
+  String get notificationActionComplete => 'Complete';
+
+  @override
+  String get notificationActionSnooze => 'Snooze';
+
+  @override
+  String get notificationActionDismiss => 'Dismiss';
+
+  @override
+  String notificationSubtasksMore(int count) {
+    return '+$count more';
+  }
+
+  @override
+  String notificationSubtasksSummary(int completed, int total) {
+    return '$completed/$total completed';
+  }
 }

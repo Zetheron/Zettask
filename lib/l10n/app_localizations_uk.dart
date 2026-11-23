@@ -1606,4 +1606,35 @@ class AppLocalizationsUk extends AppLocalizations {
   @override
   String get dynamicColorSubtitle =>
       'Підлаштовувати акцентні кольори під шпалери пристрою (Android 12+)';
+
+  @override
+  String get subtaskMarkedCancelled => 'Підзавдання скасовано';
+
+  @override
+  String get subtaskCancelledBadge => 'Скасовано';
+
+  @override
+  String get cancelSubtaskTooltip => 'Скасувати підзавдання';
+
+  @override
+  String get restoreSubtaskTooltip => 'Відновити підзавдання';
+
+  @override
+  String get notificationActionComplete => 'Виконано';
+
+  @override
+  String get notificationActionSnooze => 'Відкласти';
+
+  @override
+  String get notificationActionDismiss => 'Закрити';
+
+  @override
+  String notificationSubtasksMore(int count) {
+    return 'ще +$count';
+  }
+
+  @override
+  String notificationSubtasksSummary(int completed, int total) {
+    return '$completed/$total виконано';
+  }
 }

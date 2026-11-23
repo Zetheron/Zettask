@@ -486,5 +486,14 @@
   "appGuideTitle": "App-Einführung",
   "appGuideSubtitle": "Kurze Zettask-Einführung erneut ansehen",
   "dynamicColorTitle": "Material You (Hintergrundfarbe)",
-  "dynamicColorSubtitle": "Akzentfarben an dein Geräte-Hintergrundbild anpassen (Android 12+)"
+  "dynamicColorSubtitle": "Akzentfarben an dein Geräte-Hintergrundbild anpassen (Android 12+)",
+  "subtaskMarkedCancelled": "Unteraufgabe abgebrochen",
+  "subtaskCancelledBadge": "Abgebrochen",
+  "cancelSubtaskTooltip": "Unteraufgabe abbrechen",
+  "restoreSubtaskTooltip": "Unteraufgabe wiederherstellen",
+  "notificationActionComplete": "Erledigen",
+  "notificationActionSnooze": "Schlummern",
+  "notificationActionDismiss": "Verwerfen",
+  "notificationSubtasksMore": "+{count} weitere",
+  "notificationSubtasksSummary": "{completed}/{total} erledigt"
 }

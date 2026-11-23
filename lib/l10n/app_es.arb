@@ -486,5 +486,14 @@
   "appGuideTitle": "Guía de la app",
   "appGuideSubtitle": "Volver a ver la guía rápida de Zettask",
   "dynamicColorTitle": "Material You (Color del fondo)",
-  "dynamicColorSubtitle": "Ajusta los colores de acento al fondo de pantalla (Android 12+)"
+  "dynamicColorSubtitle": "Ajusta los colores de acento al fondo de pantalla (Android 12+)",
+  "subtaskMarkedCancelled": "Subtarea cancelada",
+  "subtaskCancelledBadge": "Cancelada",
+  "cancelSubtaskTooltip": "Cancelar subtarea",
+  "restoreSubtaskTooltip": "Restaurar subtarea",
+  "notificationActionComplete": "Completar",
+  "notificationActionSnooze": "Posponer",
+  "notificationActionDismiss": "Descartar",
+  "notificationSubtasksMore": "+{count} más",
+  "notificationSubtasksSummary": "{completed}/{total} completadas"
 }

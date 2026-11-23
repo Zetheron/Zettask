@@ -1558,4 +1558,35 @@ class AppLocalizationsJa extends AppLocalizations {
 
   @override
   String get dynamicColorSubtitle => '端末の壁紙に合わせてアクセントカラーを調整（Android 12+）';
+
+  @override
+  String get subtaskMarkedCancelled => 'サブタスクをキャンセルしました';
+
+  @override
+  String get subtaskCancelledBadge => 'キャンセル済み';
+
+  @override
+  String get cancelSubtaskTooltip => 'サブタスクをキャンセル';
+
+  @override
+  String get restoreSubtaskTooltip => 'サブタスクを復元';
+
+  @override
+  String get notificationActionComplete => '完了';
+
+  @override
+  String get notificationActionSnooze => 'スヌーズ';
+
+  @override
+  String get notificationActionDismiss => '閉じる';
+
+  @override
+  String notificationSubtasksMore(int count) {
+    return '他 +$count 件';
+  }
+
+  @override
+  String notificationSubtasksSummary(int completed, int total) {
+    return '$completed/$total 完了';
+  }
 }

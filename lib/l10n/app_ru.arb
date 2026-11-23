@@ -486,5 +486,14 @@
   "appGuideTitle": "Гид по приложению",
   "appGuideSubtitle": "Повторить краткое знакомство с Zettask",
   "dynamicColorTitle": "Material You (Цвет обоев)",
-  "dynamicColorSubtitle": "Подбирать акцентные цвета под обои устройства (Android 12+)"
+  "dynamicColorSubtitle": "Подбирать акцентные цвета под обои устройства (Android 12+)",
+  "subtaskMarkedCancelled": "Подзадача отменена",
+  "subtaskCancelledBadge": "Отменена",
+  "cancelSubtaskTooltip": "Отменить подзадачу",
+  "restoreSubtaskTooltip": "Восстановить подзадачу",
+  "notificationActionComplete": "Готово",
+  "notificationActionSnooze": "Отложить",
+  "notificationActionDismiss": "Закрыть",
+  "notificationSubtasksMore": "ещё +{count}",
+  "notificationSubtasksSummary": "{completed}/{total} выполнено"
 }

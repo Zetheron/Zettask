@@ -1,3 +1,5 @@
+import 'dart:convert';
+
 import 'package:path/path.dart' as p;
 import 'package:sqflite/sqflite.dart';
 
@@ -15,7 +17,8 @@ class DatabaseService {
   static final DatabaseService instance = DatabaseService._internal();
 
   static const String _databaseName = 'zettask.db';
-  static const int _databaseVersion = 7;
+  static const int _databaseVersion = 8;
+  static const int databaseVersion = _databaseVersion;
   static const String tableTasks = 'tasks';
   static const String tableRepeatingTasks = 'repeating_tasks';
   static const String tableProjects = 'projects';
@@ -239,6 +242,63 @@ class DatabaseService {
       await db.execute(
         'ALTER TABLE $tableTasks ADD COLUMN is_cancelled INTEGER NOT NULL DEFAULT 0',
       );
+    }
+
+    if (oldVersion < 8) {
+      await migrateChecklistSubtasksToV8(db);
+    }
+  }
+
+  /// Non-destructively migrates legacy `checklistItems` JSON payloads (without
+  /// `isCancelled`/`status`) to v8 format while preserving all existing rows.
+  static Future<void> migrateChecklistSubtasksToV8(Database db) async {
+    await db.transaction((txn) async {
+      for (final table in [
+        tableTasks,
+        tableRepeatingTasks,
+        tableTaskTemplates,
+      ]) {
+        final rows = await txn.query(
+          table,
+          columns: ['id', 'checklistItems'],
+          where: "checklistItems IS NOT NULL AND checklistItems != '' AND checklistItems != '[]'",
+        );
+        for (final row in rows) {
+          final id = row['id'];
+          final raw = row['checklistItems'] as String?;
+          if (id == null || raw == null) continue;
+          final migrated = normalizeChecklistItemsJson(raw);
+          if (migrated != raw) {
+            await txn.update(
+              table,
+              {'checklistItems': migrated},
+              where: 'id = ?',
+              whereArgs: [id],
+            );
+          }
+        }
+      }
+    });
+  }
+
+  static String normalizeChecklistItemsJson(String rawJson) {
+    if (rawJson.trim().isEmpty) return '[]';
+    try {
+      final decoded = jsonDecode(rawJson);
+      if (decoded is! List) return rawJson;
+      final normalized = <Map<String, dynamic>>[];
+      for (final entry in decoded) {
+        if (entry is Map<String, dynamic>) {
+          normalized.add(ChecklistItem.fromMap(entry).toMap());
+        } else if (entry is Map) {
+          normalized.add(
+            ChecklistItem.fromMap(Map<String, dynamic>.from(entry)).toMap(),
+          );
+        }
+      }
+      return jsonEncode(normalized);
+    } catch (_) {
+      return rawJson;
     }
   }
 

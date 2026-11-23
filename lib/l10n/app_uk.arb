@@ -486,5 +486,14 @@
   "appGuideTitle": "Посібник додатку",
   "appGuideSubtitle": "Переглянути короткий вступ Zettask ще раз",
   "dynamicColorTitle": "Material You (Колір шпалер)",
-  "dynamicColorSubtitle": "Підлаштовувати акцентні кольори під шпалери пристрою (Android 12+)"
+  "dynamicColorSubtitle": "Підлаштовувати акцентні кольори під шпалери пристрою (Android 12+)",
+  "subtaskMarkedCancelled": "Підзавдання скасовано",
+  "subtaskCancelledBadge": "Скасовано",
+  "cancelSubtaskTooltip": "Скасувати підзавдання",
+  "restoreSubtaskTooltip": "Відновити підзавдання",
+  "notificationActionComplete": "Виконано",
+  "notificationActionSnooze": "Відкласти",
+  "notificationActionDismiss": "Закрити",
+  "notificationSubtasksMore": "ще +{count}",
+  "notificationSubtasksSummary": "{completed}/{total} виконано"
 }

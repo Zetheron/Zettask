@@ -103,7 +103,7 @@ class CsvExportService implements DataExportService {
           task.priority.label,
           projectName,
           tagName,
-          task.checklistItems.length.toString(),
+          task.totalActiveSubtasksCount.toString(),
           task.completedAt?.toIso8601String() ?? '',
         ]),
       );

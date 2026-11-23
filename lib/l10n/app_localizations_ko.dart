@@ -1563,4 +1563,35 @@ class AppLocalizationsKo extends AppLocalizations {
   @override
   String get dynamicColorSubtitle =>
       '기기 배경화면에 맞춰 강조 색상을 자동 조정합니다 (Android 12+)';
+
+  @override
+  String get subtaskMarkedCancelled => '하위 작업이 취소됨';
+
+  @override
+  String get subtaskCancelledBadge => '취소됨';
+
+  @override
+  String get cancelSubtaskTooltip => '하위 작업 취소';
+
+  @override
+  String get restoreSubtaskTooltip => '하위 작업 복원';
+
+  @override
+  String get notificationActionComplete => '완료';
+
+  @override
+  String get notificationActionSnooze => '다시 알림';
+
+  @override
+  String get notificationActionDismiss => '닫기';
+
+  @override
+  String notificationSubtasksMore(int count) {
+    return '+$count개 더';
+  }
+
+  @override
+  String notificationSubtasksSummary(int completed, int total) {
+    return '$completed/$total 완료';
+  }
 }

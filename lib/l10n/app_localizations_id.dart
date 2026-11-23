@@ -1614,4 +1614,35 @@ class AppLocalizationsId extends AppLocalizations {
   @override
   String get dynamicColorSubtitle =>
       'Sesuaikan warna aksen dengan wallpaper perangkat (Android 12+)';
+
+  @override
+  String get subtaskMarkedCancelled => 'Sub-tugas dibatalkan';
+
+  @override
+  String get subtaskCancelledBadge => 'Dibatalkan';
+
+  @override
+  String get cancelSubtaskTooltip => 'Batalkan sub-tugas';
+
+  @override
+  String get restoreSubtaskTooltip => 'Pulihkan sub-tugas';
+
+  @override
+  String get notificationActionComplete => 'Selesai';
+
+  @override
+  String get notificationActionSnooze => 'Tunda';
+
+  @override
+  String get notificationActionDismiss => 'Tutup';
+
+  @override
+  String notificationSubtasksMore(int count) {
+    return '+$count lainnya';
+  }
+
+  @override
+  String notificationSubtasksSummary(int completed, int total) {
+    return '$completed/$total selesai';
+  }
 }

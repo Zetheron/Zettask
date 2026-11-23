@@ -1604,4 +1604,35 @@ class AppLocalizationsVi extends AppLocalizations {
   @override
   String get dynamicColorSubtitle =>
       'Đồng bộ màu nhấn theo hình nền thiết bị (Android 12+)';
+
+  @override
+  String get subtaskMarkedCancelled => 'Đã hủy tác vụ con';
+
+  @override
+  String get subtaskCancelledBadge => 'Đã hủy';
+
+  @override
+  String get cancelSubtaskTooltip => 'Hủy tác vụ con';
+
+  @override
+  String get restoreSubtaskTooltip => 'Khôi phục tác vụ con';
+
+  @override
+  String get notificationActionComplete => 'Hoàn thành';
+
+  @override
+  String get notificationActionSnooze => 'Báo lại';
+
+  @override
+  String get notificationActionDismiss => 'Đóng';
+
+  @override
+  String notificationSubtasksMore(int count) {
+    return '+$count mục khác';
+  }
+
+  @override
+  String notificationSubtasksSummary(int completed, int total) {
+    return '$completed/$total hoàn thành';
+  }
 }

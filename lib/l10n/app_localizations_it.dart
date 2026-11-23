@@ -1612,4 +1612,35 @@ class AppLocalizationsIt extends AppLocalizations {
   @override
   String get dynamicColorSubtitle =>
       'Adatta i colori di accento allo sfondo del dispositivo (Android 12+)';
+
+  @override
+  String get subtaskMarkedCancelled => 'Sotto-attività annullata';
+
+  @override
+  String get subtaskCancelledBadge => 'Annullata';
+
+  @override
+  String get cancelSubtaskTooltip => 'Annulla sotto-attività';
+
+  @override
+  String get restoreSubtaskTooltip => 'Ripristina sotto-attività';
+
+  @override
+  String get notificationActionComplete => 'Completa';
+
+  @override
+  String get notificationActionSnooze => 'Posticipa';
+
+  @override
+  String get notificationActionDismiss => 'Ignora';
+
+  @override
+  String notificationSubtasksMore(int count) {
+    return '+$count altre';
+  }
+
+  @override
+  String notificationSubtasksSummary(int completed, int total) {
+    return '$completed/$total completate';
+  }
 }

@@ -191,8 +191,9 @@ class WorkspaceStats {
         tagTotals[task.tagId!] = (tagTotals[task.tagId!] ?? 0) + 1;
       }
 
-      final checkedSubtasks =
-          task.checklistItems.where((item) => item.isDone).length;
+      final checkedSubtasks = task.checklistItems
+          .where((item) => item.isDone && !item.isCancelled)
+          .length;
 
       if (task.isCompleted) {
         allTimeCompleted++;

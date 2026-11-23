@@ -1612,6 +1612,37 @@ class AppLocalizationsPt extends AppLocalizations {
   @override
   String get dynamicColorSubtitle =>
       'Adapte as cores de destaque ao papel de parede do dispositivo (Android 12+)';
+
+  @override
+  String get subtaskMarkedCancelled => 'Subtarefa cancelada';
+
+  @override
+  String get subtaskCancelledBadge => 'Cancelada';
+
+  @override
+  String get cancelSubtaskTooltip => 'Cancelar subtarefa';
+
+  @override
+  String get restoreSubtaskTooltip => 'Restaurar subtarefa';
+
+  @override
+  String get notificationActionComplete => 'Concluir';
+
+  @override
+  String get notificationActionSnooze => 'Adiar';
+
+  @override
+  String get notificationActionDismiss => 'Dispensar';
+
+  @override
+  String notificationSubtasksMore(int count) {
+    return '+$count mais';
+  }
+
+  @override
+  String notificationSubtasksSummary(int completed, int total) {
+    return '$completed/$total concluídas';
+  }
 }
 
 /// The translations for Portuguese, as used in Brazil (`pt_BR`).
@@ -3220,4 +3251,35 @@ class AppLocalizationsPtBr extends AppLocalizationsPt {
   @override
   String get dynamicColorSubtitle =>
       'Adapte as cores de destaque ao papel de parede do dispositivo (Android 12+)';
+
+  @override
+  String get subtaskMarkedCancelled => 'Subtarefa cancelada';
+
+  @override
+  String get subtaskCancelledBadge => 'Cancelada';
+
+  @override
+  String get cancelSubtaskTooltip => 'Cancelar subtarefa';
+
+  @override
+  String get restoreSubtaskTooltip => 'Restaurar subtarefa';
+
+  @override
+  String get notificationActionComplete => 'Concluir';
+
+  @override
+  String get notificationActionSnooze => 'Adiar';
+
+  @override
+  String get notificationActionDismiss => 'Dispensar';
+
+  @override
+  String notificationSubtasksMore(int count) {
+    return '+$count mais';
+  }
+
+  @override
+  String notificationSubtasksSummary(int completed, int total) {
+    return '$completed/$total concluídas';
+  }
 }

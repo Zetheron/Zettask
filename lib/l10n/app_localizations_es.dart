@@ -1612,4 +1612,35 @@ class AppLocalizationsEs extends AppLocalizations {
   @override
   String get dynamicColorSubtitle =>
       'Ajusta los colores de acento al fondo de pantalla (Android 12+)';
+
+  @override
+  String get subtaskMarkedCancelled => 'Subtarea cancelada';
+
+  @override
+  String get subtaskCancelledBadge => 'Cancelada';
+
+  @override
+  String get cancelSubtaskTooltip => 'Cancelar subtarea';
+
+  @override
+  String get restoreSubtaskTooltip => 'Restaurar subtarea';
+
+  @override
+  String get notificationActionComplete => 'Completar';
+
+  @override
+  String get notificationActionSnooze => 'Posponer';
+
+  @override
+  String get notificationActionDismiss => 'Descartar';
+
+  @override
+  String notificationSubtasksMore(int count) {
+    return '+$count más';
+  }
+
+  @override
+  String notificationSubtasksSummary(int completed, int total) {
+    return '$completed/$total completadas';
+  }
 }

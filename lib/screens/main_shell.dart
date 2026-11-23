@@ -1,5 +1,6 @@
 import 'dart:async';
 
+import 'package:flutter_local_notifications/flutter_local_notifications.dart';
 import 'package:material_ui/material_ui.dart';
 import 'package:provider/provider.dart';
 
@@ -14,6 +15,7 @@ import '../providers/subscription_provider.dart';
 import '../providers/task_provider.dart';
 import '../providers/workspace_provider.dart';
 import '../services/home_widget_service.dart';
+import '../services/notification_service.dart';
 import '../widgets/quick_add_task_sheet.dart';
 import '../widgets/task_editor_sheet.dart';
 import 'board_screen.dart';
@@ -29,6 +31,7 @@ class MainShell extends StatefulWidget {
     this.onSelectThemeMode,
     this.autoLoad = true,
     this.homeWidgetService,
+    this.notificationService,
   });
 
   final ThemeMode themeMode;
@@ -36,6 +39,7 @@ class MainShell extends StatefulWidget {
   final ValueChanged<ThemeMode>? onSelectThemeMode;
   final bool autoLoad;
   final HomeWidgetSyncService? homeWidgetService;
+  final TaskNotificationService? notificationService;
 
   @override
   State<MainShell> createState() => _MainShellState();
@@ -47,10 +51,17 @@ class _MainShellState extends State<MainShell> {
   WorkspaceProvider? _workspaceProvider;
   AuthProvider? _authProvider;
   StreamSubscription<Uri?>? _widgetClickSubscription;
+  StreamSubscription<NotificationResponse>? _notificationSubscription;
   bool _handlingWidgetQuickAdd = false;
+  bool _handlingNotificationResponse = false;
 
   HomeWidgetSyncService get _homeWidgetService =>
       widget.homeWidgetService ?? AndroidHomeWidgetService.instance;
+
+  InteractiveNotificationService? get _interactiveNotificationService {
+    final service = widget.notificationService ?? NotificationService.instance;
+    return service is InteractiveNotificationService ? service : null;
+  }
 
   @override
   void initState() {
@@ -78,7 +89,86 @@ class _MainShellState extends State<MainShell> {
       }
 
       _initHomeWidgetListener();
+      _initNotificationListener();
     });
+  }
+
+  Future<void> _initNotificationListener() async {
+    final interactive = _interactiveNotificationService;
+    if (interactive == null) return;
+
+    final initialResponse = await interactive.getInitialNotificationResponse();
+    if (mounted && initialResponse != null) {
+      await _handleNotificationResponse(initialResponse);
+    }
+    if (!mounted) return;
+    _notificationSubscription = interactive.notificationResponses.listen(
+      (response) {
+        if (mounted) {
+          _handleNotificationResponse(response);
+        }
+      },
+    );
+  }
+
+  Future<void> _handleNotificationResponse(
+    NotificationResponse response,
+  ) async {
+    if (_handlingNotificationResponse || !mounted) return;
+    final taskId = int.tryParse(response.payload ?? '');
+    if (taskId == null) return;
+
+    _handlingNotificationResponse = true;
+    try {
+      final taskProvider = _taskProvider ?? context.read<TaskProvider>();
+      final task = await taskProvider.findTaskById(taskId);
+      if (!mounted || task == null) return;
+
+      final actionId = response.actionId;
+      if (actionId == NotificationService.actionCompleteId) {
+        if (!task.isCompleted) {
+          await taskProvider.toggleTaskComplete(task);
+        }
+        return;
+      }
+      if (actionId == NotificationService.actionSnoozeId) {
+        await _interactiveNotificationService?.snoozeTaskReminder(task);
+        return;
+      }
+      if (actionId == NotificationService.actionDismissId) {
+        return;
+      }
+
+      if (task.date != null) {
+        if (_currentIndex != 0) {
+          setState(() => _currentIndex = 0);
+        }
+        await taskProvider.selectDate(task.date!);
+      } else {
+        if (_currentIndex != 2) {
+          setState(() => _currentIndex = 2);
+        }
+      }
+      if (!mounted) return;
+
+      final result = await TaskEditorSheet.show(
+        context,
+        initialTask: task,
+        onRequestNotificationPermission:
+            taskProvider.requestNotificationPermission,
+      );
+      if (!mounted || result == null) return;
+      switch (result) {
+        case TaskEditorSaved(:final task):
+          await taskProvider.updateTask(task);
+        case TaskEditorDeleted(:final task):
+          if (task.id != null) {
+            await taskProvider.deleteTask(task.id!);
+          }
+      }
+    } finally {
+      _handlingNotificationResponse = false;
+    }
   }
 
   Future<void> _initHomeWidgetListener() async {
@@ -141,6 +231,7 @@ class _MainShellState extends State<MainShell> {
                   priority: task.priority,
                   colorHex: task.colorHex,
                   checklistItems: task.checklistItems
+                      .where((i) => !i.isCancelled)
                       .map((i) => ChecklistItem(title: i.title, isDone: false))
                       .toList(),
                   reminderMinutesBefore: task.reminderMinutesBefore,
@@ -179,6 +270,7 @@ class _MainShellState extends State<MainShell> {
   @override
   void dispose() {
     _widgetClickSubscription?.cancel();
+    _notificationSubscription?.cancel();
     _taskProvider?.removeListener(_onTaskStateChanged);
     _authProvider?.attachDataSyncedCallback(null);
     super.dispose();

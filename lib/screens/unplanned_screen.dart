@@ -87,6 +87,7 @@ class UnplannedScreen extends StatelessWidget {
               priority: task.priority,
               colorHex: task.colorHex,
               checklistItems: task.checklistItems
+                  .where((i) => !i.isCancelled)
                   .map((i) => ChecklistItem(title: i.title, isDone: false))
                   .toList(),
               reminderMinutesBefore: task.reminderMinutesBefore,
@@ -150,6 +151,29 @@ class UnplannedScreen extends StatelessWidget {
           ),
         );
     }
+  }
+
+  Future<void> _handleCancelChecklistItem(
+    BuildContext context,
+    TaskProvider taskProvider,
+    TaskModel task,
+    int itemIndex,
+  ) async {
+    final didCancel = await taskProvider.cancelChecklistItem(task, itemIndex);
+    if (!didCancel || !context.mounted) return;
+    final l10n = AppLocalizations.of(context);
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(l10n.subtaskMarkedCancelled),
+          duration: const Duration(seconds: 4),
+          action: SnackBarAction(
+            label: l10n.undo,
+            onPressed: () => taskProvider.restoreChecklistItem(task, itemIndex),
+          ),
+        ),
+      );
   }
 
   Future<void> _deleteWithUndo(
@@ -266,6 +290,13 @@ class UnplannedScreen extends StatelessWidget {
                             _deleteWithUndo(context, taskProvider, task),
                         onToggleChecklistItem: (itemIndex) =>
                             taskProvider.toggleChecklistItem(task, itemIndex),
+                        onCancelChecklistItem: (itemIndex) =>
+                            _handleCancelChecklistItem(
+                          context,
+                          taskProvider,
+                          task,
+                          itemIndex,
+                        ),
                       );
                     },
                   ),
@@ -290,6 +321,7 @@ class _UnplannedTaskCard extends StatelessWidget {
     required this.onToggleCancel,
     required this.onDelete,
     required this.onToggleChecklistItem,
+    this.onCancelChecklistItem,
   });
 
   final TaskModel task;
@@ -298,6 +330,7 @@ class _UnplannedTaskCard extends StatelessWidget {
   final VoidCallback onToggleCancel;
   final VoidCallback onDelete;
   final ValueChanged<int> onToggleChecklistItem;
+  final ValueChanged<int>? onCancelChecklistItem;
 
   @override
   Widget build(BuildContext context) {
@@ -319,8 +352,13 @@ class _UnplannedTaskCard extends StatelessWidget {
     final isMuted = task.isCompleted || isCancelled;
     final mutedNeutral = colorScheme.onSurfaceVariant.withValues(alpha: 0.6);
     final hasDescription = task.description.trim().isNotEmpty;
-    final hasChecklist = task.checklistItems.isNotEmpty;
-    final doneSubtasks = task.checklistItems.where((i) => i.isDone).length;
+    final visibleChecklistEntries = <(int, ChecklistItem)>[
+      for (var i = 0; i < task.checklistItems.length; i++)
+        if (!task.checklistItems[i].isCancelled) (i, task.checklistItems[i]),
+    ];
+    final hasChecklist = visibleChecklistEntries.isNotEmpty;
+    final doneSubtasks =
+        visibleChecklistEntries.where((entry) => entry.$2.isDone).length;
 
     return Dismissible(
       key: ValueKey(
@@ -569,7 +607,7 @@ class _UnplannedTaskCard extends StatelessWidget {
                   child: Text(
                     l10n.subtasksCount(
                       doneSubtasks,
-                      task.checklistItems.length,
+                      visibleChecklistEntries.length,
                     ),
                     style: theme.textTheme.labelSmall?.copyWith(
                       color: colorScheme.onSurfaceVariant,
@@ -577,10 +615,16 @@ class _UnplannedTaskCard extends StatelessWidget {
                     ),
                   ),
                 ),
-                ...List.generate(task.checklistItems.length, (index) {
-                  final item = task.checklistItems[index];
+                ...visibleChecklistEntries.map((entry) {
+                  final (originalIndex, item) = entry;
                   return InkWell(
-                    onTap: () => onToggleChecklistItem(index),
+                    onTap: () => onToggleChecklistItem(originalIndex),
+                    onLongPress: onCancelChecklistItem != null
+                        ? () {
+                            HapticFeedback.mediumImpact();
+                            onCancelChecklistItem!(originalIndex);
+                          }
+                        : null,
                     child: ConstrainedBox(
                       constraints: const BoxConstraints(minHeight: 48),
                       child: Padding(

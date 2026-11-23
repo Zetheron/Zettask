@@ -1544,4 +1544,35 @@ class AppLocalizationsZh extends AppLocalizations {
 
   @override
   String get dynamicColorSubtitle => '根据设备壁纸自动调整强调色（Android 12+）';
+
+  @override
+  String get subtaskMarkedCancelled => '已取消子任务';
+
+  @override
+  String get subtaskCancelledBadge => '已取消';
+
+  @override
+  String get cancelSubtaskTooltip => '取消子任务';
+
+  @override
+  String get restoreSubtaskTooltip => '恢复子任务';
+
+  @override
+  String get notificationActionComplete => '完成';
+
+  @override
+  String get notificationActionSnooze => '稍后提醒';
+
+  @override
+  String get notificationActionDismiss => '关闭';
+
+  @override
+  String notificationSubtasksMore(int count) {
+    return '+$count 项更多';
+  }
+
+  @override
+  String notificationSubtasksSummary(int completed, int total) {
+    return '已完成 $completed/$total';
+  }
 }

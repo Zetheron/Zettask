@@ -486,5 +486,14 @@
   "appGuideTitle": "Hướng dẫn ứng dụng",
   "appGuideSubtitle": "Xem lại giới thiệu ngắn về Zettask",
   "dynamicColorTitle": "Material You (Màu hình nền)",
-  "dynamicColorSubtitle": "Đồng bộ màu nhấn theo hình nền thiết bị (Android 12+)"
+  "dynamicColorSubtitle": "Đồng bộ màu nhấn theo hình nền thiết bị (Android 12+)",
+  "subtaskMarkedCancelled": "Đã hủy tác vụ con",
+  "subtaskCancelledBadge": "Đã hủy",
+  "cancelSubtaskTooltip": "Hủy tác vụ con",
+  "restoreSubtaskTooltip": "Khôi phục tác vụ con",
+  "notificationActionComplete": "Hoàn thành",
+  "notificationActionSnooze": "Báo lại",
+  "notificationActionDismiss": "Đóng",
+  "notificationSubtasksMore": "+{count} mục khác",
+  "notificationSubtasksSummary": "{completed}/{total} hoàn thành"
 }

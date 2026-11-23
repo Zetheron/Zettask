@@ -214,6 +214,7 @@ class _HomeScreenState extends State<HomeScreen> {
               priority: task.priority,
               colorHex: task.colorHex,
               checklistItems: task.checklistItems
+                  .where((i) => !i.isCancelled)
                   .map((i) => ChecklistItem(title: i.title, isDone: false))
                   .toList(),
               reminderMinutesBefore: task.reminderMinutesBefore,
@@ -403,6 +404,32 @@ class _HomeScreenState extends State<HomeScreen> {
           ),
         );
     }
+  }
+
+  Future<void> _handleCancelChecklistItem(
+    BuildContext context,
+    TaskProvider taskProvider,
+    TaskModel task,
+    int itemIndex,
+  ) async {
+    final didCancel = await taskProvider.cancelChecklistItem(task, itemIndex);
+    if (!didCancel || !context.mounted) return;
+
+    final l10n = AppLocalizations.of(context);
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(l10n.subtaskMarkedCancelled),
+          duration: const Duration(seconds: 4),
+          action: SnackBarAction(
+            label: l10n.undo,
+            onPressed: () {
+              taskProvider.restoreChecklistItem(task, itemIndex);
+            },
+          ),
+        ),
+      );
   }
 
   void _openOverdueSheet(BuildContext context) {
@@ -875,6 +902,12 @@ class _HomeScreenState extends State<HomeScreen> {
           onDelete: () => _deleteTaskWithUndo(context, taskProvider, task),
           onToggleChecklistItem: (itemIndex) =>
               taskProvider.toggleChecklistItem(task, itemIndex),
+          onCancelChecklistItem: (itemIndex) => _handleCancelChecklistItem(
+            context,
+            taskProvider,
+            task,
+            itemIndex,
+          ),
         ),
       CalendarEventTimelineEntry(:final event) => () {
           final cal = resolvedCalendarProvider.findCalendar(event.calendarId);

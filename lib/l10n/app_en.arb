@@ -774,5 +774,31 @@
   "appGuideTitle": "App Guide",
   "appGuideSubtitle": "Replay the quick Zettask walkthrough",
   "dynamicColorTitle": "Material You (Wallpaper Color)",
-  "dynamicColorSubtitle": "Match accent colors with your device wallpaper (Android 12+)"
+  "dynamicColorSubtitle": "Match accent colors with your device wallpaper (Android 12+)",
+  "subtaskMarkedCancelled": "Subtask cancelled",
+  "subtaskCancelledBadge": "Cancelled",
+  "cancelSubtaskTooltip": "Cancel subtask",
+  "restoreSubtaskTooltip": "Restore subtask",
+  "notificationActionComplete": "Complete",
+  "notificationActionSnooze": "Snooze",
+  "notificationActionDismiss": "Dismiss",
+  "notificationSubtasksMore": "+{count} more",
+  "@notificationSubtasksMore": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "notificationSubtasksSummary": "{completed}/{total} completed",
+  "@notificationSubtasksSummary": {
+    "placeholders": {
+      "completed": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  }
 }

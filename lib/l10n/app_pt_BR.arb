@@ -486,5 +486,14 @@
   "appGuideTitle": "Guia do aplicativo",
   "appGuideSubtitle": "Rever a apresentação rápida do Zettask",
   "dynamicColorTitle": "Material You (Cor do papel de parede)",
-  "dynamicColorSubtitle": "Adapte as cores de destaque ao papel de parede do dispositivo (Android 12+)"
+  "dynamicColorSubtitle": "Adapte as cores de destaque ao papel de parede do dispositivo (Android 12+)",
+  "subtaskMarkedCancelled": "Subtarefa cancelada",
+  "subtaskCancelledBadge": "Cancelada",
+  "cancelSubtaskTooltip": "Cancelar subtarefa",
+  "restoreSubtaskTooltip": "Restaurar subtarefa",
+  "notificationActionComplete": "Concluir",
+  "notificationActionSnooze": "Adiar",
+  "notificationActionDismiss": "Dispensar",
+  "notificationSubtasksMore": "+{count} mais",
+  "notificationSubtasksSummary": "{completed}/{total} concluídas"
 }

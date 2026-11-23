@@ -1614,4 +1614,35 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String get dynamicColorSubtitle =>
       'Adaptez les couleurs d’accentuation à votre fond d’écran (Android 12+)';
+
+  @override
+  String get subtaskMarkedCancelled => 'Sous-tâche annulée';
+
+  @override
+  String get subtaskCancelledBadge => 'Annulée';
+
+  @override
+  String get cancelSubtaskTooltip => 'Annuler la sous-tâche';
+
+  @override
+  String get restoreSubtaskTooltip => 'Restaurer la sous-tâche';
+
+  @override
+  String get notificationActionComplete => 'Terminer';
+
+  @override
+  String get notificationActionSnooze => 'Reporter';
+
+  @override
+  String get notificationActionDismiss => 'Ignorer';
+
+  @override
+  String notificationSubtasksMore(int count) {
+    return '+$count autres';
+  }
+
+  @override
+  String notificationSubtasksSummary(int completed, int total) {
+    return '$completed/$total terminées';
+  }
 }

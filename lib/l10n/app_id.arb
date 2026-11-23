@@ -486,5 +486,14 @@
   "appGuideTitle": "Panduan Aplikasi",
   "appGuideSubtitle": "Putar ulang panduan singkat Zettask",
   "dynamicColorTitle": "Material You (Warna Wallpaper)",
-  "dynamicColorSubtitle": "Sesuaikan warna aksen dengan wallpaper perangkat (Android 12+)"
+  "dynamicColorSubtitle": "Sesuaikan warna aksen dengan wallpaper perangkat (Android 12+)",
+  "subtaskMarkedCancelled": "Sub-tugas dibatalkan",
+  "subtaskCancelledBadge": "Dibatalkan",
+  "cancelSubtaskTooltip": "Batalkan sub-tugas",
+  "restoreSubtaskTooltip": "Pulihkan sub-tugas",
+  "notificationActionComplete": "Selesai",
+  "notificationActionSnooze": "Tunda",
+  "notificationActionDismiss": "Tutup",
+  "notificationSubtasksMore": "+{count} lainnya",
+  "notificationSubtasksSummary": "{completed}/{total} selesai"
 }

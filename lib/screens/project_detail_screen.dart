@@ -93,6 +93,7 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                 priority: task.priority,
                 colorHex: task.colorHex,
                 checklistItems: task.checklistItems
+                    .where((i) => !i.isCancelled)
                     .map((i) => ChecklistItem(title: i.title, isDone: false))
                     .toList(),
                 reminderMinutesBefore: task.reminderMinutesBefore,
@@ -160,6 +161,30 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
     final taskProvider = context.read<TaskProvider>();
     await taskProvider.toggleChecklistItem(task, index);
     await _loadTasks();
+  }
+
+  Future<void> _cancelChecklistItem(TaskModel task, int index) async {
+    final taskProvider = context.read<TaskProvider>();
+    final didCancel = await taskProvider.cancelChecklistItem(task, index);
+    if (!didCancel) return;
+    await _loadTasks();
+    if (!mounted) return;
+    final l10n = AppLocalizations.of(context);
+    ScaffoldMessenger.of(context)
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(
+          content: Text(l10n.subtaskMarkedCancelled),
+          duration: const Duration(seconds: 4),
+          action: SnackBarAction(
+            label: l10n.undo,
+            onPressed: () async {
+              await taskProvider.restoreChecklistItem(task, index);
+              if (mounted) await _loadTasks();
+            },
+          ),
+        ),
+      );
   }
 
   Future<void> _deleteWithUndo(TaskModel task) async {
@@ -363,6 +388,8 @@ class _ProjectDetailScreenState extends State<ProjectDetailScreen> {
                               onDelete: () => _deleteWithUndo(task),
                               onToggleChecklistItem: (i) =>
                                   _toggleChecklistItem(task, i),
+                              onCancelChecklistItem: (i) =>
+                                  _cancelChecklistItem(task, i),
                             );
                           },
                         ),
@@ -393,6 +420,7 @@ class _ProjectTaskCard extends StatelessWidget {
     required this.onToggleCancel,
     required this.onDelete,
     required this.onToggleChecklistItem,
+    this.onCancelChecklistItem,
   });
 
   final TaskModel task;
@@ -404,6 +432,7 @@ class _ProjectTaskCard extends StatelessWidget {
   final VoidCallback onToggleCancel;
   final VoidCallback onDelete;
   final ValueChanged<int> onToggleChecklistItem;
+  final ValueChanged<int>? onCancelChecklistItem;
 
   @override
   Widget build(BuildContext context) {
@@ -619,53 +648,63 @@ class _ProjectTaskCard extends StatelessWidget {
                   ],
                 ),
               ),
-              if (task.checklistItems.isNotEmpty) ...[
+              if (task.activeChecklistItems.isNotEmpty) ...[
                 Divider(
                   height: 1,
                   color: colorScheme.outline.withValues(alpha: 0.7),
                 ),
-                ...List.generate(task.checklistItems.length, (index) {
-                  final item = task.checklistItems[index];
-                  return InkWell(
-                    onTap: () => onToggleChecklistItem(index),
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(minHeight: 44),
-                      child: Padding(
-                        padding: const EdgeInsets.symmetric(
-                          horizontal: 14,
-                          vertical: 6,
-                        ),
-                        child: Row(
-                          children: [
-                            Icon(
-                              item.isDone
-                                  ? Icons.check_box_rounded
-                                  : Icons.check_box_outline_blank_rounded,
-                              size: 18,
-                              color: item.isDone
-                                  ? taskColor
-                                  : colorScheme.onSurfaceVariant,
+                ...[
+                  for (var index = 0;
+                      index < task.checklistItems.length;
+                      index++)
+                    if (!task.checklistItems[index].isCancelled)
+                      InkWell(
+                        onTap: () => onToggleChecklistItem(index),
+                        onLongPress: onCancelChecklistItem != null
+                            ? () {
+                                HapticFeedback.mediumImpact();
+                                onCancelChecklistItem!(index);
+                              }
+                            : null,
+                        child: ConstrainedBox(
+                          constraints: const BoxConstraints(minHeight: 44),
+                          child: Padding(
+                            padding: const EdgeInsets.symmetric(
+                              horizontal: 14,
+                              vertical: 6,
                             ),
-                            const SizedBox(width: 8),
-                            Expanded(
-                              child: Text(
-                                item.title,
-                                style: theme.textTheme.bodySmall?.copyWith(
-                                  decoration: item.isDone
-                                      ? TextDecoration.lineThrough
-                                      : null,
-                                  color: item.isDone
-                                      ? colorScheme.onSurfaceVariant
-                                      : colorScheme.onSurface,
+                            child: Row(
+                              children: [
+                                Icon(
+                                  task.checklistItems[index].isDone
+                                      ? Icons.check_box_rounded
+                                      : Icons.check_box_outline_blank_rounded,
+                                  size: 18,
+                                  color: task.checklistItems[index].isDone
+                                      ? taskColor
+                                      : colorScheme.onSurfaceVariant,
                                 ),
-                              ),
+                                const SizedBox(width: 8),
+                                Expanded(
+                                  child: Text(
+                                    task.checklistItems[index].title,
+                                    style: theme.textTheme.bodySmall?.copyWith(
+                                      decoration:
+                                          task.checklistItems[index].isDone
+                                              ? TextDecoration.lineThrough
+                                              : null,
+                                      color: task.checklistItems[index].isDone
+                                          ? colorScheme.onSurfaceVariant
+                                          : colorScheme.onSurface,
+                                    ),
+                                  ),
+                                ),
+                              ],
                             ),
-                          ],
+                          ),
                         ),
                       ),
-                    ),
-                  );
-                }),
+                ],
               ],
             ],
           ),

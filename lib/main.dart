@@ -242,6 +242,11 @@ class _ZettaskAppState extends State<ZettaskApp> {
 
   Future<void> _syncWidgetLabelsForLocale(Locale effectiveLocale) async {
     final l10n = lookupAppLocalizations(effectiveLocale);
+    NotificationService.instance.updateLocalization(l10n);
+    final customNotif = widget.notificationService;
+    if (customNotif is InteractiveNotificationService) {
+      customNotif.updateLocalization(l10n);
+    }
     await _homeWidgetService.updateWidgetLabels(
       widgetTitle: l10n.widgetTitle,
       widgetEmptyText: l10n.widgetEmptyText,
@@ -329,6 +334,7 @@ class _ZettaskAppState extends State<ZettaskApp> {
                               onSelectThemeMode: themeProvider.setThemeMode,
                               autoLoad: widget.autoLoadTasks,
                               homeWidgetService: widget.homeWidgetService,
+                              notificationService: widget.notificationService,
                             )
                           : OnboardingScreen(
                               key: const ValueKey('zettask_onboarding_screen'),

@@ -1604,4 +1604,35 @@ class AppLocalizationsRu extends AppLocalizations {
   @override
   String get dynamicColorSubtitle =>
       'Подбирать акцентные цвета под обои устройства (Android 12+)';
+
+  @override
+  String get subtaskMarkedCancelled => 'Подзадача отменена';
+
+  @override
+  String get subtaskCancelledBadge => 'Отменена';
+
+  @override
+  String get cancelSubtaskTooltip => 'Отменить подзадачу';
+
+  @override
+  String get restoreSubtaskTooltip => 'Восстановить подзадачу';
+
+  @override
+  String get notificationActionComplete => 'Готово';
+
+  @override
+  String get notificationActionSnooze => 'Отложить';
+
+  @override
+  String get notificationActionDismiss => 'Закрыть';
+
+  @override
+  String notificationSubtasksMore(int count) {
+    return 'ещё +$count';
+  }
+
+  @override
+  String notificationSubtasksSummary(int completed, int total) {
+    return '$completed/$total выполнено';
+  }
 }

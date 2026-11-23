@@ -623,6 +623,7 @@ class TaskProvider extends ChangeNotifier {
       }
 
       final templateChecklist = updatedTask.checklistItems
+          .where((item) => !item.isCancelled)
           .map((item) => ChecklistItem(title: item.title, isDone: false))
           .toList();
 
@@ -974,20 +975,61 @@ class TaskProvider extends ChangeNotifier {
     }
   }
 
+  Future<TaskModel?> findTaskById(int taskId) async {
+    for (final list in [
+      _tasks,
+      _unplannedTasks,
+      _overdueTasks,
+      ..._timelineTasksByDate.values,
+    ]) {
+      for (final item in list) {
+        if (item.id == taskId) return item;
+      }
+    }
+    try {
+      final all = await _databaseService.getAllTasks();
+      for (final item in all) {
+        if (item.id == taskId) return item;
+      }
+    } catch (e) {
+      debugPrint('TaskProvider.findTaskById gagal: $e');
+    }
+    return null;
+  }
+
+  TaskModel _resolveLatestInMemory(TaskModel fallback) {
+    final taskId = fallback.id;
+    if (taskId == null) return fallback;
+    for (final list in [
+      _tasks,
+      _unplannedTasks,
+      _overdueTasks,
+      ..._timelineTasksByDate.values,
+    ]) {
+      for (final item in list) {
+        if (item.id == taskId) return item;
+      }
+    }
+    return fallback;
+  }
+
   Future<void> toggleChecklistItem(TaskModel task, int itemIndex) async {
-    final taskId = task.id;
+    final currentTask = _resolveLatestInMemory(task);
+    final taskId = currentTask.id;
     if (taskId == null ||
         itemIndex < 0 ||
-        itemIndex >= task.checklistItems.length) {
+        itemIndex >= currentTask.checklistItems.length) {
       return;
     }
 
     final previousTasks = List<TaskModel>.from(_tasks);
     final previousUnplanned = List<TaskModel>.from(_unplannedTasks);
-    final updatedItems = List<ChecklistItem>.from(task.checklistItems);
+    final updatedItems = List<ChecklistItem>.from(currentTask.checklistItems);
     final currentItem = updatedItems[itemIndex];
-    updatedItems[itemIndex] = currentItem.copyWith(isDone: !currentItem.isDone);
-    final updatedTask = task.copyWith(checklistItems: updatedItems);
+    updatedItems[itemIndex] = currentItem.isCancelled
+        ? currentItem.copyWith(isDone: false, isCancelled: false)
+        : currentItem.copyWith(isDone: !currentItem.isDone, isCancelled: false);
+    final updatedTask = currentTask.copyWith(checklistItems: updatedItems);
 
     _tasks = _tasks
         .map((item) => item.id == taskId ? updatedTask : item)
@@ -1001,12 +1043,69 @@ class TaskProvider extends ChangeNotifier {
 
     try {
       await _databaseService.updateTask(updatedTask);
+      await _syncReminder(updatedTask);
     } catch (e) {
       _tasks = previousTasks;
       _unplannedTasks = previousUnplanned;
       _errorMessage = 'Gagal memperbarui sub-tugas: $e';
       notifyListeners();
     }
+  }
+
+  Future<bool> setChecklistItemCancelled(
+    TaskModel task,
+    int itemIndex, {
+    required bool isCancelled,
+  }) async {
+    final currentTask = _resolveLatestInMemory(task);
+    final taskId = currentTask.id;
+    if (taskId == null ||
+        itemIndex < 0 ||
+        itemIndex >= currentTask.checklistItems.length) {
+      return false;
+    }
+
+    final previousTasks = List<TaskModel>.from(_tasks);
+    final previousUnplanned = List<TaskModel>.from(_unplannedTasks);
+    final updatedItems = List<ChecklistItem>.from(currentTask.checklistItems);
+    final currentItem = updatedItems[itemIndex];
+    if (currentItem.isCancelled == isCancelled) return false;
+
+    updatedItems[itemIndex] = currentItem.copyWith(
+      isDone: false,
+      isCancelled: isCancelled,
+    );
+    final updatedTask = currentTask.copyWith(checklistItems: updatedItems);
+
+    _tasks = _tasks
+        .map((item) => item.id == taskId ? updatedTask : item)
+        .toList();
+    _unplannedTasks = _unplannedTasks
+        .map((item) => item.id == taskId ? updatedTask : item)
+        .toList();
+    _replaceInTimelineMap(updatedTask);
+    _errorMessage = null;
+    notifyListeners();
+
+    try {
+      await _databaseService.updateTask(updatedTask);
+      await _syncReminder(updatedTask);
+      return true;
+    } catch (e) {
+      _tasks = previousTasks;
+      _unplannedTasks = previousUnplanned;
+      _errorMessage = 'Gagal mengubah status batal sub-tugas: $e';
+      notifyListeners();
+      return false;
+    }
+  }
+
+  Future<bool> cancelChecklistItem(TaskModel task, int itemIndex) {
+    return setChecklistItemCancelled(task, itemIndex, isCancelled: true);
+  }
+
+  Future<bool> restoreChecklistItem(TaskModel task, int itemIndex) {
+    return setChecklistItemCancelled(task, itemIndex, isCancelled: false);
   }
 
   Future<void> deleteTask(int id) async {

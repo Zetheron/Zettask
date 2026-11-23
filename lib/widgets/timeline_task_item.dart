@@ -1,3 +1,5 @@
+import 'dart:async';
+
 import 'package:flutter/services.dart';
 import 'package:material_ui/material_ui.dart';
 
@@ -19,6 +21,7 @@ class TimelineTaskItem extends StatelessWidget {
     required this.onToggleComplete,
     required this.onDelete,
     required this.onToggleChecklistItem,
+    this.onCancelChecklistItem,
     this.onToggleCancel,
     this.onConfirmDelete,
     this.tag,
@@ -33,6 +36,7 @@ class TimelineTaskItem extends StatelessWidget {
   final VoidCallback? onToggleCancel;
   final VoidCallback onDelete;
   final ValueChanged<int> onToggleChecklistItem;
+  final ValueChanged<int>? onCancelChecklistItem;
   final Future<bool> Function()? onConfirmDelete;
   final TagModel? tag;
   final ProjectModel? project;
@@ -122,6 +126,7 @@ class TimelineTaskItem extends StatelessWidget {
                   onToggleComplete: onToggleComplete,
                   onToggleCancel: onToggleCancel,
                   onToggleChecklistItem: onToggleChecklistItem,
+                  onCancelChecklistItem: onCancelChecklistItem,
                 ),
               ),
             ),
@@ -300,6 +305,7 @@ class _TaskCard extends StatelessWidget {
     required this.onToggleComplete,
     this.onToggleCancel,
     required this.onToggleChecklistItem,
+    this.onCancelChecklistItem,
   });
 
   final TaskModel task;
@@ -311,6 +317,7 @@ class _TaskCard extends StatelessWidget {
   final VoidCallback onToggleComplete;
   final VoidCallback? onToggleCancel;
   final ValueChanged<int> onToggleChecklistItem;
+  final ValueChanged<int>? onCancelChecklistItem;
 
   @override
   Widget build(BuildContext context) {
@@ -318,9 +325,14 @@ class _TaskCard extends StatelessWidget {
     final colorScheme = theme.colorScheme;
     final l10n = AppLocalizations.of(context);
     final hasDescription = task.description.trim().isNotEmpty;
-    final hasChecklist = task.checklistItems.isNotEmpty;
+    final visibleChecklistEntries = <(int, ChecklistItem)>[
+      for (var i = 0; i < task.checklistItems.length; i++)
+        if (!task.checklistItems[i].isCancelled) (i, task.checklistItems[i]),
+    ];
+    final hasChecklist = visibleChecklistEntries.isNotEmpty;
     final completedSubtasks =
-        task.checklistItems.where((item) => item.isDone).length;
+        visibleChecklistEntries.where((entry) => entry.$2.isDone).length;
+    final totalActiveSubtasks = visibleChecklistEntries.length;
     final reminderLabel =
         localizedReminderShortLabel(l10n, task.reminderMinutesBefore);
     final isCancelled = task.isCancelled;
@@ -472,7 +484,7 @@ class _TaskCard extends StatelessWidget {
                     Text(
                       l10n.subtasksCount(
                         completedSubtasks,
-                        task.checklistItems.length,
+                        totalActiveSubtasks,
                       ),
                       style: theme.textTheme.labelSmall?.copyWith(
                         color: isCancelled
@@ -487,7 +499,9 @@ class _TaskCard extends StatelessWidget {
                       child: ClipRRect(
                         borderRadius: BorderRadius.circular(999),
                         child: LinearProgressIndicator(
-                          value: completedSubtasks / task.checklistItems.length,
+                          value: totalActiveSubtasks == 0
+                              ? 0.0
+                              : completedSubtasks / totalActiveSubtasks,
                           minHeight: 5,
                           backgroundColor: colorScheme.surfaceContainerHighest,
                           valueColor: AlwaysStoppedAnimation<Color>(
@@ -503,13 +517,19 @@ class _TaskCard extends StatelessWidget {
                   ],
                 ),
               ),
-              ...List.generate(task.checklistItems.length, (index) {
-                final item = task.checklistItems[index];
+              ...visibleChecklistEntries.map((entry) {
+                final (originalIndex, item) = entry;
                 return _InlineChecklistRow(
+                  key: ValueKey('subtask_item_${task.id ?? 'x'}_$originalIndex'),
+                  taskId: task.id,
+                  itemIndex: originalIndex,
                   item: item,
                   accentColor: isCancelled ? mutedNeutral : tagColor,
                   isParentCancelled: isCancelled,
-                  onTap: () => onToggleChecklistItem(index),
+                  onTap: () => onToggleChecklistItem(originalIndex),
+                  onLongPressCancel: onCancelChecklistItem != null
+                      ? () => onCancelChecklistItem!(originalIndex)
+                      : null,
                 );
               }),
               const SizedBox(height: 4),
@@ -807,33 +827,94 @@ class _PriorityIndicator extends StatelessWidget {
   }
 }
 
-class _InlineChecklistRow extends StatelessWidget {
+class _InlineChecklistRow extends StatefulWidget {
   const _InlineChecklistRow({
+    super.key,
+    required this.taskId,
+    required this.itemIndex,
     required this.item,
     required this.accentColor,
     this.isParentCancelled = false,
     required this.onTap,
+    this.onLongPressCancel,
   });
 
+  final int? taskId;
+  final int itemIndex;
   final ChecklistItem item;
   final Color accentColor;
   final bool isParentCancelled;
   final VoidCallback onTap;
+  final VoidCallback? onLongPressCancel;
+
+  @override
+  State<_InlineChecklistRow> createState() => _InlineChecklistRowState();
+}
+
+class _InlineChecklistRowState extends State<_InlineChecklistRow> {
+  bool _isCancelling = false;
+  Timer? _cancelCommitTimer;
+
+  @override
+  void didUpdateWidget(covariant _InlineChecklistRow oldWidget) {
+    super.didUpdateWidget(oldWidget);
+    if (oldWidget.item != widget.item && !widget.item.isCancelled) {
+      _cancelCommitTimer?.cancel();
+      _cancelCommitTimer = null;
+      _isCancelling = false;
+    }
+  }
+
+  @override
+  void dispose() {
+    _cancelCommitTimer?.cancel();
+    super.dispose();
+  }
+
+  void _triggerCancel() {
+    final onCancel = widget.onLongPressCancel;
+    if (onCancel == null || _isCancelling) return;
+
+    HapticFeedback.mediumImpact();
+    if (MediaQuery.disableAnimationsOf(context)) {
+      onCancel();
+      return;
+    }
+
+    setState(() => _isCancelling = true);
+    _cancelCommitTimer?.cancel();
+    _cancelCommitTimer = Timer(const Duration(milliseconds: 220), () {
+      if (!mounted) return;
+      onCancel();
+    });
+  }
 
   @override
   Widget build(BuildContext context) {
     final theme = Theme.of(context);
     final colorScheme = theme.colorScheme;
-    final checkColor = theme.brightness == Brightness.dark
-        ? const Color(0xFF0A0A0A)
-        : Colors.white;
+    final brightness = theme.brightness;
+    final checkColor =
+        brightness == Brightness.dark ? const Color(0xFF0A0A0A) : Colors.white;
+    final cancelledFill = brightness == Brightness.dark
+        ? const Color(0xFF52525B)
+        : const Color(0xFF71717A);
+    final cancelledIconColor =
+        brightness == Brightness.dark ? const Color(0xFFFAFAFA) : Colors.white;
+    final isMuted =
+        widget.item.isDone || widget.isParentCancelled || _isCancelling;
 
     return Semantics(
       button: true,
-      checked: item.isDone,
-      label: item.title,
+      checked: widget.item.isDone,
+      label: widget.item.title,
       child: InkWell(
-        onTap: onTap,
+        key: ValueKey(
+          'subtask_row_${widget.taskId ?? 'x'}_${widget.itemIndex}',
+        ),
+        onTap: _isCancelling ? null : widget.onTap,
+        onLongPress:
+            widget.onLongPressCancel != null ? _triggerCancel : null,
         child: ConstrainedBox(
           constraints: const BoxConstraints(minHeight: 48),
           child: Padding(
@@ -841,43 +922,58 @@ class _InlineChecklistRow extends StatelessWidget {
             child: Row(
               children: [
                 ZettaskSpringCheckBounce(
-                  stateKey: item.isDone,
+                  stateKey: (widget.item.isDone, _isCancelling),
                   child: AnimatedContainer(
-                    duration: const Duration(milliseconds: 220),
+                    key: ValueKey(
+                      'subtask_circle_${widget.taskId ?? 'x'}_${widget.itemIndex}',
+                    ),
+                    duration: const Duration(milliseconds: 200),
                     curve: ZettaskSpringCurve.snappy,
                     width: 20,
                     height: 20,
                     decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(7),
-                      color: item.isDone ? accentColor : Colors.transparent,
+                      borderRadius: BorderRadius.circular(
+                        _isCancelling ? 999 : 7,
+                      ),
+                      color: _isCancelling
+                          ? cancelledFill
+                          : (widget.item.isDone
+                              ? widget.accentColor
+                              : Colors.transparent),
                       border: Border.all(
-                        color: item.isDone
-                            ? accentColor
-                            : colorScheme.onSurfaceVariant
-                                .withValues(alpha: 0.6),
+                        color: _isCancelling
+                            ? cancelledFill
+                            : (widget.item.isDone
+                                ? widget.accentColor
+                                : colorScheme.onSurfaceVariant
+                                    .withValues(alpha: 0.6)),
                         width: 1.75,
                       ),
                     ),
-                    child: item.isDone
+                    child: _isCancelling
                         ? Icon(
-                            Icons.check_rounded,
+                            Icons.close_rounded,
                             size: 13,
-                            color: checkColor,
+                            color: cancelledIconColor,
                           )
-                        : null,
+                        : widget.item.isDone
+                            ? Icon(
+                                Icons.check_rounded,
+                                size: 13,
+                                color: checkColor,
+                              )
+                            : null,
                   ),
                 ),
                 const SizedBox(width: 10),
                 Expanded(
                   child: Text(
-                    item.title,
+                    widget.item.title,
                     style: theme.textTheme.bodyMedium?.copyWith(
                       fontSize: 13.5,
-                      decoration: (item.isDone || isParentCancelled)
-                          ? TextDecoration.lineThrough
-                          : null,
+                      decoration: isMuted ? TextDecoration.lineThrough : null,
                       decorationColor: colorScheme.onSurfaceVariant,
-                      color: (item.isDone || isParentCancelled)
+                      color: isMuted
                           ? colorScheme.onSurfaceVariant.withValues(alpha: 0.65)
                           : colorScheme.onSurface,
                     ),

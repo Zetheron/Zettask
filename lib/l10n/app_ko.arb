@@ -486,5 +486,14 @@
   "appGuideTitle": "앱 가이드",
   "appGuideSubtitle": "Zettask 간단 안내 다시 보기",
   "dynamicColorTitle": "Material You(배경화면 색상)",
-  "dynamicColorSubtitle": "기기 배경화면에 맞춰 강조 색상을 자동 조정합니다 (Android 12+)"
+  "dynamicColorSubtitle": "기기 배경화면에 맞춰 강조 색상을 자동 조정합니다 (Android 12+)",
+  "subtaskMarkedCancelled": "하위 작업이 취소됨",
+  "subtaskCancelledBadge": "취소됨",
+  "cancelSubtaskTooltip": "하위 작업 취소",
+  "restoreSubtaskTooltip": "하위 작업 복원",
+  "notificationActionComplete": "완료",
+  "notificationActionSnooze": "다시 알림",
+  "notificationActionDismiss": "닫기",
+  "notificationSubtasksMore": "+{count}개 더",
+  "notificationSubtasksSummary": "{completed}/{total} 완료"
 }

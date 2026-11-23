@@ -486,5 +486,14 @@
   "appGuideTitle": "מדריך האפליקציה",
   "appGuideSubtitle": "הפעל מחדש את ההיכרות הקצרה עם Zettask",
   "dynamicColorTitle": "Material You (צבע טפט)",
-  "dynamicColorSubtitle": "התאמת צבעי הדגשה לטפט המכשיר שלך (Android 12+)"
+  "dynamicColorSubtitle": "התאמת צבעי הדגשה לטפט המכשיר שלך (Android 12+)",
+  "subtaskMarkedCancelled": "משימת המשנה בוטלה",
+  "subtaskCancelledBadge": "בוטלה",
+  "cancelSubtaskTooltip": "בטל משימת משנה",
+  "restoreSubtaskTooltip": "שחזר משימת משנה",
+  "notificationActionComplete": "הושלם",
+  "notificationActionSnooze": "נודניק",
+  "notificationActionDismiss": "סגור",
+  "notificationSubtasksMore": "+{count} נוספות",
+  "notificationSubtasksSummary": "{completed}/{total} הושלמו"
 }

@@ -270,12 +270,21 @@ class CloudSyncMerger {
           ? localItem.copyWith(id: targetId)
           : cloudItem.copyWith(id: targetId);
     }
-    final localChecked =
-        localItem.checklistItems.where((item) => item.isDone).length;
-    final cloudChecked =
-        cloudItem.checklistItems.where((item) => item.isDone).length;
+    final localChecked = localItem.checklistItems
+        .where((item) => item.isDone && !item.isCancelled)
+        .length;
+    final cloudChecked = cloudItem.checklistItems
+        .where((item) => item.isDone && !item.isCancelled)
+        .length;
     if (localChecked != cloudChecked) {
       return localChecked > cloudChecked
+          ? localItem.copyWith(id: targetId)
+          : cloudItem.copyWith(id: targetId);
+    }
+    final localCancelledSubtasks = localItem.cancelledSubtasksCount;
+    final cloudCancelledSubtasks = cloudItem.cancelledSubtasksCount;
+    if (localCancelledSubtasks != cloudCancelledSubtasks) {
+      return localCancelledSubtasks > cloudCancelledSubtasks
           ? localItem.copyWith(id: targetId)
           : cloudItem.copyWith(id: targetId);
     }
