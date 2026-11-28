@@ -16,7 +16,7 @@
     monochrome: 'Monochrome'
   };
 
-  var HERO_RING_CIRC = 213.63;
+  var HERO_RING_CIRC = 125.66;
   var BENTO_RING_CIRC = 289.03;
 
   var COPY = {
@@ -30,44 +30,30 @@
       navDownloadApk: 'Unduh APK',
       navOpenWeb: 'Buka Web App',
 
-      heroBadge: 'Android Beta • 100% Gratis & Bebas Iklan',
-      heroTitleMain: 'Catat, rencanakan, dan selesaikan',
-      heroTitleSub: '— di satu tempat',
+      heroBadge: 'Android Beta • 100% Gratis & Offline-First',
+      heroTitleMain: 'Atur harimu.',
+      heroTitleSub: 'Selesaikan tanpa distraksi.',
       heroLead:
-        'Daftar tugas timeline harian, sub-tugas cerdas dengan Cancel & Undo, serta Focus Timer. Berjalan lokal secara offline-first dengan dukungan Material You dan AMOLED Pure Black.',
+        'Timeline tugas harian dengan sub-tugas Cancel & Undo, Focus Timer bawaan, serta kanvas AMOLED Pure Black #000000. Cepat dibuka dan tersimpan langsung di perangkat Anda.',
       heroCtaWeb: 'Buka Web App',
       heroCtaApk: 'Unduh APK Beta',
+      heroPill1: 'Offline SQLite',
+      heroPill3: '16 Bahasa',
+      heroPill4: 'Tanpa Wajib Login',
 
-      floatStickyText:
-        'Tulis detail penting rapat pagi, pecah jadi sub-tugas kecil, dan selesaikan tepat waktu.',
-      floatCheckAria: 'Klik contoh kotak centang',
-      floatRemTitle: 'Pengingat',
-      floatRemItem: 'Review Desain Sprint',
-      floatRemSub: 'Alarm lokal tepat waktu',
-      floatTasksTitle: 'Tugas Hari Ini',
-      floatTasksHint: 'Klik bar',
-      floatTask1: 'Riset alur onboarding',
-      floatTask2: 'Rilis APK Android Beta',
-      floatEcoTitle: 'Ekosistem & Metrik',
-      floatEco1: 'Offline-First',
-      floatEco3: 'Layar Beranda',
-      floatEco4: 'Multibahasa',
+      heroNotifMeta: 'Pengingat · 13:30',
+      heroNotifTitle: 'Persiapan Rilis Android',
+      heroNotifSub1: '○ Uji kontras AMOLED #000000',
+      heroNotifSub2: '○ Cek alarm pengingat lokal',
+      heroCardTitle: 'Timeline Hari Ini',
+      heroSubHeader: 'Sub-tugas aktif',
+      heroSubDoneItem: 'Susun skema database SQLite lokal',
+      heroSubCancelItem: 'Tambahkan SDK iklan pihak ketiga',
+      heroSubToast: 'Dibatalkan · Dikecualikan dari progres',
+      heroFloatRingSub: 'Progres harian',
 
-      mockNewBtn: '+ Tugas Baru',
-      mockNavToday: 'Hari Ini',
-      mockNavAll: 'Semua Tugas',
-      mockNavProjects: 'Proyek',
-      mockNavStats: 'Statistik',
-      mockProjHeader: 'PROYEK AKTIF',
-      mockUser: 'Produktif',
-      mockOpenFull: 'Buka Layar Penuh',
-      mockTodoTitle: 'Daftar Tugas Interaktif',
-      mockAddPlaceholder: 'Ketik tugas demo baru lalu tekan Enter...',
-      mockAddBtn: 'Tambah',
       timerStart: 'Mulai',
       timerPause: 'Jeda',
-      mockRingTitle: 'Progres Aktif',
-      mockRingHint: 'Centang tugas di kiri untuk melihat cincin bergerak',
 
       solKicker: 'Solusi',
       solTitle: 'Dirancang untuk ritme kerja yang tenang dan terukur',
@@ -158,44 +144,30 @@
       navDownloadApk: 'Download APK',
       navOpenWeb: 'Open Web App',
 
-      heroBadge: 'Android Beta • 100% Free & Ad-Free',
-      heroTitleMain: 'Think, plan, and track',
-      heroTitleSub: '— all in one place',
+      heroBadge: 'Android Beta • 100% Free & Offline-First',
+      heroTitleMain: 'Plan your day.',
+      heroTitleSub: 'Finish without noise.',
       heroLead:
-        'Daily timeline to-do list, smart sub-tasks with Cancel & Undo, and a built-in Focus Timer. Runs locally offline-first with Material You and AMOLED Pure Black support.',
+        'Daily task timeline with Cancel & Undo sub-tasks, a built-in Focus Timer, and a true #000000 AMOLED Pure Black canvas. Opens in an instant and stays local on your device.',
       heroCtaWeb: 'Open Web App',
       heroCtaApk: 'Download Beta APK',
+      heroPill1: 'Offline SQLite',
+      heroPill3: '16 Languages',
+      heroPill4: 'No Forced Login',
 
-      floatStickyText:
-        'Capture key morning notes, break big goals into clear sub-tasks, and finish on schedule.',
-      floatCheckAria: 'Toggle sample checkbox',
-      floatRemTitle: 'Reminders',
-      floatRemItem: 'Sprint Design Review',
-      floatRemSub: 'Exact local Android alarm',
-      floatTasksTitle: "Today's Tasks",
-      floatTasksHint: 'Click bar',
-      floatTask1: 'Onboarding flow research',
-      floatTask2: 'Ship Android Beta APK',
-      floatEcoTitle: 'Ecosystem & Metrics',
-      floatEco1: 'Offline-First',
-      floatEco3: 'Home Widget',
-      floatEco4: 'Multilingual',
+      heroNotifMeta: 'Reminder · 13:30',
+      heroNotifTitle: 'Android Release Prep',
+      heroNotifSub1: '○ Verify AMOLED #000000 contrast',
+      heroNotifSub2: '○ Test exact local reminder alarm',
+      heroCardTitle: "Today's Timeline",
+      heroSubHeader: 'Active sub-tasks',
+      heroSubDoneItem: 'Finalize local SQLite schema',
+      heroSubCancelItem: 'Add third-party ad tracker SDK',
+      heroSubToast: 'Cancelled · Excluded from progress',
+      heroFloatRingSub: 'Daily progress',
 
-      mockNewBtn: '+ New Task',
-      mockNavToday: 'Today',
-      mockNavAll: 'All Tasks',
-      mockNavProjects: 'Projects',
-      mockNavStats: 'Statistics',
-      mockProjHeader: 'ACTIVE PROJECTS',
-      mockUser: 'Maker',
-      mockOpenFull: 'Open Full Workspace',
-      mockTodoTitle: 'Interactive Task List',
-      mockAddPlaceholder: 'Type a new demo task and press Enter...',
-      mockAddBtn: 'Add',
       timerStart: 'Start',
       timerPause: 'Pause',
-      mockRingTitle: 'Active Progress',
-      mockRingHint: 'Check tasks on the left to watch the ring respond',
 
       solKicker: 'Solutions',
       solTitle: 'Built for a calm, measurable daily workflow',
@@ -502,63 +474,61 @@
   }
 
   /* =========================
-     Real-Time Analog Clock & Dynamic Greeting/Date
+     Dynamic Date Strip & Eyebrow in Hero Timeline Card
      ========================= */
-  function initRealtimeAnalogClock() {
-    var hourHand = document.getElementById('clock-hour-hand');
-    var minHand = document.getElementById('clock-min-hand');
-    var secHand = document.getElementById('clock-sec-hand');
-    var digitalMini = document.getElementById('realtime-digital-mini');
-    if (!hourHand || !minHand || !secHand) return;
+  var selectedDateOffset = 0;
 
-    function tickClock() {
-      var now = new Date();
-      var ms = now.getMilliseconds();
-      var sec = now.getSeconds() + ms / 1000;
-      var min = now.getMinutes() + sec / 60;
-      var hr = (now.getHours() % 12) + min / 60;
+  function renderHeroDateStrip() {
+    var stripEl = document.getElementById('hero-date-strip');
+    if (!stripEl) return;
 
-      hourHand.setAttribute('transform', 'rotate(' + (hr * 30).toFixed(2) + ' 28 28)');
-      minHand.setAttribute('transform', 'rotate(' + (min * 6).toFixed(2) + ' 28 28)');
-      secHand.setAttribute('transform', 'rotate(' + (sec * 6).toFixed(2) + ' 28 28)');
+    var base = new Date();
+    var locale = activeLang === 'en' ? 'en-US' : 'id-ID';
+    stripEl.innerHTML = '';
 
-      if (digitalMini) {
-        digitalMini.textContent =
-          String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
-      }
+    for (var offset = -2; offset <= 2; offset++) {
+      var d = new Date(base);
+      d.setDate(base.getDate() + offset);
+      var dow = String(d.getDate());
+      try {
+        dow = new Intl.DateTimeFormat(locale, { weekday: 'short' }).format(d).slice(0, 3);
+      } catch (_) {}
+
+      var chip = document.createElement('button');
+      chip.type = 'button';
+      chip.className = 'htc-date-chip' + (offset === selectedDateOffset ? ' is-today' : '');
+      chip.setAttribute('data-date-offset', String(offset));
+
+      var sDow = document.createElement('span');
+      sDow.className = 'htc-chip-dow';
+      sDow.textContent = dow;
+
+      var sNum = document.createElement('span');
+      sNum.className = 'htc-chip-num tabular';
+      sNum.textContent = String(d.getDate());
+
+      chip.appendChild(sDow);
+      chip.appendChild(sNum);
+      stripEl.appendChild(chip);
     }
-
-    tickClock();
-    window.setInterval(tickClock, 1000);
   }
 
   function updateLiveDatesAndGreeting() {
     var now = new Date();
-    var dayEl = document.getElementById('hero-live-day');
-    var greetEl = document.getElementById('hero-mock-greet');
     var dateEl = document.getElementById('hero-mock-date');
-
-    if (dayEl) dayEl.textContent = String(now.getDate());
-
-    var h = now.getHours();
-    if (greetEl) {
-      if (activeLang === 'en') {
-        greetEl.textContent = h < 12 ? 'Good morning,' : (h < 18 ? 'Good afternoon,' : 'Good evening,');
-      } else {
-        greetEl.textContent = h < 11 ? 'Selamat pagi,' : (h < 15 ? 'Selamat siang,' : (h < 18 ? 'Selamat sore,' : 'Selamat malam,'));
-      }
-    }
 
     if (dateEl && typeof Intl !== 'undefined' && Intl.DateTimeFormat) {
       try {
         dateEl.textContent = new Intl.DateTimeFormat(activeLang === 'en' ? 'en-US' : 'id-ID', {
-          weekday: 'long',
+          weekday: 'short',
           day: 'numeric',
-          month: 'long',
-          year: 'numeric'
-        }).format(now);
+          month: 'short'
+        }).format(now).toUpperCase();
       } catch (_) {}
     }
+
+    renderHeroDateStrip();
+    syncHeroSubtaskBadge();
   }
 
   /* =========================
@@ -566,7 +536,7 @@
      ========================= */
   function initHeroParallaxAndSpotlight() {
     var stage = document.getElementById('hero-spotlight-stage');
-    var dotLayer = document.getElementById('hero-dotted-layer');
+    var archGrid = document.getElementById('hero-arch-grid');
     var progressBar = document.getElementById('scroll-progress');
     var floatCards = document.querySelectorAll('[data-parallax-y]');
     var reducedMotion = window.matchMedia && window.matchMedia('(prefers-reduced-motion: reduce)').matches;
@@ -584,14 +554,14 @@
       }
 
       if (!reducedMotion) {
-        if (dotLayer) {
-          var gridShiftY = Math.min(scrollYVal * 0.12, 36);
-          dotLayer.style.transform =
-            'translate3d(' + (mouseOffsetX * -8).toFixed(1) + 'px, ' + (gridShiftY + mouseOffsetY * -8).toFixed(1) + 'px, 0)';
+        if (archGrid) {
+          var gridShiftY = Math.min(scrollYVal * 0.1, 28);
+          archGrid.style.transform =
+            'translate3d(' + (mouseOffsetX * -6).toFixed(1) + 'px, ' + (gridShiftY + mouseOffsetY * -6).toFixed(1) + 'px, 0)';
         }
 
-        if (window.innerWidth > 1160) {
-          var cappedScroll = Math.min(scrollYVal, 560) / 560;
+        if (window.innerWidth > 1080) {
+          var cappedScroll = Math.min(scrollYVal, 520) / 520;
           floatCards.forEach(function (el) {
             var py = parseFloat(el.getAttribute('data-parallax-y') || '0');
             var pm = parseFloat(el.getAttribute('data-parallax-mouse') || '0');
@@ -636,6 +606,25 @@
     );
 
     applyTransforms();
+  }
+
+  function syncHeroSubtaskBadge() {
+    var row = document.getElementById('hero-cancellable-sub');
+    var badge = document.getElementById('hero-sub-badge');
+    var icon = document.getElementById('hero-cancellable-icon');
+    var btn = document.getElementById('hero-sub-cancel-btn');
+    if (!row || !badge || !icon || !btn) return;
+
+    var isCancelled = row.getAttribute('data-cancelled') === 'true';
+    if (isCancelled) {
+      badge.textContent = '1/1 · 100%';
+      icon.textContent = '✕';
+      btn.textContent = '↺';
+    } else {
+      badge.textContent = '1/2 · 50%';
+      icon.textContent = '○';
+      btn.textContent = '✕';
+    }
   }
 
   /* =========================
@@ -683,13 +672,13 @@
     var pct = total === 0 ? 0 : Math.round((done / total) * 100);
 
     var heroCounter = document.getElementById('hero-task-counter');
-    var heroRatio = document.getElementById('hero-ring-ratio');
+    var heroTimelineBar = document.getElementById('hero-timeline-bar');
     var heroPct = document.getElementById('hero-ring-pct');
     var heroDoneLabel = document.getElementById('hero-ring-done-label');
     var heroCircle = document.getElementById('hero-ring-circle');
 
     if (heroCounter) heroCounter.textContent = done + '/' + total;
-    if (heroRatio) heroRatio.textContent = pct + '%';
+    if (heroTimelineBar) heroTimelineBar.style.width = pct + '%';
     if (heroPct) heroPct.textContent = pct + '%';
     if (heroDoneLabel) {
       heroDoneLabel.textContent = activeLang === 'en' ? (done + ' completed') : (done + ' selesai');
@@ -805,35 +794,19 @@
   }
 
   function initInteractiveWidgets() {
-    // Floating sticky check
-    var stickyCheck = document.getElementById('float-sticky-check');
-    if (stickyCheck) {
-      stickyCheck.addEventListener('click', function () {
-        var isPressed = stickyCheck.getAttribute('aria-pressed') === 'true';
-        stickyCheck.setAttribute('aria-pressed', isPressed ? 'false' : 'true');
+    // Hero Date Strip selection
+    var dateStrip = document.getElementById('hero-date-strip');
+    if (dateStrip) {
+      dateStrip.addEventListener('click', function (e) {
+        var chip = e.target.closest('[data-date-offset]');
+        if (!chip) return;
+        selectedDateOffset = parseInt(chip.getAttribute('data-date-offset') || '0', 10);
+        renderHeroDateStrip();
       });
     }
 
-    // Floating Today's Tasks interactive progress bars
-    var floatToday = document.getElementById('float-today-card');
-    if (floatToday) {
-      var barValues = [65, 90];
-      floatToday.addEventListener('click', function (e) {
-        var btn = e.target.closest('[data-cycle-bar]');
-        if (!btn) return;
-        var idx = parseInt(btn.getAttribute('data-cycle-bar'), 10);
-        barValues[idx] = barValues[idx] >= 100 ? 25 : Math.min(100, barValues[idx] + 25);
-        var fill = floatToday.querySelector('[data-bar-fill="' + idx + '"]');
-        var label = floatToday.querySelector('[data-bar-label="' + idx + '"]');
-        if (fill) fill.style.width = barValues[idx] + '%';
-        if (label) label.textContent = barValues[idx] + '%';
-      });
-    }
-
-    // Hero live task list toggle & quick add
+    // Hero live task list toggle
     var heroList = document.getElementById('hero-task-list');
-    var heroForm = document.getElementById('hero-task-form');
-    var heroInput = document.getElementById('hero-task-input');
     if (heroList) {
       heroList.addEventListener('click', function (e) {
         var btn = e.target.closest('[data-hero-task-id]');
@@ -847,34 +820,47 @@
         }
       });
     }
-    if (heroForm && heroInput) {
-      heroForm.addEventListener('submit', function (e) {
-        e.preventDefault();
-        var text = heroInput.value.trim();
-        if (!text) return;
-        var now = new Date();
-        var hhmm = String(now.getHours()).padStart(2, '0') + ':' + String(now.getMinutes()).padStart(2, '0');
-        if (demoState.heroTasks.length >= 6) {
-          demoState.heroTasks.shift();
+
+    // Hero embedded Sub-task Cancel (✕) & Undo
+    var heroSubCancelBtn = document.getElementById('hero-sub-cancel-btn');
+    var heroSubRow = document.getElementById('hero-cancellable-sub');
+    var heroSubToast = document.getElementById('hero-sub-toast');
+    var heroSubUndoBtn = document.getElementById('hero-sub-undo-btn');
+    var heroSubTimer = null;
+
+    if (heroSubCancelBtn && heroSubRow && heroSubToast) {
+      heroSubCancelBtn.addEventListener('click', function () {
+        var cancelled = heroSubRow.getAttribute('data-cancelled') === 'true';
+        if (cancelled) {
+          heroSubRow.setAttribute('data-cancelled', 'false');
+          heroSubToast.setAttribute('hidden', '');
+          if (heroSubTimer) window.clearTimeout(heroSubTimer);
+        } else {
+          heroSubRow.setAttribute('data-cancelled', 'true');
+          heroSubToast.removeAttribute('hidden');
+          if (heroSubTimer) window.clearTimeout(heroSubTimer);
+          heroSubTimer = window.setTimeout(function () {
+            heroSubToast.setAttribute('hidden', '');
+          }, 5000);
         }
-        demoState.heroTasks.push({
-          id: 'ht_' + Date.now(),
-          done: false,
-          time: hhmm,
-          customText: text
-        });
-        heroInput.value = '';
-        saveDemoState();
-        renderHeroTasks();
+        syncHeroSubtaskBadge();
       });
     }
 
-    // Hero Mini Timer
+    if (heroSubUndoBtn && heroSubRow && heroSubToast) {
+      heroSubUndoBtn.addEventListener('click', function () {
+        heroSubRow.setAttribute('data-cancelled', 'false');
+        heroSubToast.setAttribute('hidden', '');
+        if (heroSubTimer) window.clearTimeout(heroSubTimer);
+        syncHeroSubtaskBadge();
+      });
+    }
+
+    // Hero Floating Focus Timer Pill
     var heroDigits = document.getElementById('hero-timer-digits');
     var heroToggle = document.getElementById('hero-timer-toggle');
-    var heroReset = document.getElementById('hero-timer-reset');
     var heroDot = document.getElementById('hero-timer-dot');
-    if (heroDigits && heroToggle && heroReset) {
+    if (heroDigits && heroToggle) {
       heroToggle.addEventListener('click', function () {
         if (heroTimer.running) {
           window.clearInterval(heroTimer.id);
@@ -890,20 +876,13 @@
             } else {
               window.clearInterval(heroTimer.id);
               heroTimer.running = false;
+              heroTimer.seconds = 25 * 60;
+              heroDigits.textContent = '25:00';
               if (heroDot) heroDot.classList.remove('is-running');
               syncHeroTimerButtonLabel();
             }
           }, 1000);
         }
-        syncHeroTimerButtonLabel();
-      });
-
-      heroReset.addEventListener('click', function () {
-        if (heroTimer.id) window.clearInterval(heroTimer.id);
-        heroTimer.running = false;
-        heroTimer.seconds = 25 * 60;
-        heroDigits.textContent = '25:00';
-        if (heroDot) heroDot.classList.remove('is-running');
         syncHeroTimerButtonLabel();
       });
     }
@@ -1134,7 +1113,6 @@
   applyAccent(activeAccent, false);
   applyLang(activeLang, false, false);
 
-  initRealtimeAnalogClock();
   initHeroParallaxAndSpotlight();
   initInteractiveWidgets();
   initScrollReveal();
